@@ -1,5 +1,6 @@
 import { Sequelize, DataTypes } from 'sequelize';
 import VideoModel from './components/videos/model';
+import UserModel from './components/users/model';
 
 const sequelize = new Sequelize(
   'postgres://postgres:password@localhost/youtube'
@@ -7,3 +8,4 @@ const sequelize = new Sequelize(
 (async () => await sequelize.sync({ alter: true }))();
 
 export const Video = VideoModel(sequelize, DataTypes);
+export const User = UserModel(sequelize, DataTypes);
