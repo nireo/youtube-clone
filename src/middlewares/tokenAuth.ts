@@ -1,12 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { RequestWithUser } from '../interfaces/RequestWithUser';
 
-const authenticateToken = (
-  req: RequestWithUser,
-  res: Response,
-  next: NextFunction
-) => {
+const authenticateToken = (req: any, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   if (token == null) return res.sendStatus(401);
