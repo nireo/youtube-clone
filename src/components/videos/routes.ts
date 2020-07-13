@@ -61,6 +61,7 @@ router.delete(
         if (err) return res.status(500).json({ message: err });
       });
 
+      await video.destroy();
       res.status(204);
     } catch (error) {
       res.status(500).send(error);

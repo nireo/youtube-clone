@@ -2,6 +2,7 @@ import express from 'express';
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import dotenv from 'dotenv';
 
 import videoRoutes from './components/videos/routes';
 import authRoutes from './components/auth/routes';
@@ -10,6 +11,7 @@ import commentRouter from './components/comments/routes';
 
 const PORT: number = 3001;
 const app: express.Application = express();
+dotenv.config();
 
 // enable file upload
 app.use(

@@ -9,11 +9,9 @@ const UserModel = (sequelize: Sequelize) => {
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
 
     // path to the avatar file in the avatars directory
