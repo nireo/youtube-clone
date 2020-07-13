@@ -10,11 +10,13 @@ const authenticateToken = (req: any, res: Response, next: NextFunction) => {
   jwt.verify(
     token,
     process.env.TOKEN_SECRET as string,
-    async (err: any, username: any) => {
+    async (err: any, user: any) => {
       if (err) return res.sendStatus(403);
 
-      const user = await User.findOne({ where: { username } });
-      req.user = user;
+      const requestUser = await User.findOne({
+        where: { username: user.username },
+      });
+      req.user = requestUser;
       next();
     }
   );

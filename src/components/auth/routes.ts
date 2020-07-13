@@ -43,8 +43,6 @@ router.post('/login', async (req: express.Request, res: express.Response) => {
       where: { username: req.body.username },
     });
 
-    console.log('he');
-
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });
     }
@@ -53,8 +51,6 @@ router.post('/login', async (req: express.Request, res: express.Response) => {
       req.body.password,
       user.password
     );
-
-    console.log('hee');
 
     if (!passwordMatches) {
       return res.status(401).json({ message: 'Credentials do not match.' });
