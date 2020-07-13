@@ -1,6 +1,6 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize, DataTypes } from 'sequelize';
 
-const UserModel = (sequelize: Sequelize, DataTypes: any) => {
+const UserModel = (sequelize: Sequelize) => {
   return sequelize.define('User', {
     id: {
       type: DataTypes.STRING,

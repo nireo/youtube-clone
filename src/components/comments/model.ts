@@ -1,17 +1,17 @@
 import { Sequelize, DataTypes } from 'sequelize';
 
-const VideoModel = (sequelize: Sequelize) => {
-  return sequelize.define('Video', {
+const CommentModel = (sequelize: Sequelize) => {
+  return sequelize.define('Comment', {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
       allowNull: false,
     },
-    title: {
+    content: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   });
 };
 
-export default VideoModel;
+export default CommentModel;
