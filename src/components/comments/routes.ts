@@ -1,12 +1,14 @@
 import express from 'express';
 import { Video, Comment } from '../../sequelize';
 import { v4 as uuidv4 } from 'uuid';
+import authenticateToken from '../../middlewares/tokenAuth';
 
 const router: express.Router = express.Router();
 
 router.post(
   '/:videoId',
-  async (req: express.Request, res: express.Response) => {
+  authenticateToken,
+  async (req: any, res: express.Response) => {
     try {
       const video = await Video.findOne({ where: { id: req.params.videoId } });
       if (!video) {
@@ -17,6 +19,7 @@ router.post(
         id: uuidv4(),
         content: req.body.content,
         videoId: req.params.videoId,
+        userId: req.user.id,
       });
 
       await newComment.save();

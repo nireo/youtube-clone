@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { User } from '../../sequelize';
 import generateToken from '../../utils/generateToken';
+import authenticateToken from '../../middlewares/tokenAuth';
 
 const router: express.Router = express.Router();
 
@@ -49,5 +50,17 @@ router.post('/login', async (req: express.Request, res: express.Response) => {
     res.status(500).send(error);
   }
 });
+
+router.get(
+  '/me',
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      res.json(req.user);
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  }
+);
 
 export default router;

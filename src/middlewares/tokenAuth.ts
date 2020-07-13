@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { RequestWithUser } from '../interfaces/RequestWithUser';
+import { User } from '../sequelize';
 
 const authenticateToken = (req: any, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization'];
@@ -10,8 +10,10 @@ const authenticateToken = (req: any, res: Response, next: NextFunction) => {
   jwt.verify(
     token,
     process.env.TOKEN_SECRET as string,
-    (err: any, user: any) => {
+    async (err: any, username: any) => {
       if (err) return res.sendStatus(403);
+
+      const user = await User.findOne({ where: { username } });
       req.user = user;
       next();
     }
