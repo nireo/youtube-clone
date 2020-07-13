@@ -2,6 +2,7 @@ import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { User } from '../../sequelize';
+import generateToken from '../../utils/generateToken';
 
 const router: express.Router = express.Router();
 
@@ -42,7 +43,8 @@ router.post('/login', async (req: express.Request, res: express.Response) => {
       return res.status(401).json({ message: 'Credentials do not match.' });
     }
 
-    res.status(200).json(user);
+    const token = generateToken(req.body.username);
+    res.json(token);
   } catch (error) {
     res.status(500).send(error);
   }
