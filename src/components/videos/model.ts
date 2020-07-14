@@ -14,6 +14,10 @@ const VideoModel = (sequelize: Sequelize) => {
     description: {
       type: DataTypes.STRING,
     },
+    fileExtension: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   });
 };
 

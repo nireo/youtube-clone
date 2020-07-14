@@ -17,16 +17,22 @@ router.post('/', authenticateToken, async (req: any, res: express.Response) => {
       const uuid = uuidv4();
       const video: any = req.files.video;
 
+      // get file extension
+      const splittedFileName: string[] = video.name.split('.');
+      const fileExtension: string =
+        splittedFileName[splittedFileName.length - 1];
+
       // store the video with the name of a unique id, in the future
       // this id will be the same as the one pointing to the video information
       // in the database
-      video.mv('./videos/' + uuid);
+      video.mv('./videos/' + `${uuid}.${fileExtension}`);
 
       const newVideoModel = await Video.create({
         id: uuid,
         title: req.body.title,
         description: req.body.description ? req.body.description : null,
         userId: req.user.id,
+        fileExtension,
       });
 
       res.send({
