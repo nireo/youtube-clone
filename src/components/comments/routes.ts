@@ -30,6 +30,17 @@ router.post(
   }
 );
 
+router.get('/:videoId', async (req: express.Request, res: express.Response) => {
+  try {
+    const comments = await Comment.findAll({
+      where: { videoId: req.params.videoId },
+    });
+    res.status(200).json(comments);
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+});
+
 router.delete(
   '/:commentId',
   async (req: express.Request, res: express.Response) => {
