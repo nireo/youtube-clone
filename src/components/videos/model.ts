@@ -18,6 +18,14 @@ const VideoModel = (sequelize: Sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    likes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    dislikes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
   });
 };
 

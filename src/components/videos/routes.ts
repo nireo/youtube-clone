@@ -75,4 +75,37 @@ router.delete(
   }
 );
 
+router.patch(
+  '/:action/:videoId',
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      if (!req.params.action) {
+        return res.status(400).json({ message: 'Provide action' });
+      }
+      const video: any = await Video.findOne({
+        where: { id: req.params.videoId },
+      });
+      if (!video) {
+        return res.status(404).json({ message: 'Video not found' });
+      }
+
+      if (req.params.action === 'like') {
+        video.likes += 1;
+      } else if (req.params.action === 'dislike') {
+        video.dislikes += 1;
+      } else {
+        return res
+          .status(400)
+          .json({ message: "Action can only be 'like' or 'dislike'" });
+      }
+
+      await video.save();
+      res.status(204);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }
+);
+
 export default router;

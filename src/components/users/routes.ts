@@ -2,6 +2,7 @@ import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../../sequelize';
 import { Video } from '../../sequelize';
+import authenticateToken from '../../middlewares/tokenAuth';
 
 const router: express.Router = express.Router();
 
