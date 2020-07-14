@@ -11,6 +11,10 @@ const CommentModel = (sequelize: Sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    edited: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   });
 };
 
