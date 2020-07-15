@@ -108,4 +108,37 @@ router.patch(
   }
 );
 
+router.patch(
+  '/:videoId',
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const video: any = await Video.findOne({
+        where: { id: req.params.videoId },
+      });
+
+      if (!video) {
+        return res.status(404).json({ message: 'Video not found' });
+      }
+
+      // check ownership
+      if (req.user.id !== video.userId) {
+        return res.status(403).json({ message: 'Forbidden' });
+      }
+
+      if (!req.body.title) {
+        return res.status(400).json({ message: 'Title cannot be empty' });
+      }
+
+      video.description = req.body.description;
+      video.title = req.body.title;
+
+      await video.save();
+      res.status(200).json(video);
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  }
+);
+
 export default router;
