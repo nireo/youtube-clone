@@ -87,4 +87,36 @@ router.delete(
   }
 );
 
+router.delete(
+  '/:videoId/:commentId',
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const video: any = await Video.findOne({
+        where: { id: req.params.videoId },
+      });
+      if (!video) {
+        return res.status(404).json({ message: 'Video not found' });
+      }
+
+      // only the user can remove comments from the video
+      if (video.userId !== req.user.id) {
+        return res.status(403).json({ message: 'Forbidden' });
+      }
+
+      const comment = await Comment.findOne({
+        where: { id: req.params.commentId, videoId: req.params.videoId },
+      });
+      if (!comment) {
+        return res.status(404).json({ message: 'Comment not found' });
+      }
+
+      await comment.destroy();
+      res.status(204);
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  }
+);
+
 export default router;

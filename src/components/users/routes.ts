@@ -4,7 +4,6 @@ import { User } from '../../sequelize';
 import { Video } from '../../sequelize';
 import authenticateToken from '../../middlewares/tokenAuth';
 import getFileExtension from '../../utils/getFileExtension';
-import { userInfo } from 'os';
 
 const router: express.Router = express.Router();
 
