@@ -3,9 +3,15 @@ import VideoModel from './components/videos/model';
 import UserModel from './components/users/model';
 import CommentModel from './components/comments/model';
 
-const sequelize = new Sequelize(
-  'postgres://postgres:password@localhost/youtube'
-);
+let database = 'youtube';
+if (process.env.NODE_ENV === 'test') {
+  database = 'youtubetest';
+}
+
+export const sequelize = new Sequelize(database, 'postgres', 'password', {
+  host: 'localhost',
+  dialect: 'postgres',
+});
 (async () => await sequelize.sync({ alter: true }))();
 
 export const Video = VideoModel(sequelize);

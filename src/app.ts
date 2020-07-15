@@ -9,7 +9,6 @@ import authRoutes from './components/auth/routes';
 import userRoutes from './components/users/routes';
 import commentRouter from './components/comments/routes';
 
-const PORT: number = 3001;
 const app: express.Application = express();
 dotenv.config();
 
@@ -29,6 +28,4 @@ app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/comments', commentRouter);
 
-app.listen(PORT, () => {
-  console.log(`server listening on port ${PORT}`);
-});
+export default app;
