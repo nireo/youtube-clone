@@ -11,6 +11,7 @@ if (process.env.NODE_ENV === 'test') {
 export const sequelize = new Sequelize(database, 'postgres', 'password', {
   host: 'localhost',
   dialect: 'postgres',
+  logging: false,
 });
 (async () => await sequelize.sync({ alter: true }))();
 
