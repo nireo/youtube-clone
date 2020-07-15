@@ -1,12 +1,17 @@
-import { sequelize, User } from '../../sequelize';
 import supertest from 'supertest';
 import app from '../../app';
+import { sequelize, User } from '../../sequelize';
 
 const api = supertest(app);
 
+export let token: string = '';
+
 test('A user can register', async () => {
+  const user = await User.findOne({ where: { username: 'user' } });
+  await user?.destroy();
+
   const credentials = {
-    username: 'user1',
+    username: 'user',
     password: 'password',
   };
 
@@ -19,7 +24,7 @@ test('A user can register', async () => {
 
 test('User can login', async () => {
   const credentials = {
-    username: 'user1',
+    username: 'user',
     password: 'password',
   };
 
@@ -30,12 +35,19 @@ test('User can login', async () => {
     .expect(200);
 
   expect(response.body.token).not.toBeUndefined();
+  token = response.body.token;
+});
+
+test('Me route works', async () => {
+  const response = await api
+    .get('/auth/me')
+    .set('Authorization', `bearer ${token}`)
+    .expect(200)
+    .expect('Content-type', /application\/json/);
+
+  expect(response.body.username).toBe('user');
 });
 
 afterAll(async () => {
-  // delete user
-  const user = await User.findOne({ where: { username: 'user1' } });
-  await user?.destroy();
-
   await sequelize.close();
 });

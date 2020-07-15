@@ -60,4 +60,21 @@ router.get('/users', async (req: express.Request, res: express.Response) => {
   }
 });
 
+router.delete(
+  '/',
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const user = await User.findOne({ where: { id: req.user.id } });
+      if (!user) {
+        return res.status(404);
+      }
+
+      await user.destroy();
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  }
+);
+
 export default router;
