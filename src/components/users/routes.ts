@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { User } from '../../sequelize';
 import { Video } from '../../sequelize';
 import authenticateToken from '../../middlewares/tokenAuth';
+import getFileExtension from '../../utils/getFileExtension';
+import { userInfo } from 'os';
 
 const router: express.Router = express.Router();
 
@@ -30,26 +32,34 @@ router.get(
   }
 );
 
-router.post('/avatar', async (req: express.Request, res: express.Response) => {
-  try {
-    if (!req.files) {
-      return res.send({
-        status: false,
-        message: 'No avatar image was provided',
+router.post(
+  '/avatar',
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      if (!req.files) {
+        return res.send({
+          status: false,
+          message: 'No avatar image was provided',
+        });
+      }
+
+      const avatar: any = req.files.avatar;
+      const avatarFilename = `${req.user.id}.${getFileExtension(avatar.name)}`;
+      avatar.mv('./avatars/' + avatarFilename);
+
+      req.user.avatar = avatarFilename;
+      await req.user.save();
+
+      res.send({
+        status: true,
+        message: 'Avatar successfully uploaded',
       });
+    } catch (error) {
+      res.status(500).json({ message: error });
     }
-
-    let avatar: any = req.files.avatar;
-    avatar.mv('./avatars/' + uuidv4());
-
-    res.send({
-      status: true,
-      message: 'Avatar successfully uploaded',
-    });
-  } catch (error) {
-    res.status(500).json({ message: error });
   }
-});
+);
 
 router.get('/users', async (req: express.Request, res: express.Response) => {
   try {

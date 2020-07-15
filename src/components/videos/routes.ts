@@ -86,6 +86,7 @@ router.patch(
       const video: any = await Video.findOne({
         where: { id: req.params.videoId },
       });
+
       if (!video) {
         return res.status(404).json({ message: 'Video not found' });
       }
