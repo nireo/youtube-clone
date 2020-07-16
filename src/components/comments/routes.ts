@@ -61,6 +61,7 @@ router.patch(
 
       if (commentLike) {
         // the like can change into a dislike and vice versa.
+        // also if the actions are same, the like model is deleted
         if (commentLike.like && req.params.action === 'dislike') {
           comment.likes -= 1;
           comment.dislikes += 1;
