@@ -15,6 +15,14 @@ const CommentModel = (sequelize: Sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    likes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    dislikes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
   });
 };
 

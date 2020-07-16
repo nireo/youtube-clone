@@ -1,5 +1,5 @@
 import express from 'express';
-import { Video, Comment } from '../../sequelize';
+import { Video, Comment, CommentLike } from '../../sequelize';
 import { v4 as uuidv4 } from 'uuid';
 import authenticateToken from '../../middlewares/tokenAuth';
 
@@ -40,6 +40,66 @@ router.get('/:videoId', async (req: express.Request, res: express.Response) => {
     res.status(500).json({ message: error });
   }
 });
+
+router.patch(
+  '/:action/:commentId',
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const comment: any = await Comment.findOne({
+        where: { id: req.params.commentId },
+      });
+
+      if (!comment) {
+        return res.status(404).json({ message: 'Comment not found' });
+      }
+
+      // check if the user has already liked or disliked the comment
+      const commentLike: any = await CommentLike.findOne({
+        where: { userId: req.user.id, commentId: req.params.commentId },
+      });
+
+      if (commentLike) {
+        // the like can change into a dislike and vice versa.
+        if (commentLike.like && req.params.action === 'dislike') {
+          comment.likes -= 1;
+          comment.dislikes += 1;
+
+          commentLike.like = false;
+          await comment.save();
+          await commentLike.save();
+
+          return res.status(204);
+        } else if (commentLike.like === false && req.params.action === 'like') {
+          comment.likes += 1;
+          comment.dislikes -= 1;
+
+          commentLike.like = true;
+          await comment.save();
+          await commentLike.save();
+
+          return res.status(204);
+        }
+      }
+
+      await CommentLike.create({
+        id: uuidv4(),
+        userId: req.user.id,
+        commentId: req.params.commentId,
+        like: req.params.action === 'like',
+      });
+
+      comment.likes += req.params.action === 'like' ? 1 : -1;
+      comment.likes += req.params.action !== 'like' ? 1 : -1;
+      await comment.save();
+
+      res.status(204);
+      res.status(200);
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  }
+);
 
 router.patch(
   '/:commentId',

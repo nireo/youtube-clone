@@ -15,6 +15,10 @@ const VideoLikeModel = (sequelize: Sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    like: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
   });
 };
 
