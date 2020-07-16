@@ -99,6 +99,7 @@ router.patch(
       });
 
       if (videoLike) {
+        // change like to dislike or remove like/dislike
         if (video.like && action === 'dislike') {
           video.likes -= 1;
           video.dislikes += 1;
@@ -109,6 +110,12 @@ router.patch(
           video.dislikes -= 1;
 
           videoLike.like = true;
+        } else if (videoLike.like && action === 'like') {
+          await videoLike.destroy();
+          return res.status(204);
+        } else if (videoLike.like === false && action === 'dislike') {
+          await videoLike.destroy();
+          return res.status(204);
         } else {
           return res.status(400).json({ message: 'Bad request' });
         }
@@ -125,6 +132,8 @@ router.patch(
         like: action === 'like',
       });
 
+      video.likes += req.params.action === 'like' ? 1 : -1;
+      video.dislikes += req.params.action !== 'like' ? 1 : -1;
       res.status(204);
     } catch (error) {
       res.status(500).send(error);

@@ -1,5 +1,5 @@
 import express from 'express';
-import { Video, Comment, CommentLike } from '../../sequelize';
+import { Video, Comment, CommentLike, VideoLike } from '../../sequelize';
 import { v4 as uuidv4 } from 'uuid';
 import authenticateToken from '../../middlewares/tokenAuth';
 
@@ -71,6 +71,15 @@ router.patch(
           comment.dislikes -= 1;
 
           commentLike.like = true;
+        } else if (commentLike.like && req.params.action === 'like') {
+          await commentLike.destroy();
+          return res.status(204);
+        } else if (
+          commentLike.like === false &&
+          req.params.action === 'dislike'
+        ) {
+          await commentLike.destroy();
+          return res.status(204);
         } else {
           return res.status(204);
         }
