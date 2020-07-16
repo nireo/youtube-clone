@@ -1,6 +1,4 @@
-import { Model } from 'sequelize/types';
-
-import sequelize from 'sequelize';
+import sequelize from "sequelize";
 
 export interface UserAttributes {
   id: string;
@@ -9,7 +7,8 @@ export interface UserAttributes {
   avatar: string | null;
 }
 
-class User extends sequelize.Model<UserAttributes> implements UserAttributes {
+export class User extends sequelize.Model<UserAttributes>
+  implements UserAttributes {
   public id!: string;
   public username!: string;
   public password!: string;
@@ -18,5 +17,3 @@ class User extends sequelize.Model<UserAttributes> implements UserAttributes {
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
-
-export default User;
