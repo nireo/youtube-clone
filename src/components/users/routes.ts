@@ -149,4 +149,34 @@ router.delete(
   }
 );
 
+router.get(
+  '/subscription',
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const subscriptions: any = await Subscription.findAll({
+        where: { subscriberId: req.user.id },
+      });
+
+      let users: any = [];
+      subscriptions.forEach(async (subscription: any) => {
+        const user = await User.findOne({
+          where: { id: subscription.subscribedId },
+        });
+        if (!user) {
+          return res
+            .status(404)
+            .json({ message: 'Problem with subscription entry' });
+        }
+
+        users = users.append(user);
+      });
+
+      res.status(200).json(users);
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  }
+);
+
 export default router;
