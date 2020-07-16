@@ -1,6 +1,6 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { Video } from '../../sequelize';
+import { Video, VideoLike } from '../../sequelize';
 import authenticateToken from '../../middlewares/tokenAuth';
 import fs from 'fs';
 
@@ -80,28 +80,51 @@ router.patch(
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
-      if (!req.params.action) {
-        return res.status(400).json({ message: 'Provide action' });
+      const { action, videoId } = req.params.action;
+      if (action !== 'like' || action !== 'dislike') {
+        return res.status(400).json({ message: 'No action provided' });
       }
+
       const video: any = await Video.findOne({
-        where: { id: req.params.videoId },
+        where: { id: videoId },
       });
 
       if (!video) {
         return res.status(404).json({ message: 'Video not found' });
       }
 
-      if (req.params.action === 'like') {
-        video.likes += 1;
-      } else if (req.params.action === 'dislike') {
-        video.dislikes += 1;
-      } else {
-        return res
-          .status(400)
-          .json({ message: "Action can only be 'like' or 'dislike'" });
+      // check for existing like model
+      const videoLike: any = await VideoLike.findOne({
+        where: { userId: req.user.id, videoId },
+      });
+
+      if (videoLike) {
+        if (video.like && action === 'dislike') {
+          video.likes -= 1;
+          video.dislikes += 1;
+
+          videoLike.like = false;
+        } else if (videoLike.like === false && action === 'like') {
+          video.likes += 1;
+          video.dislikes -= 1;
+
+          videoLike.like = true;
+        } else {
+          return res.status(400).json({ message: 'Bad request' });
+        }
+
+        await video.save();
+        await videoLike.save();
+        return res.status(204);
       }
 
-      await video.save();
+      await VideoLike.create({
+        id: uuidv4(),
+        userId: req.user.id,
+        videoId,
+        like: action === 'like',
+      });
+
       res.status(204);
     } catch (error) {
       res.status(500).send(error);

@@ -66,20 +66,16 @@ router.patch(
           comment.dislikes += 1;
 
           commentLike.like = false;
-          await comment.save();
-          await commentLike.save();
-
-          return res.status(204);
         } else if (commentLike.like === false && req.params.action === 'like') {
           comment.likes += 1;
           comment.dislikes -= 1;
 
           commentLike.like = true;
-          await comment.save();
-          await commentLike.save();
-
+        } else {
           return res.status(204);
         }
+        await comment.save();
+        await commentLike.save();
       }
 
       await CommentLike.create({
@@ -90,11 +86,10 @@ router.patch(
       });
 
       comment.likes += req.params.action === 'like' ? 1 : -1;
-      comment.likes += req.params.action !== 'like' ? 1 : -1;
+      comment.dislikes += req.params.action !== 'like' ? 1 : -1;
       await comment.save();
 
       res.status(204);
-      res.status(200);
     } catch (error) {
       res.status(500).json({ message: error });
     }
