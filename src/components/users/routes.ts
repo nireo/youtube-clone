@@ -120,4 +120,33 @@ router.post(
   }
 );
 
+router.delete(
+  '/subscribe/:userId',
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const user: any = await User.findOne({
+        where: { id: req.params.userId },
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      const subscription = await Subscription.findOne({
+        where: { subscriberId: req.user.id, subscribedId: user.id },
+      });
+
+      if (!subscription) {
+        return res.status(404).json({ message: "Subscription doesn't exist " });
+      }
+
+      await subscription.destroy();
+      res.status(204);
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  }
+);
+
 export default router;
