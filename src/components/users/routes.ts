@@ -1,7 +1,6 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { User } from '../../sequelize';
-import { Video } from '../../sequelize';
+import { User, Video, Subscription } from '../../sequelize';
 import authenticateToken from '../../middlewares/tokenAuth';
 import getFileExtension from '../../utils/getFileExtension';
 
@@ -80,6 +79,41 @@ router.delete(
       }
 
       await user.destroy();
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+  }
+);
+
+router.post(
+  '/subscribe/:userId',
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const user: any = await User.findOne({
+        where: { id: req.params.userId },
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // check if there is a existing subscription model
+      const exists = await Subscription.findOne({
+        where: { subscriberId: req.user.id, subscribedId: user.id },
+      });
+
+      if (exists) {
+        return res.status(409).json({ message: 'Subscription already exists' });
+      }
+
+      await Subscription.create({
+        id: uuidv4(),
+        subscriberId: req.user.id,
+        subscribedId: user.id,
+      });
+
+      res.status(204);
     } catch (error) {
       res.status(500).json({ message: error });
     }
