@@ -101,7 +101,7 @@ export const DrawerWrapper: React.FC = ({ children }) => {
   };
 
   return (
-    <div className={classes.root}>
+    <div>
       <CssBaseline />
       <AppBar
         position="fixed"
