@@ -197,10 +197,10 @@ export const DrawerWrapper: React.FC = ({ children }) => {
           </ListItem>
         </List>
       </Drawer>
-      <main className={classes.content}>
+      <div>
         <div className={classes.toolbar} />
         {children}
-      </main>
+      </div>
     </div>
   );
 };

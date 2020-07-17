@@ -1,8 +1,10 @@
 import React from "react";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import { Navbar } from "./components/layout/Navbar";
 import { DrawerWrapper } from "./components/layout/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Home } from "./components/pages/Home";
+import { Login } from "./components/pages/Login";
 
 function App() {
   const darkTheme = createMuiTheme({
@@ -14,7 +16,26 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <DrawerWrapper />
+      <Router>
+        <Route
+          path="/"
+          exact
+          render={() => (
+            <DrawerWrapper>
+              <Home />
+            </DrawerWrapper>
+          )}
+        />
+        <Route
+          path="/login"
+          exact
+          render={() => (
+            <DrawerWrapper>
+              <Login />
+            </DrawerWrapper>
+          )}
+        />
+      </Router>
     </ThemeProvider>
   );
 }
