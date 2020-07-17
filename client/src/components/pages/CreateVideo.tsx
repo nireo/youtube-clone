@@ -20,11 +20,18 @@ export const CreateVideo: React.FC = () => {
     }
   };
 
+  const handleThumbnailChange = (event: any) => {
+    if (event.target.files[0] !== null) {
+      setThumbnail(event.target.files[0]);
+    }
+  };
+
   const uploadVideo = async (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData();
     formData.append("video", video);
+    formData.append("thumbnail", thumbnail);
     formData.append("title", title);
     formData.append("description", description);
     const config = {
@@ -44,14 +51,30 @@ export const CreateVideo: React.FC = () => {
         <TextField
           value={title}
           onChange={({ target }) => setTitle(target.value)}
+          style={{ width: "100%", marginBottom: "1.5rem" }}
           placeholder="Title"
         />
         <TextField
           value={description}
+          style={{ width: "100%", marginBottom: "1.5rem" }}
           onChange={({ target }) => setDescription(target.value)}
           placeholder="Description"
         />
-        <input type="file" onChange={handleVideoChange} />
+        <Typography>Video file</Typography>
+        <div>
+          <input
+            placeholder="Video file"
+            type="file"
+            style={{ width: "100%", marginBottom: "1.5rem" }}
+            onChange={handleVideoChange}
+          />
+          <input
+            placeholder="Thumbnail file"
+            type="file"
+            style={{ marginBottom: "1.5rem" }}
+            onChange={handleThumbnailChange}
+          />
+        </div>
         <Button variant="contained">Upload</Button>
       </form>
     </Container>

@@ -16,8 +16,11 @@
     "clsx": "^1.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "typescript": "^3.7.5"
   },
   "scripts": {
@@ -43,6 +46,10 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
-    "@types/react-router-dom": "^5.1.5"
-  }
+    "@types/react-redux": "^7.1.9",
+    "@types/react-router-dom": "^5.1.5",
+    "@types/redux": "^3.6.0",
+    "@types/redux-thunk": "^2.1.0"
+  },
+  "proxy": "http://localhost:3001"
 }

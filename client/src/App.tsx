@@ -5,6 +5,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Home } from "./components/pages/Home";
 import { Login } from "./components/pages/Login";
+import { CreateVideo } from "./components/pages/CreateVideo";
 
 function App() {
   const darkTheme = createMuiTheme({
@@ -32,6 +33,15 @@ function App() {
           render={() => (
             <DrawerWrapper>
               <Login />
+            </DrawerWrapper>
+          )}
+        />
+        <Route
+          path="/upload"
+          exact
+          render={() => (
+            <DrawerWrapper>
+              <CreateVideo />
             </DrawerWrapper>
           )}
         />
