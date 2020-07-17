@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/video", express.static("./videos"));
 app.use("/avatar", express.static("./avatars"));
+app.use("/thumbnails", express.static("/thumbnails"));
 
 app.use("/videos", videoRoutes);
 app.use("/auth", authRoutes);

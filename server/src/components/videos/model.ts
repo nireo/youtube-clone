@@ -27,7 +27,7 @@ const VideoModel = (sequelize: Sequelize) => {
       defaultValue: 0
     },
     thumbnail: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false
     }
   });
