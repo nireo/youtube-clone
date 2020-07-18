@@ -4,6 +4,7 @@ import { Video, VideoLike } from "../../sequelize";
 import authenticateToken from "../../middlewares/tokenAuth";
 import fs from "fs";
 import getFileExtension from "../../utils/getFileExtension";
+import * as sequelize from "sequelize";
 
 const router: express.Router = express.Router();
 
@@ -178,5 +179,32 @@ router.patch(
     }
   }
 );
+
+router.get("/", async (req: express.Request, res: express.Response) => {
+  try {
+    const videos = await Video.findAll();
+    res.status(200).json(videos);
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+});
+
+router.get("/search", async (req: express.Request, res: express.Response) => {
+  try {
+    const searchQuery = req.query.search;
+
+    const matchingVideos = await Video.findAll({
+      where: { title: { [sequelize.Op.like]: "%" + searchQuery + "%" } }
+    });
+
+    if (!matchingVideos) {
+      return res.status(500);
+    }
+
+    res.status(200).json(matchingVideos);
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+});
 
 export default router;
