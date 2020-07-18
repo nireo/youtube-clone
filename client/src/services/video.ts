@@ -35,3 +35,13 @@ export const updateVideo = async (videoId: string, newInfo: UpdateVideo) => {
   );
   return response.data;
 };
+
+export const getVideos = async () => {
+  const response = await axios.get(baseUrl);
+  return response.data;
+};
+
+export const videoSearch = async (query: string) => {
+  const response = await axios.get(`${baseUrl}/search?search=${query}`);
+  return response.data;
+};

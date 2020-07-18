@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Home } from "./components/pages/Home";
 import { Login } from "./components/pages/Login";
 import { CreateVideo } from "./components/pages/CreateVideo";
+import { Search } from "./components/pages/Search";
 
 function App() {
   const darkTheme = createMuiTheme({
@@ -42,6 +43,15 @@ function App() {
           render={() => (
             <DrawerWrapper>
               <CreateVideo />
+            </DrawerWrapper>
+          )}
+        />
+        <Route
+          path="/search"
+          exact
+          render={() => (
+            <DrawerWrapper>
+              <Search />
             </DrawerWrapper>
           )}
         />
