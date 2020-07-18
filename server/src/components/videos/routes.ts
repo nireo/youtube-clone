@@ -1,6 +1,6 @@
 import express from "express";
 import { v4 as uuidv4 } from "uuid";
-import { Video, VideoLike } from "../../sequelize";
+import { Video, VideoLike, Comment } from "../../sequelize";
 import authenticateToken from "../../middlewares/tokenAuth";
 import fs from "fs";
 import getFileExtension from "../../utils/getFileExtension";
@@ -206,5 +206,29 @@ router.get("/search", async (req: express.Request, res: express.Response) => {
     return res.status(500).json({ message: error });
   }
 });
+
+// This route exists to make displaying a video on the front-end easier, since we only need
+// one request instead of 2. (get video comments and get video info)
+router.get(
+  "/watch/:videoId",
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const { videoId } = req.params;
+      const video = await Video.findOne({ where: { id: videoId } });
+      if (!video) {
+        return res.status(404);
+      }
+
+      // we return 404 if the video is not found, but the comments field can be empty
+      const comments = await Comment.findAll({
+        where: { videoId: videoId }
+      });
+
+      return res.status(200).json({ video, comments });
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
 
 export default router;
