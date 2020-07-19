@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, MouseEvent } from "react";
 import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { Video } from "../../interfaces/Video";
@@ -13,6 +13,8 @@ import { deepOrange, deepPurple } from "@material-ui/core/colors";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import Popover from "@material-ui/core/Popover";
+import { subscribeToUser } from "../../services/user";
 
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
@@ -31,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 type Props = {
   id: string;
+  user: User | null;
 };
 
 interface WatchPage {
@@ -39,10 +42,15 @@ interface WatchPage {
   user: User;
 }
 
-const WatchVideo: React.FC<Props> = ({ id }) => {
+const WatchVideo: React.FC<Props> = ({ id, user }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [video, setVideo] = useState<WatchPage | null>(null);
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   const loadVideo = useCallback(async () => {
     const data = await getSingleVideo(id);
@@ -55,6 +63,14 @@ const WatchVideo: React.FC<Props> = ({ id }) => {
       setLoaded(true);
     }
   }, [loaded, video, loadVideo]);
+
+  const open = Boolean(anchorEl);
+
+  const handleSubscribe = async () => {
+    if (user !== null && video !== null) {
+      await subscribeToUser(video.user.username);
+    }
+  };
 
   return (
     <Container>
@@ -118,7 +134,38 @@ const WatchVideo: React.FC<Props> = ({ id }) => {
                 </Typography>
               </Link>
             </div>
-            <Button variant="contained">Subscribe</Button>
+            {user === null ? (
+              <div>
+                <Button variant="contained" onClick={handleClick}>
+                  Subscribe
+                </Button>
+                <Popover
+                  open={open}
+                  onClose={() => setAnchorEl(null)}
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center"
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center"
+                  }}
+                >
+                  <div style={{ padding: "1rem" }}>
+                    You need to be logged in to subscribe.
+                    <Divider
+                      style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
+                    />
+                    <Button variant="outlined">Login</Button>
+                  </div>
+                </Popover>
+              </div>
+            ) : (
+              <Button variant="contained" onClick={handleSubscribe}>
+                Subscribe
+              </Button>
+            )}
           </div>
           <Container maxWidth="lg">
             <Typography
@@ -136,7 +183,8 @@ const WatchVideo: React.FC<Props> = ({ id }) => {
 };
 
 const mapStateToProps = (state: AppState) => ({
-  videos: state.videos
+  videos: state.videos,
+  user: state.user
 });
 
 export default connect(mapStateToProps)(WatchVideo);
