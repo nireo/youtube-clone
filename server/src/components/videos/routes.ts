@@ -209,15 +209,19 @@ router.get("/search", async (req: express.Request, res: express.Response) => {
 
 // This route exists to make displaying a video on the front-end easier, since we only need
 // one request instead of 2. (get video comments and get video info)
+// this controller also handles adding views to videos
 router.get(
   "/watch/:videoId",
   async (req: express.Request, res: express.Response) => {
     try {
       const { videoId } = req.params;
-      const video = await Video.findOne({ where: { id: videoId } });
+      const video: any = await Video.findOne({ where: { id: videoId } });
       if (!video) {
         return res.status(404);
       }
+
+      video.views++;
+      await video.save();
 
       // we return 404 if the video is not found, but the comments field can be empty
       const comments = await Comment.findAll({

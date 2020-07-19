@@ -19,4 +19,5 @@ export interface Video {
   createdAt: string;
   updatedAt: string;
   userId: string;
+  views: number;
 }

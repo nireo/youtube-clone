@@ -182,7 +182,7 @@ export const DrawerWrapper: React.FC = ({ children }) => {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
-          <Link to="/search">
+          <Link to={`/search?search=${search}`}>
             <Button variant="contained">Search</Button>
           </Link>
         </Toolbar>
