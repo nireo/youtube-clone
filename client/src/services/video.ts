@@ -45,3 +45,8 @@ export const videoSearch = async (query: string) => {
   const response = await axios.get(`${baseUrl}/search?search=${query}`);
   return response.data;
 };
+
+export const getSingleVideo = async (videoId: string) => {
+  const response = await axios.get(`${baseUrl}/watch/${videoId}`);
+  return response.data;
+};

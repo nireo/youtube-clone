@@ -6,6 +6,7 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
+import { Link } from "react-router-dom";
 
 export const Search: React.FC = () => {
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -45,21 +46,25 @@ export const Search: React.FC = () => {
           </Typography>
           <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
           {videos.map((video: Video) => (
-            <Grid container style={{ marginTop: "0.75rem" }} key={video.id}>
-              <Grid item xs={2}>
-                <img
-                  style={{ width: "12rem", marginRight: "1rem" }}
-                  alt="video-thumbnail"
-                  src={`http://localhost:3001/thumbnails/${video.id}.${video.thumbnail}`}
-                />
+            <Link to={`/watch/${video.id}`} style={{ textDecoration: "none" }}>
+              <Grid container style={{ marginTop: "0.75rem" }} key={video.id}>
+                <Grid item xs={2}>
+                  <img
+                    style={{ width: "12rem", marginRight: "1rem" }}
+                    alt="video-thumbnail"
+                    src={`http://localhost:3001/thumbnails/${video.id}.${video.thumbnail}`}
+                  />
+                </Grid>
+                <Grid item xs={10}>
+                  <Typography variant="h5" color="textPrimary">
+                    {video.title}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {video.description}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={10}>
-                <Typography variant="h5">{video.title}</Typography>
-                <Typography variant="body1" color="textSecondary">
-                  {video.description}
-                </Typography>
-              </Grid>
-            </Grid>
+            </Link>
           ))}
         </Container>
       )}

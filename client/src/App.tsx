@@ -7,6 +7,7 @@ import { Home } from "./components/pages/Home";
 import { Login } from "./components/pages/Login";
 import { CreateVideo } from "./components/pages/CreateVideo";
 import { Search } from "./components/pages/Search";
+import WatchVideo from "./components/pages/WatchVideo";
 
 function App() {
   const darkTheme = createMuiTheme({
@@ -52,6 +53,15 @@ function App() {
           render={() => (
             <DrawerWrapper>
               <Search />
+            </DrawerWrapper>
+          )}
+        />
+        <Route
+          path="/watch/:id"
+          exact
+          render={({ match }) => (
+            <DrawerWrapper>
+              <WatchVideo id={match.params.id} />
             </DrawerWrapper>
           )}
         />
