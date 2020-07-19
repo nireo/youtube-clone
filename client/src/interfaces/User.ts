@@ -8,4 +8,5 @@ export interface User {
   username: string;
   avatar: string | null;
   createdAt: string;
+  subscribers: number;
 }

@@ -1,6 +1,6 @@
 import express from "express";
 import { v4 as uuidv4 } from "uuid";
-import { Video, VideoLike, Comment } from "../../sequelize";
+import { Video, VideoLike, Comment, User } from "../../sequelize";
 import authenticateToken from "../../middlewares/tokenAuth";
 import fs from "fs";
 import getFileExtension from "../../utils/getFileExtension";
@@ -219,16 +219,20 @@ router.get(
       if (!video) {
         return res.status(404);
       }
-
       video.views++;
       await video.save();
+
+      const user = await User.findOne({ where: { id: video.userId } });
+      if (!user) {
+        return res.status(404);
+      }
 
       // we return 404 if the video is not found, but the comments field can be empty
       const comments = await Comment.findAll({
         where: { videoId: videoId }
       });
 
-      return res.status(200).json({ video, comments });
+      return res.status(200).json({ video, comments, user });
     } catch (error) {
       return res.status(500).json({ message: error });
     }

@@ -5,7 +5,6 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
@@ -26,12 +25,22 @@ import SearchIcon from "@material-ui/icons/Search";
 import InputBase from "@material-ui/core/InputBase";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { AppState } from "../../store";
+import { User } from "../../interfaces/User";
+import AccountCircle from "@material-ui/icons/AccountCircle";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex"
+  },
+  sectionDesktop: {
+    display: "none",
+    [theme.breakpoints.up("md")]: {
+      display: "flex"
+    }
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -125,10 +134,17 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("md")]: {
       width: "20ch"
     }
+  },
+  grow: {
+    flewGrow: 1
   }
 }));
 
-export const DrawerWrapper: React.FC = ({ children }) => {
+type Props = {
+  user: User | null;
+};
+
+const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState<boolean>(false);
@@ -143,8 +159,7 @@ export const DrawerWrapper: React.FC = ({ children }) => {
   };
 
   return (
-    <div>
-      <CssBaseline />
+    <div className={classes.grow}>
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
@@ -167,7 +182,7 @@ export const DrawerWrapper: React.FC = ({ children }) => {
           <Typography variant="h6" noWrap>
             <strong>Youtube</strong>
           </Typography>
-          <div className={classes.search} style={{ textAlign: "center" }}>
+          <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
@@ -185,6 +200,22 @@ export const DrawerWrapper: React.FC = ({ children }) => {
           <Link to={`/search?search=${search}`}>
             <Button variant="contained">Search</Button>
           </Link>
+          <div className={classes.grow}></div>
+          <div className={classes.sectionDesktop} style={{ float: "right" }}>
+            {user === null ? (
+              <Link to="/login">
+                <Button>Login</Button>
+              </Link>
+            ) : (
+              <IconButton
+                edge="end"
+                aria-label="account of user"
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            )}
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -265,3 +296,9 @@ export const DrawerWrapper: React.FC = ({ children }) => {
     </div>
   );
 };
+
+const mapStateToProps = (state: AppState) => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps)(DrawerWrapper);

@@ -7,6 +7,27 @@ import { Comment } from "../../interfaces/Comment";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
+import { User } from "../../interfaces/User";
+import Avatar from "@material-ui/core/Avatar";
+import { deepOrange, deepPurple } from "@material-ui/core/colors";
+import { makeStyles, Theme } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+
+const useStyles = makeStyles((theme: Theme) => ({
+  orange: {
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: deepOrange[500]
+  },
+  purple: {
+    color: theme.palette.getContrastText(deepPurple[500]),
+    backgroundColor: deepPurple[500]
+  },
+  avatar: {
+    width: theme.spacing(6),
+    height: theme.spacing(6)
+  }
+}));
 
 type Props = {
   id: string;
@@ -15,11 +36,13 @@ type Props = {
 interface WatchPage {
   comments: Comment[];
   video: Video;
+  user: User;
 }
 
 const WatchVideo: React.FC<Props> = ({ id }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [video, setVideo] = useState<WatchPage | null>(null);
+  const classes = useStyles();
 
   const loadVideo = useCallback(async () => {
     const data = await getSingleVideo(id);
@@ -32,8 +55,6 @@ const WatchVideo: React.FC<Props> = ({ id }) => {
       setLoaded(true);
     }
   }, [loaded, video, loadVideo]);
-
-  console.log(video);
 
   return (
     <Container>
@@ -64,13 +85,50 @@ const WatchVideo: React.FC<Props> = ({ id }) => {
             </Typography>
           </div>
           <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
-          <Typography
-            variant="body1"
-            color="textPrimary"
-            style={{ fontSize: "0.9rem" }}
+          <div
+            style={{
+              display: "flex",
+              marginBottom: "1rem",
+              justifyContent: "space-between"
+            }}
           >
-            {video.video.description}
-          </Typography>
+            <div style={{ display: "flex" }}>
+              <Link to={`/channel/${video.user.id}`}>
+                <Avatar
+                  className={classes.avatar}
+                  src={`http://localhost:3001/avatars/${video.user.id}${video.user.avatar}`}
+                ></Avatar>
+              </Link>
+              <Link
+                to={`/channel/${video.user.id}`}
+                style={{ textDecoration: "none" }}
+              >
+                <Typography
+                  style={{ marginLeft: "0.5rem" }}
+                  color="textPrimary"
+                >
+                  <strong>{video.user.username}</strong>
+                </Typography>
+                <Typography
+                  style={{ marginLeft: "0.5rem" }}
+                  color="textSecondary"
+                  variant="body2"
+                >
+                  {video.user.subscribers} subscribers
+                </Typography>
+              </Link>
+            </div>
+            <Button variant="contained">Subscribe</Button>
+          </div>
+          <Container maxWidth="lg">
+            <Typography
+              variant="body1"
+              color="textPrimary"
+              style={{ fontSize: "0.9rem" }}
+            >
+              {video.video.description}
+            </Typography>
+          </Container>
         </div>
       )}
     </Container>

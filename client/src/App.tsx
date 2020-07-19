@@ -1,6 +1,6 @@
 import React from "react";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import { DrawerWrapper } from "./components/layout/Drawer";
+import DrawerWrapper from "./components/layout/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Home } from "./components/pages/Home";
