@@ -1,6 +1,7 @@
-import { User, Credentials } from "../interfaces/User";
+import { User, Credentials, UserWithToken } from "../interfaces/User";
 import { Dispatch } from "redux";
 import { login, register } from "../services/auth";
+import setTokens from "../utils/setTokens";
 
 const reducer = (state: User | null = null, action: any) => {
   switch (action.type) {
@@ -15,10 +16,11 @@ const reducer = (state: User | null = null, action: any) => {
 
 export const loginAction = (credentials: Credentials) => {
   return async (dispatch: Dispatch) => {
-    const user = await login(credentials);
+    const data: UserWithToken = await login(credentials);
+    setTokens(data.token);
     dispatch({
       type: "LOGIN",
-      data: user
+      data: data.user
     });
   };
 };

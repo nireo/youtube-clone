@@ -10,3 +10,8 @@ export interface User {
   createdAt: string;
   subscribers: number;
 }
+
+export interface UserWithToken {
+  user: User;
+  token: string;
+}

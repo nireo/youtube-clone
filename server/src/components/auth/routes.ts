@@ -60,7 +60,7 @@ router.post("/login", async (req: express.Request, res: express.Response) => {
       process.env.TOKEN_SECRET as string
     );
 
-    res.json({ token });
+    res.json({ token, user });
   } catch (error) {
     res.status(500).json({ message: error });
   }

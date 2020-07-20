@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -8,6 +8,11 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import { connect } from "react-redux";
+import { AppState } from "../../store";
+import { loginAction } from "../../store/userReducer";
+import { User, Credentials } from "../../interfaces/User";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -29,17 +34,32 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const Login: React.FC = () => {
+type Props = {
+  user: User | null;
+  loginAction: (credentials: Credentials) => void;
+};
+
+const Login: React.FC<Props> = ({ loginAction, user }) => {
   const [page, setPage] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const classes = useStyles();
+
+  if (user) {
+    return <Redirect to="/" />;
+  }
 
   const changePage = () => {
     const newPage = page === "register" ? "login" : "register";
     setPage(newPage);
     setUsername("");
     setPassword("");
+  };
+
+  const handleLogin = (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (username === "" || password === "") return;
+    loginAction({ username, password });
   };
 
   return (
@@ -51,7 +71,7 @@ export const Login: React.FC = () => {
         <Typography component="h1" variant="h5">
           {page === "register" ? "Register" : "Login"}
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleLogin}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -61,6 +81,7 @@ export const Login: React.FC = () => {
             name="username"
             autoFocus
             value={username}
+            onChange={({ target }) => setUsername(target.value)}
           />
           <TextField
             variant="outlined"
@@ -70,6 +91,7 @@ export const Login: React.FC = () => {
             label="Password"
             type="password"
             value={password}
+            onChange={({ target }) => setPassword(target.value)}
           />
           <Button
             type="submit"
@@ -95,3 +117,9 @@ export const Login: React.FC = () => {
     </Container>
   );
 };
+
+const mapStateToProps = (state: AppState) => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps, { loginAction })(Login);
