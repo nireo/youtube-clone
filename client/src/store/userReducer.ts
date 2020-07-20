@@ -18,6 +18,7 @@ export const loginAction = (credentials: Credentials) => {
   return async (dispatch: Dispatch) => {
     const data: UserWithToken = await login(credentials);
     setTokens(data.token);
+    localStorage.setItem("youtube-user", JSON.stringify(data));
     dispatch({
       type: "LOGIN",
       data: data.user
@@ -38,6 +39,22 @@ export const registerAction = (credentials: Credentials) => {
 export const logoutAction = () => {
   localStorage.clear();
   return { type: "LOGOUT" };
+};
+
+export const loadLocalStorageUser = () => {
+  return async (dispatch: Dispatch) => {
+    const userDataString: string | null = localStorage.getItem("youtube-user");
+    if (!userDataString) {
+      return;
+    }
+
+    const userDataJSON: UserWithToken = JSON.parse(userDataString);
+    setTokens(userDataJSON.token);
+    dispatch({
+      type: "LOGIN",
+      data: userDataJSON
+    });
+  };
 };
 
 export default reducer;

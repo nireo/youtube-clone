@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import DrawerWrapper from "./components/layout/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -8,13 +8,31 @@ import Login from "./components/pages/Login";
 import { CreateVideo } from "./components/pages/CreateVideo";
 import { Search } from "./components/pages/Search";
 import WatchVideo from "./components/pages/WatchVideo";
+import { connect } from "react-redux";
+import { AppState } from "./store";
+import { User } from "./interfaces/User";
+import { loadLocalStorageUser } from "./store/userReducer";
 
-function App() {
+type Props = {
+  user: User | null;
+  loadLocalStorageUser: () => void;
+};
+
+const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
+  // adding loaded since don't want the app constantly checking the local storage
+  const [loaded, setLoaded] = useState<boolean>(false);
   const darkTheme = createMuiTheme({
     palette: {
       type: "dark"
     }
   });
+
+  useEffect(() => {
+    if (!loaded && user === null) {
+      loadLocalStorageUser();
+      setLoaded(true);
+    }
+  }, [loaded, user, loadLocalStorageUser]);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -68,6 +86,10 @@ function App() {
       </Router>
     </ThemeProvider>
   );
-}
+};
 
-export default App;
+const mapStateToProps = (state: AppState) => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps, { loadLocalStorageUser })(App);
