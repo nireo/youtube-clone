@@ -29,6 +29,7 @@ import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { User } from "../../interfaces/User";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import Container from "@material-ui/core/Container";
 
 const drawerWidth = 240;
 
@@ -293,10 +294,10 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
           </ListItem>
         </List>
       </Drawer>
-      <div>
+      <Container maxWidth="lg">
         <div className={classes.toolbar} />
         {children}
-      </div>
+      </Container>
     </div>
   );
 };
