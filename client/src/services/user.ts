@@ -48,3 +48,8 @@ export const getSubscriptions = async () => {
   const response = await axios.get(`${baseUrl}/subscription`, getConfig());
   return response.data;
 };
+
+export const getChannelData = async (userId: string) => {
+  const response = await axios.get(`${baseUrl}/channel/${userId}`);
+  return response.data;
+};

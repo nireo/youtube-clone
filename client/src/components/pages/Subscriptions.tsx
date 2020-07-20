@@ -7,7 +7,6 @@ import { getSubscriptions } from "../../services/user";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
 import { makeStyles, Theme } from "@material-ui/core";
 import { Link } from "react-router-dom";

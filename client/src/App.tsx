@@ -13,6 +13,7 @@ import { AppState } from "./store";
 import { User } from "./interfaces/User";
 import { loadLocalStorageUser } from "./store/userReducer";
 import Subscriptions from "./components/pages/Subscriptions";
+import UserChannel from "./components/pages/UserChannel";
 
 type Props = {
   user: User | null;
@@ -90,6 +91,15 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
           render={() => (
             <DrawerWrapper>
               <Subscriptions />
+            </DrawerWrapper>
+          )}
+        />
+        <Route
+          path="/channel/:userId"
+          exact
+          render={({ match }) => (
+            <DrawerWrapper>
+              <UserChannel id={match.params.userId} />
             </DrawerWrapper>
           )}
         />
