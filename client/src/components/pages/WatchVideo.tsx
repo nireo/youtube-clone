@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Popover from "@material-ui/core/Popover";
 import { subscribeToUser } from "../../services/user";
+import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
@@ -28,6 +29,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   avatar: {
     width: theme.spacing(6),
     height: theme.spacing(6)
+  },
+  commentAvatar: {
+    width: theme.spacing(5),
+    height: theme.spacing(5)
   }
 }));
 
@@ -47,6 +52,7 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
   const [video, setVideo] = useState<WatchPage | null>(null);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [comment, setComment] = useState<string>("");
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -176,6 +182,40 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
               {video.video.description}
             </Typography>
           </Container>
+          <div style={{ marginTop: "2rem" }}>
+            <Divider />
+            <Typography variant="h6" style={{ marginTop: "1rem" }}>
+              {video.comments.length} comments
+            </Typography>
+            {user !== null ? (
+              <div style={{ display: "flex", marginTop: "1rem" }}>
+                <Avatar
+                  src={`http://localhost:3001/avatars/${user.avatar}`}
+                  className={classes.commentAvatar}
+                  style={{ marginRight: "1rem" }}
+                />
+                <TextField
+                  placeholder="Add public comment"
+                  value={comment}
+                  onChange={({ target }) => setComment(target.value)}
+                  fullWidth
+                />
+              </div>
+            ) : (
+              <div style={{ display: "flex", marginTop: "1rem" }}>
+                <Avatar
+                  src=""
+                  className={classes.commentAvatar}
+                  style={{ marginRight: "1rem" }}
+                />
+                <TextField
+                  placeholder="Add public comment"
+                  fullWidth
+                  disabled
+                />
+              </div>
+            )}
+          </div>
         </div>
       )}
     </Container>
