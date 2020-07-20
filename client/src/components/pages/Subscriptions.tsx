@@ -7,22 +7,35 @@ import { getSubscriptions } from "../../services/user";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
+import Grid from "@material-ui/core/Grid";
+import Avatar from "@material-ui/core/Avatar";
+import { makeStyles, Theme } from "@material-ui/core";
+import { Link } from "react-router-dom";
+
+const useStyles = makeStyles((theme: Theme) => ({
+  avatar: {
+    width: theme.spacing(16),
+    height: theme.spacing(16)
+  }
+}));
 
 type Props = {
   user: User | null;
 };
 
 const Subscriptions: React.FC<Props> = ({ user }) => {
-  const [users, setUsers] = useState<User[] | null>([]);
+  const [users, setUsers] = useState<User[] | null>(null);
   const [loaded, setLoaded] = useState<boolean>(false);
+  const classes = useStyles();
 
   const loadSubscriptions = useCallback(async () => {
     const data = await getSubscriptions();
+    console.log(data);
     setUsers(data);
   }, []);
 
   useEffect(() => {
-    if (!users && !loaded) {
+    if (users === null && loaded === false) {
       loadSubscriptions();
       setLoaded(true);
     }
@@ -33,13 +46,38 @@ const Subscriptions: React.FC<Props> = ({ user }) => {
   }
 
   return (
-    <Container>
+    <Container style={{ marginTop: "1rem" }}>
       <Typography variant="h5">Your subscriptions</Typography>
       <Divider style={{ marginTop: "1rem", marginBottom: "2rem" }} />
       {users !== null && (
         <div>
           {users.map((u: User) => (
-            <div>{u.username}</div>
+            <Link
+              to={`/channel/${u.id}`}
+              style={{ paddingBottom: "1rem", textDecoration: "none" }}
+            >
+              <div style={{ display: "flex" }}>
+                <Avatar
+                  src={`http://localhost:3001/avatars/${u.avatar}`}
+                  className={classes.avatar}
+                />
+                <div>
+                  <Typography
+                    style={{ marginLeft: "1rem", fontSize: "2rem" }}
+                    color="textPrimary"
+                  >
+                    {u.username}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color="textSecondary"
+                    style={{ marginLeft: "1rem" }}
+                  >
+                    {u.subscribers} subscribers
+                  </Typography>
+                </div>
+              </div>
+            </Link>
           ))}
         </div>
       )}

@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { AppState } from "./store";
 import { User } from "./interfaces/User";
 import { loadLocalStorageUser } from "./store/userReducer";
+import Subscriptions from "./components/pages/Subscriptions";
 
 type Props = {
   user: User | null;
@@ -80,6 +81,15 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
           render={({ match }) => (
             <DrawerWrapper>
               <WatchVideo id={match.params.id} />
+            </DrawerWrapper>
+          )}
+        />
+        <Route
+          path="/subscriptions"
+          exact
+          render={() => (
+            <DrawerWrapper>
+              <Subscriptions />
             </DrawerWrapper>
           )}
         />
