@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  MouseEvent,
-  ChangeEvent
-} from "react";
+import React, { useState, useEffect, useCallback, MouseEvent, ChangeEvent } from "react";
 import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { Video } from "../../interfaces/Video";
@@ -85,22 +79,13 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
     }
   };
 
-  const handleCommentCreation = async (event: ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!user && video === null) {
+  const handleCommentCreation = (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!user) {
       return;
     }
 
-    let content = await createComment(id, { content: comment });
-    let copy = video;
-    // typescript for some reason requires a check that copy is not null
-    if (copy === null) {
-      return;
-    }
-
-    copy.comments = [copy.comments, content];
-
-    setVideo(copy);
+    createComment(id, { content: comment });
   };
 
   return (
@@ -219,16 +204,12 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
                   className={classes.commentAvatar}
                   style={{ marginRight: "1rem" }}
                 />
-
-                <form onSubmit={handleCommentCreation}>
-                  <TextField
-                    placeholder="Add public comment"
-                    value={comment}
-                    onChange={({ target }) => setComment(target.value)}
-                    fullWidth
-                  />
-                  <Button type="submit">Create comment</Button>
-                </form>
+                <TextField
+                  placeholder="Add public comment"
+                  value={comment}
+                  onChange={({ target }) => setComment(target.value)}
+                  fullWidth
+                />
               </div>
             ) : (
               <div style={{ display: "flex", marginTop: "1rem" }}>

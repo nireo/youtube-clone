@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  MouseEvent,
-  ChangeEvent
-} from "react";
+import React, { useState, useEffect, useCallback, MouseEvent } from "react";
 import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { Video } from "../../interfaces/Video";
@@ -22,7 +16,6 @@ import Button from "@material-ui/core/Button";
 import Popover from "@material-ui/core/Popover";
 import { subscribeToUser } from "../../services/user";
 import TextField from "@material-ui/core/TextField";
-import { createComment } from "../../services/comment";
 
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
@@ -83,24 +76,6 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
     if (user !== null && video !== null) {
       await subscribeToUser(video.user.username);
     }
-  };
-
-  const handleCommentCreation = async (event: ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!user && video === null) {
-      return;
-    }
-
-    let content = await createComment(id, { content: comment });
-    let copy = video;
-    // typescript for some reason requires a check that copy is not null
-    if (copy === null) {
-      return;
-    }
-
-    copy.comments = [copy.comments, content];
-
-    setVideo(copy);
   };
 
   return (
@@ -219,16 +194,12 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
                   className={classes.commentAvatar}
                   style={{ marginRight: "1rem" }}
                 />
-
-                <form onSubmit={handleCommentCreation}>
-                  <TextField
-                    placeholder="Add public comment"
-                    value={comment}
-                    onChange={({ target }) => setComment(target.value)}
-                    fullWidth
-                  />
-                  <Button type="submit">Create comment</Button>
-                </form>
+                <TextField
+                  placeholder="Add public comment"
+                  value={comment}
+                  onChange={({ target }) => setComment(target.value)}
+                  fullWidth
+                />
               </div>
             ) : (
               <div style={{ display: "flex", marginTop: "1rem" }}>
