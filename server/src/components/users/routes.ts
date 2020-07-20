@@ -183,4 +183,23 @@ router.get(
   }
 );
 
+// get user channel information and all the videos that the user has published
+router.get(
+  "/channel/:userId",
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const { userId } = req.params;
+      const user = await User.findOne({ where: { id: userId } });
+      if (!user) {
+        return res.status(404);
+      }
+
+      const userVideos = await Video.findAll({ where: { userId } });
+      res.status(200).json({ user, videos: userVideos });
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
 export default router;
