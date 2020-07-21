@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { Video } from "../../interfaces/Video";
 import { getSingleVideo } from "../../services/video";
-import { Comment } from "../../interfaces/Comment";
+import { Comment, RateComment } from "../../interfaces/Comment";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
@@ -22,7 +22,10 @@ import Button from "@material-ui/core/Button";
 import Popover from "@material-ui/core/Popover";
 import { subscribeToUser } from "../../services/user";
 import TextField from "@material-ui/core/TextField";
-import { createComment } from "../../services/comment";
+import { createComment, rateComment } from "../../services/comment";
+import IconButton from "@material-ui/core/IconButton";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
@@ -60,6 +63,7 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [comment, setComment] = useState<string>("");
+  const [comments, setComments] = useState<Comment[] | null>(null);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -68,6 +72,7 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
   const loadVideo = useCallback(async () => {
     const data = await getSingleVideo(id);
     setVideo(data);
+    setComments(data.comments);
   }, [id]);
 
   useEffect(() => {
@@ -98,14 +103,43 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
       return;
     }
 
-    copy.comments = [copy.comments, content];
+    copy.comments = [...copy.comments, content];
 
     setVideo(copy);
   };
 
+  const handleCommentRate = async (action: RateComment, commentId: string) => {
+    if (comments === null) {
+      return;
+    }
+
+    // check if the comment exists here, so that we can save calling the back-end if it doesn't
+    let ratedComment = comments.find((c: Comment) => c.id === commentId);
+    if (!ratedComment) {
+      return;
+    }
+
+    await rateComment(action, commentId);
+    if (action === "like") {
+      ratedComment.likes++;
+    } else if (action === "dislike") {
+      ratedComment.dislikes++;
+    }
+
+    // update comments array
+    const updatedComments = comments.map((c: Comment) =>
+      c.id === commentId && ratedComment !== undefined ? ratedComment : c
+    );
+    if (!updatedComments) {
+      return;
+    }
+
+    setComments(updatedComments);
+  };
+
   return (
     <Container>
-      {video !== null && (
+      {video !== null && comments !== null && (
         <div style={{ marginTop: "2rem" }}>
           <video style={{ width: "100%" }} controls>
             <source
@@ -186,7 +220,10 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
                   <div style={{ padding: "1rem" }}>
                     You need to be logged in to subscribe.
                     <Divider
-                      style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
+                      style={{
+                        marginTop: "0.5rem",
+                        marginBottom: "0.5rem"
+                      }}
                     />
                     <Button variant="outlined">Login</Button>
                   </div>
@@ -244,6 +281,36 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
                 />
               </div>
             )}
+
+            {comments.map((comment: Comment) => (
+              <div style={{ marginTop: "0.5rem" }}>
+                <Typography>{comment.content}</Typography>
+                <div style={{ display: "flex" }}>
+                  <IconButton
+                    onClick={() =>
+                      handleCommentRate(RateComment.Like, comment.id)
+                    }
+                    style={{ backgroundColor: "transparent" }}
+                  >
+                    <ThumbUpIcon fontSize="small" />
+                  </IconButton>
+                  <Typography style={{ marginTop: "0.5rem" }}>
+                    {comment.likes}
+                  </Typography>
+                  <IconButton
+                    onClick={() =>
+                      handleCommentRate(RateComment.Like, comment.id)
+                    }
+                    style={{ backgroundColor: "transparent" }}
+                  >
+                    <ThumbDownIcon fontSize="small" />
+                  </IconButton>
+                  <Typography style={{ marginTop: "0.5rem" }}>
+                    {comment.dislikes}
+                  </Typography>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}

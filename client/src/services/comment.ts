@@ -19,7 +19,7 @@ export const createComment = async (
   comment: CreateComment
 ) => {
   const response = await axios.post(
-    `${baseUrl}${videoId}`,
+    `${baseUrl}/${videoId}`,
     comment,
     getConfig()
   );

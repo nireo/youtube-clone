@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, KeyboardEvent } from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme, fade } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -24,7 +24,7 @@ import WatchLaterIcon from "@material-ui/icons/WatchLater";
 import SearchIcon from "@material-ui/icons/Search";
 import InputBase from "@material-ui/core/InputBase";
 import Button from "@material-ui/core/Button";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { User } from "../../interfaces/User";
@@ -159,6 +159,12 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
     setOpen(false);
   };
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      return <Redirect to={`/search/?search=${search}`} />;
+    }
+  };
+
   return (
     <div className={classes.grow}>
       <AppBar
@@ -196,6 +202,7 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
               value={search}
               onChange={({ target }) => setSearch(target.value)}
               inputProps={{ "aria-label": "search" }}
+              onKeyPress={handleKeyDown}
             />
           </div>
           <Link to={`/search?search=${search}`}>

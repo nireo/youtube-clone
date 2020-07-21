@@ -6,6 +6,7 @@ import {
   deleteVideo
 } from "../services/video";
 import { Video, UpdateVideo, RateActions } from "../interfaces/Video";
+import { createComment } from "../services/comment";
 
 const reducer = (state: Video[] = [], action: any) => {
   switch (action.type) {
@@ -32,7 +33,6 @@ const reducer = (state: Video[] = [], action: any) => {
       return state.map((video: Video) =>
         video.id === action.id ? action.data : video
       );
-
     default:
       return state;
   }

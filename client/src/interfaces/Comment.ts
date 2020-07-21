@@ -4,6 +4,8 @@ export interface Comment {
   createdAt: string;
   updatedAt: string;
   edited: boolean;
+  likes: number;
+  dislikes: number;
 }
 
 export interface CreateComment {
