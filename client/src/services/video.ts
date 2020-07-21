@@ -50,3 +50,8 @@ export const getSingleVideo = async (videoId: string) => {
   const response = await axios.get(`${baseUrl}/watch/${videoId}`);
   return response.data;
 };
+
+export const getUserVideos = async () => {
+  const response = await axios.get(`${baseUrl}/me`, getConfig());
+  return response.data;
+};

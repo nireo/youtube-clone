@@ -14,6 +14,7 @@ import { User } from "./interfaces/User";
 import { loadLocalStorageUser } from "./store/userReducer";
 import Subscriptions from "./components/pages/Subscriptions";
 import UserChannel from "./components/pages/UserChannel";
+import YourVideos from "./components/pages/YourVideos";
 
 type Props = {
   user: User | null;
@@ -100,6 +101,15 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
           render={({ match }) => (
             <DrawerWrapper>
               <UserChannel id={match.params.userId} />
+            </DrawerWrapper>
+          )}
+        />
+        <Route
+          path="/your-videos"
+          exact
+          render={() => (
+            <DrawerWrapper>
+              <YourVideos />
             </DrawerWrapper>
           )}
         />
