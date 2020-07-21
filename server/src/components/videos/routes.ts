@@ -5,6 +5,7 @@ import authenticateToken from "../../middlewares/tokenAuth";
 import fs from "fs";
 import getFileExtension from "../../utils/getFileExtension";
 import * as sequelize from "sequelize";
+import authenticateTokenNoStatus from "../../middlewares/tokenAuthNoStatus";
 
 const router: express.Router = express.Router();
 
@@ -233,6 +234,20 @@ router.get(
       });
 
       return res.status(200).json({ video, comments, user });
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
+// get all the videos by the user who call this route
+router.get(
+  "/me",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const videos = await Video.findAll({ where: { userId: req.user.id } });
+      res.status(200).json(videos);
     } catch (error) {
       return res.status(500).json({ message: error });
     }
