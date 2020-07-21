@@ -11,6 +11,11 @@ router.post(
   "/register",
   async (req: express.Request, res: express.Response) => {
     try {
+      // check request body
+      if (!req.body.username || !req.body.password) {
+        return res.status(400);
+      }
+
       // check for user conflicts
       const exists = await User.findOne({
         where: { username: req.body.username }
@@ -38,6 +43,10 @@ router.post(
 
 router.post("/login", async (req: express.Request, res: express.Response) => {
   try {
+    if (!req.body.username || !req.body.password) {
+      return res.status(400);
+    }
+
     const user: any = await User.findOne({
       where: { username: req.body.username }
     });
