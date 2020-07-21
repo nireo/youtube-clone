@@ -13,15 +13,12 @@ router.get(
     try {
       const user = await User.findOne({ where: { id: req.params.userId } });
       if (!user) {
-        return res.status(404).json({ message: "That user does not exist" });
+        return res.status(404);
       }
 
       const videos = await Video.findAll({
         where: { userId: req.params.userId }
       });
-      if (!videos) {
-        return res.status(404).json({ message: "No videos found" });
-      }
 
       res.json(videos);
     } catch (error) {
