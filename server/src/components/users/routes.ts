@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { User, Video, Subscription } from "../../sequelize";
 import authenticateToken from "../../middlewares/tokenAuth";
 import getFileExtension from "../../utils/getFileExtension";
+import fs from "fs";
 
 const router: express.Router = express.Router();
 
@@ -52,6 +53,31 @@ router.post(
       });
     } catch (error) {
       res.status(500).json({ message: error });
+    }
+  }
+);
+
+// removes the users hole avatar thus setting it to the default avatar
+router.delete(
+  "/avatar",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      // check if the avatar already is null
+      if (req.user.avatar === null) {
+        return res.status(204);
+      }
+
+      //remove the file from the file-system
+      fs.unlink(`./avatars/${req.user.avatar}`, err => {
+        if (err) return res.status(500).json({ message: err });
+      });
+
+      req.user.avatar = null;
+      await req.user.save();
+      return res.status(204);
+    } catch (error) {
+      return res.status(500).json({ message: error });
     }
   }
 );

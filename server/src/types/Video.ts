@@ -1,4 +1,4 @@
-import sequelize from 'sequelize';
+import sequelize, { Optional } from "sequelize";
 
 export interface VideoAttributes {
   id: string;
@@ -8,6 +8,9 @@ export interface VideoAttributes {
   likes: number;
   dislikes: number;
 }
+
+export interface VideoCreationAttributes
+  extends Optional<VideoAttributes, "description"> {}
 
 export interface VideoLikeAttributes {
   id: string;

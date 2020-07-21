@@ -3,6 +3,7 @@ import fileUpload from "express-fileupload";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
+import helmet from "helmet";
 
 import videoRoutes from "./components/videos/routes";
 import authRoutes from "./components/auth/routes";
@@ -12,16 +13,16 @@ import commentRouter from "./components/comments/routes";
 const app: express.Application = express();
 dotenv.config();
 
-// enable file upload
+// middleware
 app.use(
   fileUpload({
     createParentPath: true
   })
 );
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(helmet());
 
 app.use("/video", express.static("./videos"));
 app.use("/avatar", express.static("./avatars"));
