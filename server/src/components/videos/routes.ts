@@ -198,10 +198,15 @@ router.get("/search", async (req: express.Request, res: express.Response) => {
     });
 
     if (!matchingVideos) {
-      return res.status(500);
+      return res.status(404);
     }
 
-    res.status(200).json(matchingVideos);
+    // get matching users
+    const matchingUsers = await User.findAll({
+      where: { username: { [sequelize.Op.like]: "%" + searchQuery + "%" } }
+    });
+
+    res.status(200).json({ videos: matchingVideos, users: matchingUsers });
   } catch (error) {
     return res.status(500).json({ message: error });
   }
