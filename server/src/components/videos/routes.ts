@@ -5,7 +5,6 @@ import authenticateToken from "../../middlewares/tokenAuth";
 import fs from "fs";
 import getFileExtension from "../../utils/getFileExtension";
 import * as sequelize from "sequelize";
-import authenticateTokenNoStatus from "../../middlewares/tokenAuthNoStatus";
 
 const router: express.Router = express.Router();
 
@@ -229,11 +228,22 @@ router.get(
       }
 
       // we return 404 if the video is not found, but the comments field can be empty
-      const comments = await Comment.findAll({
+      const comments: any = await Comment.findAll({
         where: { videoId: videoId }
       });
 
-      return res.status(200).json({ video, comments, user });
+      // get all the users that commented
+      let users: any = [];
+      for (let i = 0; i < comments.length; ++i) {
+        const user = await User.findOne({
+          where: { id: comments[i].userId }
+        });
+
+        if (!user) return res.status(400);
+        users = [...users, user];
+      }
+
+      return res.status(200).json({ video, comments, user, users });
     } catch (error) {
       return res.status(500).json({ message: error });
     }

@@ -55,6 +55,7 @@ interface WatchPage {
   comments: Comment[];
   video: Video;
   user: User;
+  users: User[];
 }
 
 const WatchVideo: React.FC<Props> = ({ id, user }) => {
@@ -64,6 +65,7 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [comment, setComment] = useState<string>("");
   const [comments, setComments] = useState<Comment[] | null>(null);
+  const [editing, setEditing] = useState<boolean>(false);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -88,6 +90,19 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
     if (user !== null && video !== null) {
       await subscribeToUser(video.user.username);
     }
+  };
+
+  const handleCommentInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value !== "") {
+      setEditing(true);
+    }
+
+    setComment(event.target.value);
+  };
+
+  const cancelCommentEdit = () => {
+    setComment("");
+    setEditing(false);
   };
 
   const handleCommentCreation = async (event: ChangeEvent<HTMLFormElement>) => {
@@ -250,22 +265,30 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
               {video.comments.length} comments
             </Typography>
             {user !== null ? (
-              <div style={{ display: "flex", marginTop: "1rem" }}>
-                <Avatar
-                  src={`http://localhost:3001/avatars/${user.avatar}`}
-                  className={classes.commentAvatar}
-                  style={{ marginRight: "1rem" }}
-                />
-
-                <form onSubmit={handleCommentCreation}>
+              <div style={{ marginTop: "1rem", marginBottom: "2rem" }}>
+                <div style={{ display: "flex" }}>
+                  <Avatar
+                    src={`http://localhost:3001/avatars/${user.avatar}`}
+                    className={classes.commentAvatar}
+                    style={{ marginRight: "1rem" }}
+                  />
                   <TextField
                     placeholder="Add public comment"
                     value={comment}
-                    onChange={({ target }) => setComment(target.value)}
+                    onChange={handleCommentInputChange}
                     fullWidth
                   />
-                  <Button type="submit">Create comment</Button>
-                </form>
+                </div>
+                {editing && (
+                  <div style={{ float: "right", display: "flex" }}>
+                    <Button onClick={cancelCommentEdit}>Cancel</Button>
+                    <form onSubmit={handleCommentCreation}>
+                      <Button variant="contained" type="submit">
+                        Create comment
+                      </Button>
+                    </form>
+                  </div>
+                )}
               </div>
             ) : (
               <div style={{ display: "flex", marginTop: "1rem" }}>
@@ -282,9 +305,21 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
               </div>
             )}
 
-            {comments.map((comment: Comment) => (
-              <div style={{ marginTop: "0.5rem" }}>
-                <Typography>{comment.content}</Typography>
+            {comments.map((comment: Comment, index: number) => (
+              <div style={{ marginTop: "0.75rem" }}>
+                <div style={{ display: "flex" }}>
+                  <Avatar
+                    src={`http://localhost:3001/avatars/${video.users[index].avatar}`}
+                    className={classes.commentAvatar}
+                    style={{ marginRight: "1rem" }}
+                  />
+                  <div>
+                    <Typography>
+                      <strong>{video.users[index].username}</strong>
+                    </Typography>
+                    <Typography>{comment.content}</Typography>
+                  </div>
+                </div>
                 <div style={{ display: "flex" }}>
                   <IconButton
                     onClick={() =>
