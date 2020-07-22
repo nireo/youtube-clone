@@ -295,12 +295,14 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
               <ListItemText style={{ color: "#fff" }} primary="Your videos" />
             </ListItem>
           </Link>
-          <ListItem button>
-            <ListItemIcon>
-              <WatchLaterIcon />
-            </ListItemIcon>
-            <ListItemText primary="Watch Later" />
-          </ListItem>
+          <Link to="/watch-later" style={{ textDecoration: "none" }}>
+            <ListItem button>
+              <ListItemIcon>
+                <WatchLaterIcon />
+              </ListItemIcon>
+              <ListItemText style={{ color: "#fff" }} primary="Watch Later" />
+            </ListItem>
+          </Link>
         </List>
       </Drawer>
       <Container maxWidth="lg">

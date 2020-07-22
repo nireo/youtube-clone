@@ -53,3 +53,8 @@ export const getChannelData = async (userId: string) => {
   const response = await axios.get(`${baseUrl}/channel/${userId}`);
   return response.data;
 };
+
+export const getWatchLaterList = async () => {
+  const response = await axios.get(`${baseUrl}/watch-later`, getConfig());
+  return response.data;
+};
