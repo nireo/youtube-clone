@@ -9,6 +9,7 @@ export interface User {
   avatar: string | null;
   createdAt: string;
   subscribers: number;
+  description: string;
 }
 
 export interface UserWithToken {

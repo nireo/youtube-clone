@@ -10,6 +10,8 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import { Video } from "../../interfaces/Video";
 import { VideoEntryFull } from "../other/VideoEntryFull";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 const useStyles = makeStyles((theme: Theme) => ({
   channelAvatar: {
@@ -27,6 +29,7 @@ const UserChannel: React.FC<Props> = ({ id }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [channelUser, setChannelUser] = useState<User | null>(null);
   const [channelVideos, setChannelVideos] = useState<Video[] | null>(null);
+  const [page, setPage] = useState<number>(0);
   const classes = useStyles();
 
   const loadChannelData = useCallback(async () => {
@@ -41,6 +44,10 @@ const UserChannel: React.FC<Props> = ({ id }) => {
       setLoaded(true);
     }
   }, [loaded, channelUser, loadChannelData]);
+
+  const handlePageChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setPage(newValue);
+  };
 
   return (
     <Container>
@@ -69,11 +76,34 @@ const UserChannel: React.FC<Props> = ({ id }) => {
                 </Typography>
               </div>
             </div>
-            <Divider style={{ marginTop: "1.5rem", marginBottom: "1.5rem" }} />
-            <Typography variant="h6">Videos</Typography>
-            {channelVideos.map((video: Video) => (
-              <VideoEntryFull video={video} />
-            ))}
+            <div style={{ flexGrow: 1 }}>
+              <Tabs
+                value={page}
+                onChange={handlePageChange}
+                indicatorColor="primary"
+                textColor="primary"
+                centered
+              >
+                <Tab label="Videos" />
+                <Tab label="Playlists" />
+                <Tab label="About" />
+              </Tabs>
+            </div>
+            <Divider style={{ marginBottom: "1.5rem" }} />
+            {page === 0 && (
+              <div>
+                {channelVideos.map((video: Video) => (
+                  <VideoEntryFull video={video} />
+                ))}
+              </div>
+            )}
+            {page === 2 && (
+              <div>
+                <Typography variant="body1">
+                  {channelUser.description}
+                </Typography>
+              </div>
+            )}
           </div>
         )}
     </Container>
