@@ -20,6 +20,11 @@ const UserModel = (sequelize: Sequelize) => {
       defaultValue: 0
     },
 
+    description: {
+      type: DataTypes.STRING,
+      defaultValue: "No description provided"
+    },
+
     // path to the avatar file in the avatars directory
     avatar: {
       type: DataTypes.STRING

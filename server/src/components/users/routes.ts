@@ -82,6 +82,36 @@ router.delete(
   }
 );
 
+// way to update username and channel description
+router.patch(
+  "/update",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      if (req.body.username) {
+        // check if a user with the same username already exists
+        const conflicts = await User.findOne({
+          where: { username: req.body.username }
+        });
+        if (conflicts) {
+          return res.status(409);
+        }
+
+        req.user.username = req.body.username;
+      }
+
+      if (req.body.description) {
+        req.user.description = req.body.description;
+      }
+
+      await req.user.save();
+      res.status(204);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
 router.get("/users", async (req: express.Request, res: express.Response) => {
   try {
     const users = await User.findAll();

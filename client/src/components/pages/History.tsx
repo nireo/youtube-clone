@@ -18,6 +18,7 @@ type Props = {
 const History: React.FC<Props> = ({ user }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [videos, setVideos] = useState<Video[]>([]);
+  const [search, Search] = useState<string>("");
 
   const loadVideos = useCallback(async () => {
     const data = await getHistoryList();
@@ -34,6 +35,10 @@ const History: React.FC<Props> = ({ user }) => {
   if (!user) {
     return <Redirect to="/" />;
   }
+
+  const filteredVideos = videos.filter((video: Video) =>
+    video.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <Container>
@@ -59,7 +64,7 @@ const History: React.FC<Props> = ({ user }) => {
       )}
       {loaded && videos.length > 0 && (
         <div style={{ marginTop: "1rem" }}>
-          {videos.map((video: Video) => (
+          {filteredVideos.map((video: Video) => (
             <VideoEntryFull video={video} />
           ))}
         </div>
