@@ -24,7 +24,13 @@ const UserModel = (sequelize: Sequelize) => {
     avatar: {
       type: DataTypes.STRING
     },
+
+    // both are a list of strings which store video ids
     watchLater: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: []
+    },
+    history: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: []
     }

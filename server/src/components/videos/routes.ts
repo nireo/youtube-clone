@@ -5,6 +5,7 @@ import authenticateToken from "../../middlewares/tokenAuth";
 import fs from "fs";
 import getFileExtension from "../../utils/getFileExtension";
 import * as sequelize from "sequelize";
+import authenticateTokenNoStatus from "../../middlewares/tokenAuthNoStatus";
 
 const router: express.Router = express.Router();
 
@@ -217,7 +218,8 @@ router.get("/search", async (req: express.Request, res: express.Response) => {
 // this controller also handles adding views to videos
 router.get(
   "/watch/:videoId",
-  async (req: express.Request, res: express.Response) => {
+  authenticateTokenNoStatus,
+  async (req: any, res: express.Response) => {
     try {
       const { videoId } = req.params;
       const video: any = await Video.findOne({ where: { id: videoId } });
@@ -226,6 +228,15 @@ router.get(
       }
       video.views++;
       await video.save();
+
+      if (req.user) {
+        // check that the video isn't already in the history
+        const found = req.user.history.find((id: string) => id === videoId);
+        if (!found) {
+          req.user.history = req.user.history.concat(videoId);
+          await req.user.save();
+        }
+      }
 
       const user = await User.findOne({ where: { id: video.userId } });
       if (!user) {

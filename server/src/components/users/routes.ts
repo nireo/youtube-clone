@@ -294,4 +294,28 @@ router.delete(
   }
 );
 
+router.get(
+  "/history",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      let videos: any = [];
+      for (let i = 0; i < req.user.history.length; ++i) {
+        const video = await Video.findOne({
+          where: { id: req.user.history[i] }
+        });
+        if (!video) {
+          return res.status(404);
+        }
+
+        videos = [...videos, video];
+      }
+
+      res.status(200).json(videos);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
 export default router;
