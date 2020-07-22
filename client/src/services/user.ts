@@ -58,3 +58,8 @@ export const getWatchLaterList = async () => {
   const response = await axios.get(`${baseUrl}/watch-later`, getConfig());
   return response.data;
 };
+
+export const getHistoryList = async () => {
+  const response = await axios.get(`${baseUrl}/history`, getConfig());
+  return response.data;
+};
