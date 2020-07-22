@@ -254,4 +254,44 @@ router.post(
   }
 );
 
+router.get(
+  "/watch-later",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      let videos: any = [];
+      for (let i = 0; i < req.user.watchLater.length; ++i) {
+        const video = await Video.findOne({
+          where: { id: req.user.watchLater[i] }
+        });
+        if (!video) {
+          // problem with the watch later array or video has been deleted
+          return res.status(404);
+        }
+
+        videos = [...videos, video];
+      }
+
+      res.status(200).json(videos);
+    } catch (error) {
+      return res.status(500).json({ messsage: error });
+    }
+  }
+);
+
+router.delete(
+  "/watch-later/:videoId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      req.user.watchLater.filter((id: string) => id !== req.params.videoId);
+      await req.user.save();
+
+      res.status(204);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
 export default router;
