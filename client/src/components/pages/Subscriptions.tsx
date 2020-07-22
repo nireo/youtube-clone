@@ -29,7 +29,6 @@ const Subscriptions: React.FC<Props> = ({ user }) => {
 
   const loadSubscriptions = useCallback(async () => {
     const data = await getSubscriptions();
-    console.log(data);
     setUsers(data);
   }, []);
 

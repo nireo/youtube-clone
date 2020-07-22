@@ -225,4 +225,33 @@ router.get(
   }
 );
 
+router.post(
+  "/watch-later/:videoId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const { videoId } = req.params;
+
+      // check that the video exists
+      const video = await Video.findOne({ where: { id: videoId } });
+      if (!video) {
+        return res.status(404);
+      }
+
+      // check that the video isn't already in the watch later list
+      const found = req.user.watchLater.find((id: string) => id === videoId);
+      if (found) {
+        return res.status(409);
+      }
+
+      req.user.watchLater = req.user.watchLater.concat(videoId);
+      await req.user.save();
+
+      return res.status(204);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
 export default router;

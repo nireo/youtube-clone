@@ -23,6 +23,10 @@ const UserModel = (sequelize: Sequelize) => {
     // path to the avatar file in the avatars directory
     avatar: {
       type: DataTypes.STRING
+    },
+    watchLater: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: []
     }
   });
 };

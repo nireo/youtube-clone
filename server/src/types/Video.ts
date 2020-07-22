@@ -9,7 +9,7 @@ export interface VideoAttributes {
   dislikes: number;
 }
 
-export interface VideoCreationAttributes
+export interface VideoCreationAttributxes
   extends Optional<VideoAttributes, "description"> {}
 
 export interface VideoLikeAttributes {
