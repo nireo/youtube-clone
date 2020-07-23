@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import DrawerWrapper from "./components/layout/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./components/pages/Home";
@@ -18,7 +17,7 @@ import YourVideos from "./components/pages/YourVideos";
 import WatchLater from "./components/pages/WatchLater";
 import Library from "./components/pages/Library";
 import { NotFound } from "./components/pages/NotFound";
-import { DrawerWrapper as Drawer } from "./components/layout/DrawerWrapper";
+import { DrawerWrapper } from "./components/layout/DrawerWrapper";
 
 type Props = {
   user: User | null;
@@ -45,105 +44,33 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Router>
-        <Switch>
-          <Route
-            path="/"
-            exact
-            render={() => (
-              <Drawer>
-                <Home />
-              </Drawer>
-            )}
-          />
-          <Route
-            path="/login"
-            exact
-            render={() => (
-              <DrawerWrapper>
-                <Login />
-              </DrawerWrapper>
-            )}
-          />
-          <Route
-            path="/upload"
-            exact
-            render={() => (
-              <DrawerWrapper>
-                <CreateVideo />
-              </DrawerWrapper>
-            )}
-          />
-          <Route
-            path="/search"
-            exact
-            render={() => (
-              <DrawerWrapper>
-                <Search />
-              </DrawerWrapper>
-            )}
-          />
-          <Route
-            path="/watch/:id"
-            exact
-            render={({ match }) => (
-              <DrawerWrapper>
-                <WatchVideo id={match.params.id} />
-              </DrawerWrapper>
-            )}
-          />
-          <Route
-            path="/subscriptions"
-            exact
-            render={() => (
-              <DrawerWrapper>
-                <Subscriptions />
-              </DrawerWrapper>
-            )}
-          />
-          <Route
-            path="/channel/:userId"
-            exact
-            render={({ match }) => (
-              <DrawerWrapper>
-                <UserChannel id={match.params.userId} />
-              </DrawerWrapper>
-            )}
-          />
-          <Route
-            path="/your-videos"
-            exact
-            render={() => (
-              <DrawerWrapper>
-                <YourVideos />
-              </DrawerWrapper>
-            )}
-          />
-          <Route
-            path="/watch-later"
-            exact
-            render={() => (
-              <DrawerWrapper>
-                <WatchLater />
-              </DrawerWrapper>
-            )}
-          />
-          <Route
-            path="/library"
-            exact
-            render={() => (
-              <DrawerWrapper>
-                <Library />
-              </DrawerWrapper>
-            )}
-          />
-          <Route
-            render={() => (
-              <DrawerWrapper>
-                <NotFound />
-              </DrawerWrapper>
-            )}
-          />
-        </Switch>
+        <DrawerWrapper>
+          <Switch>
+            <Route path="/" exact render={() => <Home />} />
+            <Route path="/login" exact render={() => <Login />} />
+            <Route path="/upload" exact render={() => <CreateVideo />} />
+            <Route path="/search" exact render={() => <Search />} />
+            <Route
+              path="/watch/:id"
+              exact
+              render={({ match }) => <WatchVideo id={match.params.id} />}
+            />
+            <Route
+              path="/subscriptions"
+              exact
+              render={() => <Subscriptions />}
+            />
+            <Route
+              path="/channel/:userId"
+              exact
+              render={({ match }) => <UserChannel id={match.params.userId} />}
+            />
+            <Route path="/your-videos" exact render={() => <YourVideos />} />
+            <Route path="/watch-later" exact render={() => <WatchLater />} />
+            <Route path="/library" exact render={() => <Library />} />
+            <Route render={() => <NotFound />} />
+          </Switch>
+        </DrawerWrapper>
       </Router>
     </ThemeProvider>
   );
