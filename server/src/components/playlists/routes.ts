@@ -50,7 +50,7 @@ router.patch(
   async (req: any, res: express.Response) => {
     try {
       const { playlistId } = req.params;
-      const { title, description } = req.body;
+      const { title, description, videoThumbnail } = req.body;
       const playlist: any = await Playlist.findOne({
         where: { id: playlistId }
       });
@@ -68,6 +68,10 @@ router.patch(
 
       if (description) {
         playlist.description = description;
+      }
+
+      if (videoThumbnail) {
+        playlist.videoThumbnail = videoThumbnail;
       }
 
       await playlist.save();
@@ -104,6 +108,10 @@ router.post(
         return res.status(404);
       }
 
+      if (req.user.id !== playlist.userId) {
+        return res.status(403);
+      }
+
       // we don't need the values, just to check if the video exists
       const video = await Video.findOne({ where: { id: videoId } });
       if (!video) {
@@ -113,6 +121,39 @@ router.post(
       playlist.videos = playlist.videos.concat(videoId);
       await playlist.save();
 
+      res.status(204);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
+router.delete(
+  "/video/:playlistId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const { playlistId } = req.params;
+      const { videoId } = req.body;
+
+      const playlist: any = await Playlist.findOne({
+        where: { id: playlistId }
+      });
+      if (!playlist) {
+        return res.status(404);
+      }
+
+      if (req.user.id !== playlist.userId) {
+        return res.status(403);
+      }
+
+      const found = playlist.videos.find((id: string) => id === videoId);
+      if (!found) {
+        return res.status(404);
+      }
+
+      playlist.videos.filter((id: string) => id !== videoId);
+      await playlist.save();
       res.status(204);
     } catch (error) {
       return res.status(500).json({ message: error });
