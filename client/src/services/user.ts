@@ -63,3 +63,8 @@ export const getHistoryList = async () => {
   const response = await axios.get(`${baseUrl}/history`, getConfig());
   return response.data;
 };
+
+export const getLibraryData = async () => {
+  const response = await axios.get(`${baseUrl}/library`, getConfig());
+  return response.data;
+};

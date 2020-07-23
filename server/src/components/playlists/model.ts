@@ -22,7 +22,7 @@ const PlaylistModel = (sequelize: Sequelize) => {
     // youtube places one of the playlist's video's thumbnails as the thumbnail of playlist so this is that
     videoThumbnail: {
       type: DataTypes.STRING,
-      defaultValue: []
+      defaultValue: ""
     }
   });
 };

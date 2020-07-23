@@ -275,12 +275,14 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
         </List>
         <Divider />
         <List>
-          <ListItem button>
-            <ListItemIcon>
-              <VideoLibraryIcon />
-            </ListItemIcon>
-            <ListItemText primary="Library" />
-          </ListItem>
+          <Link to="/library" style={{ textDecoration: "none" }}>
+            <ListItem button>
+              <ListItemIcon>
+                <VideoLibraryIcon />
+              </ListItemIcon>
+              <ListItemText style={{ color: "#fff" }} primary="Library" />
+            </ListItem>
+          </Link>
           <ListItem button>
             <ListItemIcon>
               <HistoryIcon />

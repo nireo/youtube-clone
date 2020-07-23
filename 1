@@ -1,0 +1,24 @@
+import React from "react";
+import { connect } from "react-redux";
+import { AppState } from "../../store";
+import Container from "@material-ui/core/Container";
+import { User } from "../../interfaces/User";
+import { Redirect } from "react-router-dom";
+
+type Props = {
+  user: User | null;
+};
+
+const Library: React.FC<Props> = ({ user }) => {
+  if (!user) {
+    return <Redirect to="/" />;
+  }
+
+  return <div></div>;
+};
+
+const mapStateToProps = (state: AppState) => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps)(Library);

@@ -16,6 +16,7 @@ import Subscriptions from "./components/pages/Subscriptions";
 import UserChannel from "./components/pages/UserChannel";
 import YourVideos from "./components/pages/YourVideos";
 import WatchLater from "./components/pages/WatchLater";
+import Library from "./components/pages/Library";
 
 type Props = {
   user: User | null;
@@ -120,6 +121,15 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
           render={() => (
             <DrawerWrapper>
               <WatchLater />
+            </DrawerWrapper>
+          )}
+        />
+        <Route
+          path="/library"
+          exact
+          render={() => (
+            <DrawerWrapper>
+              <Library />
             </DrawerWrapper>
           )}
         />
