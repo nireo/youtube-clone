@@ -80,7 +80,12 @@ const useStyles = makeStyles(theme => ({
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
-    })
+    }),
+    overflowX: "hidden",
+    width: theme.spacing(7) + 1,
+    [theme.breakpoints.up("sm")]: {
+      width: theme.spacing(9) + 1
+    }
   },
   toolbar: {
     display: "flex",
@@ -104,7 +109,6 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "center"
   },
   search: {
-    position: "relative",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
     "&:hover": {
@@ -143,7 +147,7 @@ type Props = {
 const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(true);
   const [search, setSearch] = useState<string>("");
 
   const handleDrawerOpen = () => {

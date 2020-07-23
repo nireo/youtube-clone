@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, ChangeEvent } from "react";
 import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { User } from "../../interfaces/User";
-import { getChannelData } from "../../services/user";
+import { getChannelData, updateUser } from "../../services/user";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
@@ -13,6 +13,10 @@ import { VideoEntryFull } from "../other/VideoEntryFull";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { Helmet } from "react-helmet";
+import IconButton from "@material-ui/core/IconButton";
+import CreateIcon from "@material-ui/icons/Create";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme: Theme) => ({
   channelAvatar: {
@@ -26,11 +30,13 @@ type Props = {
   user: User | null;
 };
 
-const UserChannel: React.FC<Props> = ({ id }) => {
+const UserChannel: React.FC<Props> = ({ id, user }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [channelUser, setChannelUser] = useState<User | null>(null);
   const [channelVideos, setChannelVideos] = useState<Video[] | null>(null);
   const [page, setPage] = useState<number>(0);
+  const [editing, setEditing] = useState<boolean>(false);
+  const [newDescription, setNewDescription] = useState<string>("");
   const classes = useStyles();
 
   const loadChannelData = useCallback(async () => {
@@ -38,6 +44,14 @@ const UserChannel: React.FC<Props> = ({ id }) => {
     setChannelUser(data.user);
     setChannelVideos(data.videos);
   }, [id]);
+
+  const stopEditing = () => {
+    setEditing(false);
+  };
+
+  const startEditing = () => {
+    setEditing(true);
+  };
 
   useEffect(() => {
     if (loaded === false && channelUser === null) {
@@ -48,6 +62,11 @@ const UserChannel: React.FC<Props> = ({ id }) => {
 
   const handlePageChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setPage(newValue);
+  };
+
+  const handleChannelUpdate = async (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    await updateUser({ description: newDescription });
   };
 
   return (
@@ -107,6 +126,37 @@ const UserChannel: React.FC<Props> = ({ id }) => {
                 <Typography variant="body1">
                   {channelUser.description}
                 </Typography>
+                {user !== null && user.id === id && (
+                  <div>
+                    {editing === false ? (
+                      <IconButton onClick={startEditing}>
+                        <CreateIcon />
+                      </IconButton>
+                    ) : (
+                      <form onSubmit={handleChannelUpdate}>
+                        <TextField
+                          value={newDescription}
+                          onChange={({ target }) =>
+                            setNewDescription(target.value)
+                          }
+                          variant="filled"
+                          rows={3}
+                          multiline
+                          fullWidth
+                        />
+                        <div style={{ float: "right", marginTop: "0.5rem" }}>
+                          <Button onClick={stopEditing}>Cancel</Button>
+                          <Button
+                            style={{ marginLeft: "0.5rem" }}
+                            variant="contained"
+                          >
+                            Update
+                          </Button>
+                        </div>
+                      </form>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>

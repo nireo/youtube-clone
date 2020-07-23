@@ -18,7 +18,7 @@ type Props = {
 const History: React.FC<Props> = ({ user }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [videos, setVideos] = useState<Video[]>([]);
-  const [search, Search] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
 
   const loadVideos = useCallback(async () => {
     const data = await getHistoryList();

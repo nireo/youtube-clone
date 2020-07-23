@@ -53,7 +53,7 @@ export const loadLocalStorageUser = () => {
     setTokens(userDataJSON.token);
     dispatch({
       type: "LOGIN",
-      data: userDataJSON
+      data: userDataJSON.user
     });
   };
 };

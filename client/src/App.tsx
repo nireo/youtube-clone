@@ -17,7 +17,7 @@ import YourVideos from "./components/pages/YourVideos";
 import WatchLater from "./components/pages/WatchLater";
 import Library from "./components/pages/Library";
 import { NotFound } from "./components/pages/NotFound";
-import { DrawerWrapper } from "./components/layout/DrawerWrapper";
+import DrawerWrapper from "./components/layout/DrawerWrapper";
 
 type Props = {
   user: User | null;

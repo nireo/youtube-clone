@@ -29,6 +29,10 @@ import WatchLaterIcon from "@material-ui/icons/WatchLater";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import { connect } from "react-redux";
+import Button from "@material-ui/core/Button";
+import { AppState } from "../../store";
+import { User } from "../../interfaces/User";
 
 const drawerWidth = 240;
 
@@ -127,7 +131,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const DrawerWrapper: React.FC = ({ children }) => {
+type Props = {
+  user: User | null;
+};
+
+const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [search, setSearch] = React.useState<string>("");
@@ -139,6 +147,8 @@ export const DrawerWrapper: React.FC = ({ children }) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  console.log(user);
 
   return (
     <div className={classes.root}>
@@ -184,9 +194,21 @@ export const DrawerWrapper: React.FC = ({ children }) => {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
-          <IconButton edge="end" aria-label="account of user" color="inherit">
-            <AccountCircle />
-          </IconButton>
+          {user === null ? (
+            <Link to="/login">
+              <Button variant="contained">Login</Button>
+            </Link>
+          ) : (
+            <Link to={`/channel/${user.id}`}>
+              <IconButton
+                edge="end"
+                aria-label="account of user"
+                style={{ color: "#fff" }}
+              >
+                <AccountCircle />
+              </IconButton>
+            </Link>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -276,3 +298,9 @@ export const DrawerWrapper: React.FC = ({ children }) => {
     </div>
   );
 };
+
+const mapStateToProps = (state: AppState) => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps)(DrawerWrapper);

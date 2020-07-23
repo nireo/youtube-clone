@@ -3,6 +3,11 @@ export interface Credentials {
   password: string;
 }
 
+export interface UpdateUser {
+  description?: string;
+  username?: string;
+}
+
 export interface User {
   id: string;
   username: string;

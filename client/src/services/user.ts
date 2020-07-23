@@ -1,4 +1,5 @@
 import axios from "axios";
+import { UpdateUser } from "../interfaces/User";
 const baseUrl: string = "/users";
 
 let token: string | null = null;
@@ -25,6 +26,11 @@ export const getAllUsers = async () => {
 // doesn't need id since it uses the token
 export const deleteUser = async () => {
   const response = await axios.delete(baseUrl, getConfig());
+  return response.data;
+};
+
+export const updateUser = async (updatedValues: UpdateUser) => {
+  const response = await axios.patch(baseUrl, getConfig());
   return response.data;
 };
 
