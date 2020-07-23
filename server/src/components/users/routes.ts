@@ -1,6 +1,6 @@
 import express from "express";
 import { v4 as uuidv4 } from "uuid";
-import { User, Video, Subscription } from "../../sequelize";
+import { User, Video, Subscription, Playlist } from "../../sequelize";
 import authenticateToken from "../../middlewares/tokenAuth";
 import getFileExtension from "../../utils/getFileExtension";
 import fs from "fs";
@@ -342,6 +342,58 @@ router.get(
       }
 
       res.status(200).json(videos);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
+// This combines many different routes into so that the library page is easier to create
+router.get(
+  "/library",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      // get history
+      let historyVideos: any = [];
+      for (let i = 0; i < req.user.history.length; ++i) {
+        const video = await Video.findOne({
+          where: { id: req.user.history[i] }
+        });
+
+        if (!video) {
+          return res.status(404);
+        }
+
+        historyVideos = [...historyVideos, video];
+      }
+
+      // get watch later
+      let watchLaterVideos: any = [];
+      for (let i = 0; i < req.user.watchLater.length; ++i) {
+        const video = await Video.findOne({
+          where: { id: req.user.history[i] }
+        });
+
+        if (!video) {
+          return res.status(404);
+        }
+
+        watchLaterVideos = [...watchLaterVideos, video];
+      }
+
+      // get playlists
+      const playlists = await Playlist.findAll({
+        where: { userId: req.user.id }
+      });
+
+      res
+        .status(200)
+        .json({
+          history: historyVideos,
+          watchLater: watchLaterVideos,
+          playlists
+        });
     } catch (error) {
       return res.status(500).json({ message: error });
     }
