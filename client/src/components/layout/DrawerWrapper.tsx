@@ -28,6 +28,7 @@ import OndemandVideoIcon from "@material-ui/icons/OndemandVideo";
 import WatchLaterIcon from "@material-ui/icons/WatchLater";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
+import AccountCircle from "@material-ui/icons/AccountCircle";
 
 const drawerWidth = 240;
 
@@ -102,11 +103,11 @@ const useStyles = makeStyles((theme: Theme) =>
       "&:hover": {
         backgroundColor: fade(theme.palette.common.white, 0.25)
       },
-      marginRight: theme.spacing(2),
+      marginRight: 0,
       marginLeft: 0,
       width: "100%",
       [theme.breakpoints.up("sm")]: {
-        marginLeft: theme.spacing(3),
+        marginLeft: 0,
         width: "auto"
       }
     },
@@ -149,21 +150,25 @@ export const DrawerWrapper: React.FC = ({ children }) => {
         })}
         style={{ backgroundColor: "#424242" }}
       >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-          {open === false && (
-            <Typography variant="h6" noWrap>
-              TypeTube
-            </Typography>
-          )}
+        <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
+          <div>
+            {open === false && (
+              <div style={{ display: "flex" }}>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  className={clsx(classes.menuButton, open && classes.hide)}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Typography variant="h6" style={{ marginTop: "0.5rem" }} noWrap>
+                  TypeTube
+                </Typography>
+              </div>
+            )}
+          </div>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -179,6 +184,9 @@ export const DrawerWrapper: React.FC = ({ children }) => {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
+          <IconButton edge="end" aria-label="account of user" color="inherit">
+            <AccountCircle />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer

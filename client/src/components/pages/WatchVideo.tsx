@@ -26,6 +26,7 @@ import { createComment, rateComment } from "../../services/comment";
 import IconButton from "@material-ui/core/IconButton";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
@@ -156,6 +157,10 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
     <Container>
       {video !== null && comments !== null && (
         <div style={{ marginTop: "2rem" }}>
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>{video.video.title} - TypeTube</title>
+          </Helmet>
           <video style={{ width: "100%" }} controls>
             <source
               src={`http://localhost:3001/video/${video.video.id}.${video.video.fileExtension}`}

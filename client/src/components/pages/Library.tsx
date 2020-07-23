@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import { Video } from "../../interfaces/Video";
 import { VideoEntryFull } from "../other/VideoEntryFull";
 import { getLibraryData } from "../../services/user";
+import { Helmet } from "react-helmet";
 
 type Props = {
   user: User | null;
@@ -37,6 +38,10 @@ const Library: React.FC<Props> = ({ user }) => {
 
   return (
     <Container>
+      <Helmet>
+        <title>Library - TypeTube</title>
+        <meta charSet="utf-8" />
+      </Helmet>
       <Typography variant="h5" style={{ marginTop: "2rem" }}>
         History
       </Typography>

@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { VideoEntryFull } from "../other/VideoEntryFull";
+import { Helmet } from "react-helmet";
 
 type Props = {
   user: User | null;
@@ -37,6 +38,10 @@ const WatchLater: React.FC<Props> = ({ user }) => {
 
   return (
     <Container>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Watch later - TypeTube</title>
+      </Helmet>
       <Typography
         style={{ marginTop: "1.5rem", marginBottom: "1.5rem" }}
         variant="h5"

@@ -12,6 +12,7 @@ import { Video } from "../../interfaces/Video";
 import { VideoEntryFull } from "../other/VideoEntryFull";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles((theme: Theme) => ({
   channelAvatar: {
@@ -55,6 +56,10 @@ const UserChannel: React.FC<Props> = ({ id }) => {
         channelUser !== null &&
         channelVideos !== null && (
           <div style={{ marginTop: "3rem" }}>
+            <Helmet>
+              <meta charSet="utf-8" />
+              <title>{channelUser.username} - TypeTube</title>
+            </Helmet>
             <div style={{ display: "flex" }}>
               <Avatar
                 src={`http://localhost:3001/avatars/${channelUser.avatar}`}
