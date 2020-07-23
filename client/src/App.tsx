@@ -18,6 +18,7 @@ import YourVideos from "./components/pages/YourVideos";
 import WatchLater from "./components/pages/WatchLater";
 import Library from "./components/pages/Library";
 import { NotFound } from "./components/pages/NotFound";
+import { DrawerWrapper as Drawer } from "./components/layout/DrawerWrapper";
 
 type Props = {
   user: User | null;
@@ -49,9 +50,9 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
             path="/"
             exact
             render={() => (
-              <DrawerWrapper>
+              <Drawer>
                 <Home />
-              </DrawerWrapper>
+              </Drawer>
             )}
           />
           <Route
