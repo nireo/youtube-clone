@@ -5,6 +5,7 @@ import CommentModel from "./components/comments/model";
 import SubscriptionModel from "./components/users/subscribeModel";
 import CommentLikeModel from "./components/comments/commentLikeModel";
 import VideoLikeModel from "./components/videos/videoLikeModel";
+import PlaylistModel from "./components/playlists/model";
 
 let database = "youtube";
 if (process.env.NODE_ENV === "test") {

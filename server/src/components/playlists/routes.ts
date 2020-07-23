@@ -24,9 +24,54 @@ router.delete(
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
-      const playlist = await Playlist.findOne({
+      const playlist: any = await Playlist.findOne({
         where: { id: req.params.playlistId }
       });
+
+      if (!playlist) {
+        return res.status(403);
+      }
+
+      if (req.user.id !== playlist.userId) {
+        return res.status(403);
+      }
+
+      await playlist.destroy();
+      res.status(204);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
+router.patch(
+  "/:playlistId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const { playlistId } = req.params;
+      const { title, description } = req.body;
+      const playlist: any = await Playlist.findOne({
+        where: { id: playlistId }
+      });
+      if (!playlist) {
+        return res.status(404);
+      }
+
+      if (req.user.id !== playlist.userId) {
+        return res.status(403);
+      }
+
+      if (title) {
+        playlist.title = title;
+      }
+
+      if (description) {
+        playlist.description = description;
+      }
+
+      await playlist.save();
+      res.status(200).json(playlist);
     } catch (error) {
       return res.status(500).json({ message: error });
     }
