@@ -64,3 +64,8 @@ export const createPlaylist = async (newPlaylist: CreatePlaylist) => {
   const response = await axios.post(baseUrl, newPlaylist, getConfig());
   return response.data;
 };
+
+export const getPlaylistVideos = async (playlistId: string) => {
+  const response = await axios.get(`${baseUrl}/playlist/${playlistId}`);
+  return response.data;
+};
