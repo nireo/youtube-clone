@@ -21,6 +21,7 @@ type Props = {
 const WatchLater: React.FC<Props> = ({ user }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [videos, setVideos] = useState<Video[]>([]);
+  const [search, setSearch] = useState<string>("");
 
   const loadWatchLaterList = useCallback(async () => {
     const data = await getWatchLaterList();
@@ -38,6 +39,10 @@ const WatchLater: React.FC<Props> = ({ user }) => {
     return <Redirect to="/" />;
   }
 
+  const filteredVideos = videos.filter((video: Video) =>
+    video.title.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <Container>
       <Helmet>
@@ -50,7 +55,6 @@ const WatchLater: React.FC<Props> = ({ user }) => {
       >
         Watch Later
       </Typography>
-      <Divider style={{ marginBottom: 0 }} />
       {loaded && videos.length === 0 && (
         <div>
           <Typography variant="h6">Your watch later list is empty.</Typography>
@@ -66,11 +70,25 @@ const WatchLater: React.FC<Props> = ({ user }) => {
       )}
       {loaded && videos.length > 0 && (
         <div>
-          <List>
-            {videos.map((video: Video) => (
-              <ListVideoEntry video={video} />
-            ))}
-          </List>
+          <TextField
+            fullWidth
+            placeholder="Search"
+            value={search}
+            onChange={({ target }) => setSearch(target.value)}
+          />
+          {filteredVideos.length > 0 ? (
+            <List>
+              {filteredVideos.map((video: Video) => (
+                <ListVideoEntry video={video} />
+              ))}
+            </List>
+          ) : (
+            <div>
+              <Typography variant="h6" style={{ marginTop: "1.5rem" }}>
+                Not found
+              </Typography>
+            </div>
+          )}
         </div>
       )}
     </Container>

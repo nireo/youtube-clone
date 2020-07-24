@@ -4,8 +4,8 @@ import Typography from "@material-ui/core/Typography";
 import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { getVideosAction } from "../../store/videoReducer";
-import { VideoEntryFull } from "../other/VideoEntryFull";
 import { Video } from "../../interfaces/Video";
+import { VideoEntrySmall } from "../other/VideoEntrySmall";
 
 type Props = {
   getVideosAction: () => void;
@@ -15,18 +15,18 @@ type Props = {
 const Home: React.FC<Props> = ({ getVideosAction, videos }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   useEffect(() => {
-    if (!loaded && videos === []) {
+    if (!loaded) {
       getVideosAction();
       setLoaded(true);
     }
   }, [loaded, getVideosAction, videos]);
 
   return (
-    <Container maxWidth="lg" style={{ marginTop: "1rem" }}>
-      <Typography variant="h5">Home</Typography>
-      <div style={{ display: "flex" }}>
+    <Container maxWidth="xl" style={{ marginTop: "1rem" }}>
+      <Typography variant="h5">Recommended</Typography>
+      <div style={{ display: "flex", flexWrap: "wrap", marginTop: "1rem" }}>
         {videos.map((video: Video) => (
-          <VideoEntryFull video={video} />
+          <VideoEntrySmall video={video} />
         ))}
       </div>
     </Container>
