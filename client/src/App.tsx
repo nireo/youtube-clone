@@ -18,6 +18,7 @@ import WatchLater from "./components/pages/WatchLater";
 import Library from "./components/pages/Library";
 import { NotFound } from "./components/pages/NotFound";
 import DrawerWrapper from "./components/layout/DrawerWrapper";
+import HistoryPage from "./components/pages/History";
 
 type Props = {
   user: User | null;
@@ -68,6 +69,7 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
             <Route path="/your-videos" exact render={() => <YourVideos />} />
             <Route path="/watch-later" exact render={() => <WatchLater />} />
             <Route path="/library" exact render={() => <Library />} />
+            <Route path="/history" exact render={() => <HistoryPage />} />
             <Route render={() => <NotFound />} />
           </Switch>
         </DrawerWrapper>

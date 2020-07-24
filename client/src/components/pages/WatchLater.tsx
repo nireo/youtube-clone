@@ -9,8 +9,10 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { VideoEntryFull } from "../other/VideoEntryFull";
 import { Helmet } from "react-helmet";
+import { List } from "@material-ui/core";
+import { ListVideoEntry } from "../other/ListVideoEntry";
+import TextField from "@material-ui/core/TextField";
 
 type Props = {
   user: User | null;
@@ -48,7 +50,7 @@ const WatchLater: React.FC<Props> = ({ user }) => {
       >
         Watch Later
       </Typography>
-      <Divider />
+      <Divider style={{ marginBottom: 0 }} />
       {loaded && videos.length === 0 && (
         <div>
           <Typography variant="h6">Your watch later list is empty.</Typography>
@@ -63,10 +65,12 @@ const WatchLater: React.FC<Props> = ({ user }) => {
         </div>
       )}
       {loaded && videos.length > 0 && (
-        <div style={{ marginTop: "1rem" }}>
-          {videos.map((video: Video) => (
-            <VideoEntryFull video={video} />
-          ))}
+        <div>
+          <List>
+            {videos.map((video: Video) => (
+              <ListVideoEntry video={video} />
+            ))}
+          </List>
         </div>
       )}
     </Container>
