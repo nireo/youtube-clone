@@ -28,6 +28,7 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import { Helmet } from "react-helmet";
 import Grid from "@material-ui/core/Grid";
+import { SmallListVideo } from "../other/SmallListVideo";
 
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
@@ -68,6 +69,21 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
   const [comment, setComment] = useState<string>("");
   const [comments, setComments] = useState<Comment[] | null>(null);
   const [editing, setEditing] = useState<boolean>(false);
+  const [testVideo] = useState({
+    createdAt: "2020-07-17T21:11:07.197Z",
+    description: "It really is kinda crazy",
+    dislikes: 0,
+    fileExtension: "webm",
+    id: "dce9c774-3da9-4b3e-8aed-935e6099cbd7",
+    likes: 0,
+    thumbnail: "jpg",
+    title: "You wil not believe how crazy this is!",
+    updatedAt: "2020-07-24T10:15:27.678Z",
+    userId: "bc5a913f-1177-4467-9687-22d55a30805a",
+    views: 173
+  });
+
+  console.log(video);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -189,75 +205,77 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
                 </Typography>
               </div>
               <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
-              <div
-                style={{
-                  display: "flex",
-                  marginBottom: "1rem",
-                  justifyContent: "space-between"
-                }}
-              >
-                <div style={{ display: "flex" }}>
-                  <Link to={`/channel/${video.user.id}`}>
-                    <Avatar
-                      className={classes.avatar}
-                      src={`http://localhost:3001/avatars/${video.user.id}${video.user.avatar}`}
-                    ></Avatar>
-                  </Link>
-                  <Link
-                    to={`/channel/${video.user.id}`}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Typography
-                      style={{ marginLeft: "0.5rem" }}
-                      color="textPrimary"
+              {video.video.User !== undefined && (
+                <div
+                  style={{
+                    display: "flex",
+                    marginBottom: "1rem",
+                    justifyContent: "space-between"
+                  }}
+                >
+                  <div style={{ display: "flex" }}>
+                    <Link to={`/channel/${video.video.User.id}`}>
+                      <Avatar
+                        className={classes.avatar}
+                        src={`http://localhost:3001/avatars/${video.user.id}${video.video.User.avatar}`}
+                      ></Avatar>
+                    </Link>
+                    <Link
+                      to={`/channel/${video.user.id}`}
+                      style={{ textDecoration: "none" }}
                     >
-                      <strong>{video.user.username}</strong>
-                    </Typography>
-                    <Typography
-                      style={{ marginLeft: "0.5rem" }}
-                      color="textSecondary"
-                      variant="body2"
-                    >
-                      {video.user.subscribers} subscribers
-                    </Typography>
-                  </Link>
-                </div>
-                {user === null ? (
-                  <div>
-                    <Button variant="contained" onClick={handleClick}>
+                      <Typography
+                        style={{ marginLeft: "0.5rem" }}
+                        color="textPrimary"
+                      >
+                        <strong>{video.video.User.username}</strong>
+                      </Typography>
+                      <Typography
+                        style={{ marginLeft: "0.5rem" }}
+                        color="textSecondary"
+                        variant="body2"
+                      >
+                        {video.video.User.subscribers} subscribers
+                      </Typography>
+                    </Link>
+                  </div>
+                  {user === null ? (
+                    <div>
+                      <Button variant="contained" onClick={handleClick}>
+                        Subscribe
+                      </Button>
+                      <Popover
+                        open={open}
+                        onClose={() => setAnchorEl(null)}
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "center"
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "center"
+                        }}
+                      >
+                        <div style={{ padding: "1rem" }}>
+                          You need to be logged in to subscribe.
+                          <Divider
+                            style={{
+                              marginTop: "0.5rem",
+                              marginBottom: "0.5rem"
+                            }}
+                          />
+                          <Button variant="outlined">Login</Button>
+                        </div>
+                      </Popover>
+                    </div>
+                  ) : (
+                    <Button variant="contained" onClick={handleSubscribe}>
                       Subscribe
                     </Button>
-                    <Popover
-                      open={open}
-                      onClose={() => setAnchorEl(null)}
-                      anchorEl={anchorEl}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "center"
-                      }}
-                      transformOrigin={{
-                        vertical: "top",
-                        horizontal: "center"
-                      }}
-                    >
-                      <div style={{ padding: "1rem" }}>
-                        You need to be logged in to subscribe.
-                        <Divider
-                          style={{
-                            marginTop: "0.5rem",
-                            marginBottom: "0.5rem"
-                          }}
-                        />
-                        <Button variant="outlined">Login</Button>
-                      </div>
-                    </Popover>
-                  </div>
-                ) : (
-                  <Button variant="contained" onClick={handleSubscribe}>
-                    Subscribe
-                  </Button>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
               <Container maxWidth="lg">
                 <Typography
                   variant="body1"
@@ -357,7 +375,10 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
               </div>
             </Grid>
             <Grid item xs={3}>
-              <Typography variant="h6">Up next</Typography>
+              <Typography variant="h6" style={{ marginBottom: "0.75rem" }}>
+                Up next
+              </Typography>
+              <SmallListVideo video={testVideo} />
             </Grid>
           </Grid>
         </div>

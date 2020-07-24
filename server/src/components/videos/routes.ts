@@ -183,7 +183,12 @@ router.patch(
 
 router.get("/", async (req: express.Request, res: express.Response) => {
   try {
-    const videos = await Video.findAll();
+    const videos = await Video.findAll({
+      include: {
+        model: User,
+        as: "user"
+      }
+    });
     res.status(200).json(videos);
   } catch (error) {
     return res.status(500).json({ message: error });
@@ -195,7 +200,8 @@ router.get("/search", async (req: express.Request, res: express.Response) => {
     const searchQuery = req.query.search;
 
     const matchingVideos = await Video.findAll({
-      where: { title: { [sequelize.Op.like]: "%" + searchQuery + "%" } }
+      where: { title: { [sequelize.Op.like]: "%" + searchQuery + "%" } },
+      include: User
     });
 
     if (!matchingVideos) {
@@ -222,7 +228,12 @@ router.get(
   async (req: any, res: express.Response) => {
     try {
       const { videoId } = req.params;
-      const video: any = await Video.findOne({ where: { id: videoId } });
+      const video: any = await Video.findOne({
+        where: { id: videoId },
+        include: {
+          model: User
+        }
+      });
       if (!video) {
         return res.status(404);
       }

@@ -1,3 +1,5 @@
+import { User } from "./User";
+
 export interface UpdateVideo {
   title: string;
   description?: string;
@@ -20,4 +22,5 @@ export interface Video {
   updatedAt: string;
   userId: string;
   views: number;
+  User?: User;
 }
