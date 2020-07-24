@@ -217,11 +217,11 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
                     <Link to={`/channel/${video.video.User.id}`}>
                       <Avatar
                         className={classes.avatar}
-                        src={`http://localhost:3001/avatars/${video.user.id}${video.video.User.avatar}`}
+                        src={`http://localhost:3001/avatars/${video.video.User.id}${video.video.User.avatar}`}
                       ></Avatar>
                     </Link>
                     <Link
-                      to={`/channel/${video.user.id}`}
+                      to={`/channel/${video.video.User.id}`}
                       style={{ textDecoration: "none" }}
                     >
                       <Typography

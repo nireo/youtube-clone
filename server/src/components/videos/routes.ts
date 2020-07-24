@@ -249,11 +249,6 @@ router.get(
         }
       }
 
-      const user = await User.findOne({ where: { id: video.userId } });
-      if (!user) {
-        return res.status(404);
-      }
-
       // we return 404 if the video is not found, but the comments field can be empty
       const comments: any = await Comment.findAll({
         where: { videoId: videoId }
@@ -270,7 +265,7 @@ router.get(
         users = [...users, user];
       }
 
-      return res.status(200).json({ video, comments, user, users });
+      return res.status(200).json({ video, comments, users });
     } catch (error) {
       return res.status(500).json({ message: error });
     }
