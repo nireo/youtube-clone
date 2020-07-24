@@ -19,7 +19,7 @@ import Library from "./components/pages/Library";
 import { NotFound } from "./components/pages/NotFound";
 import DrawerWrapper from "./components/layout/DrawerWrapper";
 import HistoryPage from "./components/pages/History";
-import { PlaylistVideos } from "./components/pages/PlaylistVideos";
+import PlaylistVideos from "./components/pages/PlaylistVideos";
 
 type Props = {
   user: User | null;

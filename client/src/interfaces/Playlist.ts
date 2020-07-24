@@ -4,6 +4,7 @@ export interface Playlist {
   description: string;
   videos: string[];
   videoThumbnail: string;
+  userId: string;
 }
 
 export interface UpdatePlaylist {
