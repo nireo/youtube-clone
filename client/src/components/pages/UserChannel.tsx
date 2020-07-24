@@ -17,6 +17,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CreateIcon from "@material-ui/icons/Create";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import { UserPlaylists } from "./UserPlaylists";
 
 const useStyles = makeStyles((theme: Theme) => ({
   channelAvatar: {
@@ -121,6 +122,7 @@ const UserChannel: React.FC<Props> = ({ id, user }) => {
                 ))}
               </div>
             )}
+            {page === 1 && <UserPlaylists id={id} />}
             {page === 2 && (
               <div>
                 <Typography variant="body1">
