@@ -27,6 +27,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import { Helmet } from "react-helmet";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
@@ -154,204 +155,211 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
   };
 
   return (
-    <Container>
+    <Container maxWidth="xl">
       {video !== null && comments !== null && (
         <div style={{ marginTop: "2rem" }}>
           <Helmet>
             <meta charSet="utf-8" />
             <title>{video.video.title} - TypeTube</title>
           </Helmet>
-          <video style={{ width: "100%" }} controls>
-            <source
-              src={`http://localhost:3001/video/${video.video.id}.${video.video.fileExtension}`}
-              type="video/webm"
-            />
-          </video>
-          <Typography variant="h5">{video.video.title}</Typography>
-          <div style={{ display: "flex", marginTop: "0.75rem" }}>
-            <Typography
-              variant="body2"
-              style={{ marginRight: "0.25rem" }}
-              color="textSecondary"
-            >
-              {video.video.views} views
-            </Typography>
-            •
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              style={{ marginLeft: "0.25rem" }}
-            >
-              {new Date(video.video.createdAt).toDateString()}
-            </Typography>
-          </div>
-          <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
-          <div
-            style={{
-              display: "flex",
-              marginBottom: "1rem",
-              justifyContent: "space-between"
-            }}
-          >
-            <div style={{ display: "flex" }}>
-              <Link to={`/channel/${video.user.id}`}>
-                <Avatar
-                  className={classes.avatar}
-                  src={`http://localhost:3001/avatars/${video.user.id}${video.user.avatar}`}
-                ></Avatar>
-              </Link>
-              <Link
-                to={`/channel/${video.user.id}`}
-                style={{ textDecoration: "none" }}
-              >
+          <Grid container spacing={2}>
+            <Grid item xs={9}>
+              <video style={{ width: "100%" }} controls>
+                <source
+                  src={`http://localhost:3001/video/${video.video.id}.${video.video.fileExtension}`}
+                  type="video/webm"
+                />
+              </video>
+              <Typography variant="h5">{video.video.title}</Typography>
+              <div style={{ display: "flex", marginTop: "0.75rem" }}>
                 <Typography
-                  style={{ marginLeft: "0.5rem" }}
-                  color="textPrimary"
-                >
-                  <strong>{video.user.username}</strong>
-                </Typography>
-                <Typography
-                  style={{ marginLeft: "0.5rem" }}
-                  color="textSecondary"
                   variant="body2"
+                  style={{ marginRight: "0.25rem" }}
+                  color="textSecondary"
                 >
-                  {video.user.subscribers} subscribers
+                  {video.video.views} views
                 </Typography>
-              </Link>
-            </div>
-            {user === null ? (
-              <div>
-                <Button variant="contained" onClick={handleClick}>
-                  Subscribe
-                </Button>
-                <Popover
-                  open={open}
-                  onClose={() => setAnchorEl(null)}
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center"
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "center"
-                  }}
+                •
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  style={{ marginLeft: "0.25rem" }}
                 >
-                  <div style={{ padding: "1rem" }}>
-                    You need to be logged in to subscribe.
-                    <Divider
-                      style={{
-                        marginTop: "0.5rem",
-                        marginBottom: "0.5rem"
-                      }}
-                    />
-                    <Button variant="outlined">Login</Button>
-                  </div>
-                </Popover>
+                  {new Date(video.video.createdAt).toDateString()}
+                </Typography>
               </div>
-            ) : (
-              <Button variant="contained" onClick={handleSubscribe}>
-                Subscribe
-              </Button>
-            )}
-          </div>
-          <Container maxWidth="lg">
-            <Typography
-              variant="body1"
-              color="textPrimary"
-              style={{ fontSize: "0.9rem" }}
-            >
-              {video.video.description}
-            </Typography>
-          </Container>
-          <div style={{ marginTop: "2rem" }}>
-            <Divider />
-            <Typography variant="h6" style={{ marginTop: "1rem" }}>
-              {video.comments.length} comments
-            </Typography>
-            {user !== null ? (
-              <div style={{ marginTop: "1rem", marginBottom: "2rem" }}>
+              <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
+              <div
+                style={{
+                  display: "flex",
+                  marginBottom: "1rem",
+                  justifyContent: "space-between"
+                }}
+              >
                 <div style={{ display: "flex" }}>
-                  <Avatar
-                    src={`http://localhost:3001/avatars/${user.avatar}`}
-                    className={classes.commentAvatar}
-                    style={{ marginRight: "1rem" }}
-                  />
-                  <TextField
-                    placeholder="Add public comment"
-                    value={comment}
-                    onChange={handleCommentInputChange}
-                    fullWidth
-                  />
+                  <Link to={`/channel/${video.user.id}`}>
+                    <Avatar
+                      className={classes.avatar}
+                      src={`http://localhost:3001/avatars/${video.user.id}${video.user.avatar}`}
+                    ></Avatar>
+                  </Link>
+                  <Link
+                    to={`/channel/${video.user.id}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Typography
+                      style={{ marginLeft: "0.5rem" }}
+                      color="textPrimary"
+                    >
+                      <strong>{video.user.username}</strong>
+                    </Typography>
+                    <Typography
+                      style={{ marginLeft: "0.5rem" }}
+                      color="textSecondary"
+                      variant="body2"
+                    >
+                      {video.user.subscribers} subscribers
+                    </Typography>
+                  </Link>
                 </div>
-                {editing && (
-                  <div style={{ float: "right", display: "flex" }}>
-                    <Button onClick={cancelCommentEdit}>Cancel</Button>
-                    <form onSubmit={handleCommentCreation}>
-                      <Button variant="contained" type="submit">
-                        Create comment
-                      </Button>
-                    </form>
+                {user === null ? (
+                  <div>
+                    <Button variant="contained" onClick={handleClick}>
+                      Subscribe
+                    </Button>
+                    <Popover
+                      open={open}
+                      onClose={() => setAnchorEl(null)}
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center"
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center"
+                      }}
+                    >
+                      <div style={{ padding: "1rem" }}>
+                        You need to be logged in to subscribe.
+                        <Divider
+                          style={{
+                            marginTop: "0.5rem",
+                            marginBottom: "0.5rem"
+                          }}
+                        />
+                        <Button variant="outlined">Login</Button>
+                      </div>
+                    </Popover>
                   </div>
+                ) : (
+                  <Button variant="contained" onClick={handleSubscribe}>
+                    Subscribe
+                  </Button>
                 )}
               </div>
-            ) : (
-              <div style={{ display: "flex", marginTop: "1rem" }}>
-                <Avatar
-                  src=""
-                  className={classes.commentAvatar}
-                  style={{ marginRight: "1rem" }}
-                />
-                <TextField
-                  placeholder="Add public comment"
-                  fullWidth
-                  disabled
-                />
-              </div>
-            )}
-
-            {comments.map((comment: Comment, index: number) => (
-              <div style={{ marginTop: "0.75rem" }}>
-                <div style={{ display: "flex" }}>
-                  <Avatar
-                    src={`http://localhost:3001/avatars/${video.users[index].avatar}`}
-                    className={classes.commentAvatar}
-                    style={{ marginRight: "1rem" }}
-                  />
-                  <div>
-                    <Typography>
-                      <strong>{video.users[index].username}</strong>
-                    </Typography>
-                    <Typography>{comment.content}</Typography>
+              <Container maxWidth="lg">
+                <Typography
+                  variant="body1"
+                  color="textPrimary"
+                  style={{ fontSize: "0.9rem" }}
+                >
+                  {video.video.description}
+                </Typography>
+              </Container>
+              <div style={{ marginTop: "2rem" }}>
+                <Divider />
+                <Typography variant="h6" style={{ marginTop: "1rem" }}>
+                  {video.comments.length} comments
+                </Typography>
+                {user !== null ? (
+                  <div style={{ marginTop: "1rem", marginBottom: "2rem" }}>
+                    <div style={{ display: "flex" }}>
+                      <Avatar
+                        src={`http://localhost:3001/avatars/${user.avatar}`}
+                        className={classes.commentAvatar}
+                        style={{ marginRight: "1rem" }}
+                      />
+                      <TextField
+                        placeholder="Add public comment"
+                        value={comment}
+                        onChange={handleCommentInputChange}
+                        fullWidth
+                      />
+                    </div>
+                    {editing && (
+                      <div style={{ float: "right", display: "flex" }}>
+                        <Button onClick={cancelCommentEdit}>Cancel</Button>
+                        <form onSubmit={handleCommentCreation}>
+                          <Button variant="contained" type="submit">
+                            Create comment
+                          </Button>
+                        </form>
+                      </div>
+                    )}
                   </div>
-                </div>
-                <div style={{ display: "flex" }}>
-                  <IconButton
-                    onClick={() =>
-                      handleCommentRate(RateComment.Like, comment.id)
-                    }
-                    style={{ backgroundColor: "transparent" }}
-                  >
-                    <ThumbUpIcon fontSize="small" />
-                  </IconButton>
-                  <Typography style={{ marginTop: "0.5rem" }}>
-                    {comment.likes}
-                  </Typography>
-                  <IconButton
-                    onClick={() =>
-                      handleCommentRate(RateComment.Like, comment.id)
-                    }
-                    style={{ backgroundColor: "transparent" }}
-                  >
-                    <ThumbDownIcon fontSize="small" />
-                  </IconButton>
-                  <Typography style={{ marginTop: "0.5rem" }}>
-                    {comment.dislikes}
-                  </Typography>
-                </div>
+                ) : (
+                  <div style={{ display: "flex", marginTop: "1rem" }}>
+                    <Avatar
+                      src=""
+                      className={classes.commentAvatar}
+                      style={{ marginRight: "1rem" }}
+                    />
+                    <TextField
+                      placeholder="Add public comment"
+                      fullWidth
+                      disabled
+                    />
+                  </div>
+                )}
+
+                {comments.map((comment: Comment, index: number) => (
+                  <div style={{ marginTop: "0.75rem" }}>
+                    <div style={{ display: "flex" }}>
+                      <Avatar
+                        src={`http://localhost:3001/avatars/${video.users[index].avatar}`}
+                        className={classes.commentAvatar}
+                        style={{ marginRight: "1rem" }}
+                      />
+                      <div>
+                        <Typography>
+                          <strong>{video.users[index].username}</strong>
+                        </Typography>
+                        <Typography>{comment.content}</Typography>
+                      </div>
+                    </div>
+                    <div style={{ display: "flex" }}>
+                      <IconButton
+                        onClick={() =>
+                          handleCommentRate(RateComment.Like, comment.id)
+                        }
+                        style={{ backgroundColor: "transparent" }}
+                      >
+                        <ThumbUpIcon fontSize="small" />
+                      </IconButton>
+                      <Typography style={{ marginTop: "0.5rem" }}>
+                        {comment.likes}
+                      </Typography>
+                      <IconButton
+                        onClick={() =>
+                          handleCommentRate(RateComment.Like, comment.id)
+                        }
+                        style={{ backgroundColor: "transparent" }}
+                      >
+                        <ThumbDownIcon fontSize="small" />
+                      </IconButton>
+                      <Typography style={{ marginTop: "0.5rem" }}>
+                        {comment.dislikes}
+                      </Typography>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography variant="h6">Up next</Typography>
+            </Grid>
+          </Grid>
         </div>
       )}
     </Container>
