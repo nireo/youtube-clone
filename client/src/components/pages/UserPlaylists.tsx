@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Playlist } from "../../interfaces/Playlist";
 import { getUserPlaylists } from "../../services/playlist";
-import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { PlaylistListEntry } from "../other/PlaylistListEntry";
@@ -27,7 +26,7 @@ export const UserPlaylists: React.FC<Props> = ({ id }) => {
   }, [loaded, playlists, loadPlaylists]);
 
   return (
-    <Container>
+    <div>
       {!loaded && (
         <div style={{ marginTop: "4rem", textAlign: "center" }}>
           <CircularProgress />
@@ -48,6 +47,6 @@ export const UserPlaylists: React.FC<Props> = ({ id }) => {
           ))}
         </div>
       )}
-    </Container>
+    </div>
   );
 };

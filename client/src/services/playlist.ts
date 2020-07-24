@@ -1,6 +1,6 @@
 import axios from "axios";
 import { UpdatePlaylist, CreatePlaylist } from "../interfaces/Playlist";
-const baseUrl: string = "/playlists";
+const baseUrl: string = "/playlist";
 
 let token: string | null = null;
 

@@ -11,7 +11,7 @@ type Props = {
 export const PlaylistListEntry: React.FC<Props> = ({ playlist }) => {
   return (
     <Link to={`/playlist/${playlist.id}`} style={{ textDecoration: "none" }}>
-      <ListItem>
+      <ListItem button>
         <ListItemText
           style={{ color: "#fff" }}
           primary={playlist.title}

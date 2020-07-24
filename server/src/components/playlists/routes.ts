@@ -89,9 +89,40 @@ router.get("/user/:userId", async (req: any, res: express.Response) => {
     return res.status(404);
   }
 
-  const userPlaylists = await Playlist.findAll({ where: { id: userId } });
+  const userPlaylists = await Playlist.findAll({ where: { userId: userId } });
   res.status(200).json(userPlaylists);
 });
+
+router.get(
+  "/playlist/:playlistId",
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const playlist: any = await Playlist.findOne({
+        where: { id: req.params.playlistId }
+      });
+
+      if (!playlist) {
+        return res.status(404);
+      }
+
+      let videos: any = [];
+      for (let i = 0; i < playlist.videos.length; ++i) {
+        const video = await Video.findAll({
+          where: { id: playlist.videos[i] }
+        });
+        if (!video) {
+          return res.status(404);
+        }
+
+        videos = [...videos, video];
+      }
+
+      res.status(200).json({ playlist, videos });
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
 
 router.post(
   "/video/:playlistId",
@@ -128,7 +159,7 @@ router.post(
   }
 );
 
-router.delete(
+router.patch(
   "/video/:playlistId",
   authenticateToken,
   async (req: any, res: express.Response) => {
