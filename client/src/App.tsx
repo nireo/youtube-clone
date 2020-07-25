@@ -20,6 +20,7 @@ import { NotFound } from "./components/pages/NotFound";
 import DrawerWrapper from "./components/layout/DrawerWrapper";
 import HistoryPage from "./components/pages/History";
 import PlaylistVideos from "./components/pages/PlaylistVideos";
+import { Trending } from "./components/pages/Trending";
 
 type Props = {
   user: User | null;
@@ -71,6 +72,7 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
             <Route path="/watch-later" exact render={() => <WatchLater />} />
             <Route path="/library" exact render={() => <Library />} />
             <Route path="/history" exact render={() => <HistoryPage />} />
+            <Route path="/trending" exact render={() => <Trending />} />
             <Route
               path="/playlist/:id"
               exact
