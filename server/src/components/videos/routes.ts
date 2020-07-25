@@ -283,4 +283,19 @@ router.get(
   }
 );
 
+// can't really bother with implementing an algorithm which rates how "trendy" some videos are
+// since this is the case, we only get the videos with the most views
+router.get("/trending", async (req: express.Request, res: express.Response) => {
+  try {
+    const videos = await Video.findAll({
+      order: ["views", "DESC"],
+      include: User
+    });
+
+    res.status(200).json(videos);
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+});
+
 export default router;
