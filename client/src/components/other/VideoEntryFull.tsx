@@ -25,8 +25,22 @@ export const VideoEntryFull: React.FC<Props> = ({ video }) => {
           <Typography variant="h5" color="textPrimary">
             {video.title}
           </Typography>
-          <Typography variant="body1" color="textSecondary">
-            {video.description}
+          {video.User ? (
+            <Typography variant="body2" color="textSecondary">
+              {video.User.username} • {video.views} views •{" "}
+              {new Date(video.createdAt).toDateString()}{" "}
+            </Typography>
+          ) : (
+            <Typography variant="body2" color="textSecondary">
+              {video.views} views • {new Date(video.createdAt).toDateString()}{" "}
+            </Typography>
+          )}
+          <Typography
+            style={{ marginTop: "0.5rem" }}
+            variant="body2"
+            color="textSecondary"
+          >
+            {video.description.slice(0, 65)}
           </Typography>
         </Grid>
       </Grid>

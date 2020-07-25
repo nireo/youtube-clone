@@ -292,7 +292,8 @@ router.get(
       let videos: any = [];
       for (let i = 0; i < req.user.watchLater.length; ++i) {
         const video = await Video.findOne({
-          where: { id: req.user.watchLater[i] }
+          where: { id: req.user.watchLater[i] },
+          include: User
         });
         if (!video) {
           // problem with the watch later array or video has been deleted
@@ -332,7 +333,8 @@ router.get(
       let videos: any = [];
       for (let i = 0; i < req.user.history.length; ++i) {
         const video = await Video.findOne({
-          where: { id: req.user.history[i] }
+          where: { id: req.user.history[i] },
+          include: User
         });
         if (!video) {
           return res.status(404);
@@ -387,13 +389,11 @@ router.get(
         where: { userId: req.user.id }
       });
 
-      res
-        .status(200)
-        .json({
-          history: historyVideos,
-          watchLater: watchLaterVideos,
-          playlists
-        });
+      res.status(200).json({
+        history: historyVideos,
+        watchLater: watchLaterVideos,
+        playlists
+      });
     } catch (error) {
       return res.status(500).json({ message: error });
     }

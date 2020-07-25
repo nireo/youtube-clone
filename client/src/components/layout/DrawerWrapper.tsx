@@ -263,12 +263,14 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
               <ListItemText style={{ color: "#fff" }} primary="Library" />
             </ListItem>
           </Link>
-          <ListItem button>
-            <ListItemIcon>
-              <HistoryIcon />
-            </ListItemIcon>
-            <ListItemText primary="History" />
-          </ListItem>
+          <Link to="/history" style={{ textDecoration: "none" }}>
+            <ListItem button>
+              <ListItemIcon>
+                <HistoryIcon />
+              </ListItemIcon>
+              <ListItemText style={{ color: "#fff" }} primary="History" />
+            </ListItem>
+          </Link>
           <Link to="/your-videos" style={{ textDecoration: "none" }}>
             <ListItem button>
               <ListItemIcon>
