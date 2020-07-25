@@ -288,8 +288,12 @@ router.get(
 router.get("/trending", async (req: express.Request, res: express.Response) => {
   try {
     const videos = await Video.findAll({
-      order: ["views", "DESC"],
       include: User
+    });
+
+    // sort by views
+    videos.sort((a: any, b: any) => {
+      return a.views - b.views;
     });
 
     res.status(200).json(videos);
