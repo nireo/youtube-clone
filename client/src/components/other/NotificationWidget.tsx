@@ -11,20 +11,29 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import { Notification } from "../../interfaces/Notification";
 import { User } from "../../interfaces/User";
+import { initNotificationsAction } from "../../store/notificationReducer";
+import Typography from "@material-ui/core/Typography";
 
 type Props = {
   notifications: Notification[];
   user: User | null;
+  initNotificationsAction: () => void;
 };
 
-const NotificationWidget: React.FC<Props> = ({ notifications, user }) => {
+const NotificationWidget: React.FC<Props> = ({
+  notifications,
+  user,
+  initNotificationsAction
+}) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     if (!loaded && !(notifications.length > 0)) {
+      initNotificationsAction();
+      setLoaded(true);
     }
-  }, []);
+  }, [loaded, initNotificationsAction, notifications]);
 
   if (!user) {
     return null;
@@ -57,14 +66,20 @@ const NotificationWidget: React.FC<Props> = ({ notifications, user }) => {
           horizontal: "center"
         }}
       >
-        <List>
-          <ListItem button>
-            <ListItemAvatar>
-              <Avatar />
-            </ListItemAvatar>
-            <ListItemText primary="Someone commented on your video" />
-          </ListItem>
-        </List>
+        {notifications.length > 0 ? (
+          <List>
+            {notifications.map((notification: Notification) => (
+              <ListItem button>
+                <ListItemAvatar>
+                  <Avatar />
+                </ListItemAvatar>
+                <ListItemText primary={notification.content} />
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          <Typography>No notifications found.</Typography>
+        )}
       </Popover>
     </div>
   );
@@ -75,4 +90,6 @@ const mapStateToProps = (state: AppState) => ({
   user: state.user
 });
 
-export default connect(mapStateToProps)(NotificationWidget);
+export default connect(mapStateToProps, { initNotificationsAction })(
+  NotificationWidget
+);

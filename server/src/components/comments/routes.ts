@@ -1,25 +1,35 @@
-import express from 'express';
-import { Video, Comment, CommentLike, VideoLike } from '../../sequelize';
-import { v4 as uuidv4 } from 'uuid';
-import authenticateToken from '../../middlewares/tokenAuth';
+import express from "express";
+import { Video, Comment, CommentLike, Notification } from "../../sequelize";
+import { v4 as uuidv4 } from "uuid";
+import authenticateToken from "../../middlewares/tokenAuth";
 
 const router: express.Router = express.Router();
 
 router.post(
-  '/:videoId',
+  "/:videoId",
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
-      const video = await Video.findOne({ where: { id: req.params.videoId } });
+      const video: any = await Video.findOne({
+        where: { id: req.params.videoId }
+      });
       if (!video) {
-        return res.status(404).json({ message: 'Video not found.' });
+        return res.status(404).json({ message: "Video not found." });
       }
 
-      const newComment = new Comment({
+      const newComment = await Comment.create({
         id: uuidv4(),
         content: req.body.content,
         videoId: req.params.videoId,
-        userId: req.user.id,
+        userId: req.user.id
+      });
+
+      //  send notification about the new comment to the creator of the video
+      await Notification.create({
+        id: uuidv4(),
+        content: "A new comment on your video",
+        videoId: req.params.videoId,
+        toUserId: video.userId
       });
 
       await newComment.save();
@@ -30,10 +40,10 @@ router.post(
   }
 );
 
-router.get('/:videoId', async (req: express.Request, res: express.Response) => {
+router.get("/:videoId", async (req: express.Request, res: express.Response) => {
   try {
     const comments = await Comment.findAll({
-      where: { videoId: req.params.videoId },
+      where: { videoId: req.params.videoId }
     });
     res.status(200).json(comments);
   } catch (error) {
@@ -42,42 +52,42 @@ router.get('/:videoId', async (req: express.Request, res: express.Response) => {
 });
 
 router.patch(
-  '/:action/:commentId',
+  "/:action/:commentId",
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
       const comment: any = await Comment.findOne({
-        where: { id: req.params.commentId },
+        where: { id: req.params.commentId }
       });
 
       if (!comment) {
-        return res.status(404).json({ message: 'Comment not found' });
+        return res.status(404).json({ message: "Comment not found" });
       }
 
       // check if the user has already liked or disliked the comment
       const commentLike: any = await CommentLike.findOne({
-        where: { userId: req.user.id, commentId: req.params.commentId },
+        where: { userId: req.user.id, commentId: req.params.commentId }
       });
 
       if (commentLike) {
         // the like can change into a dislike and vice versa.
         // also if the actions are same, the like model is deleted
-        if (commentLike.like && req.params.action === 'dislike') {
+        if (commentLike.like && req.params.action === "dislike") {
           comment.likes -= 1;
           comment.dislikes += 1;
 
           commentLike.like = false;
-        } else if (commentLike.like === false && req.params.action === 'like') {
+        } else if (commentLike.like === false && req.params.action === "like") {
           comment.likes += 1;
           comment.dislikes -= 1;
 
           commentLike.like = true;
-        } else if (commentLike.like && req.params.action === 'like') {
+        } else if (commentLike.like && req.params.action === "like") {
           await commentLike.destroy();
           return res.status(204);
         } else if (
           commentLike.like === false &&
-          req.params.action === 'dislike'
+          req.params.action === "dislike"
         ) {
           await commentLike.destroy();
           return res.status(204);
@@ -92,11 +102,11 @@ router.patch(
         id: uuidv4(),
         userId: req.user.id,
         commentId: req.params.commentId,
-        like: req.params.action === 'like',
+        like: req.params.action === "like"
       });
 
-      comment.likes += req.params.action === 'like' ? 1 : -1;
-      comment.dislikes += req.params.action !== 'like' ? 1 : -1;
+      comment.likes += req.params.action === "like" ? 1 : -1;
+      comment.dislikes += req.params.action !== "like" ? 1 : -1;
       await comment.save();
 
       res.status(204);
@@ -107,19 +117,19 @@ router.patch(
 );
 
 router.patch(
-  '/:commentId',
+  "/:commentId",
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
       const comment: any = await Comment.findOne({
-        where: { id: req.params.commentId },
+        where: { id: req.params.commentId }
       });
       if (!comment) {
-        return res.status(404).json({ message: 'Comment not found' });
+        return res.status(404).json({ message: "Comment not found" });
       }
 
       if (comment.userId !== req.user.id) {
-        return res.status(403).json({ message: 'Forbidden' });
+        return res.status(403).json({ message: "Forbidden" });
       }
 
       comment.content = req.body.content;
@@ -134,14 +144,14 @@ router.patch(
 );
 
 router.delete(
-  '/:commentId',
+  "/:commentId",
   async (req: express.Request, res: express.Response) => {
     try {
       const comment = await Comment.findOne({
-        where: { id: req.params.commentId },
+        where: { id: req.params.commentId }
       });
       if (!comment) {
-        return res.status(404).json({ message: 'Comment not found.' });
+        return res.status(404).json({ message: "Comment not found." });
       }
 
       await comment.destroy();
@@ -153,27 +163,27 @@ router.delete(
 );
 
 router.delete(
-  '/:videoId/:commentId',
+  "/:videoId/:commentId",
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
       const video: any = await Video.findOne({
-        where: { id: req.params.videoId },
+        where: { id: req.params.videoId }
       });
       if (!video) {
-        return res.status(404).json({ message: 'Video not found' });
+        return res.status(404).json({ message: "Video not found" });
       }
 
       // only the user can remove comments from the video
       if (video.userId !== req.user.id) {
-        return res.status(403).json({ message: 'Forbidden' });
+        return res.status(403).json({ message: "Forbidden" });
       }
 
       const comment = await Comment.findOne({
-        where: { id: req.params.commentId, videoId: req.params.videoId },
+        where: { id: req.params.commentId, videoId: req.params.videoId }
       });
       if (!comment) {
-        return res.status(404).json({ message: 'Comment not found' });
+        return res.status(404).json({ message: "Comment not found" });
       }
 
       await comment.destroy();

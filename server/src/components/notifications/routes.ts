@@ -35,8 +35,8 @@ router.patch(
 
 router.get("/", authenticateToken, async (req: any, res: express.Response) => {
   try {
-    const notifications = await Notification.findOne({
-      where: { userId: req.user.id }
+    const notifications = await Notification.findAll({
+      where: { toUserId: req.user.id }
     });
 
     res.json(notifications);

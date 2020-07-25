@@ -39,4 +39,5 @@ Comment.belongsTo(User, { foreignKey: "userId" });
 Playlist.belongsTo(User, { foreignKey: "userId" });
 
 User.hasMany(Notification, { foreignKey: "userId" });
-Notification.belongsTo(User, { foreignKey: "userId" });
+Notification.belongsTo(User, { foreignKey: "toUserId" });
+Notification.hasOne(Video, { foreignKey: "videoId" });
