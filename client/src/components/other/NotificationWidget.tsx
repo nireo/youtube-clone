@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import { connect } from "react-redux";
 import { AppState } from "../../store";
@@ -9,11 +9,26 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
+import { Notification } from "../../interfaces/Notification";
+import { User } from "../../interfaces/User";
 
-const NotificationWidget: React.FC = () => {
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
-    null
-  );
+type Props = {
+  notifications: Notification[];
+  user: User | null;
+};
+
+const NotificationWidget: React.FC<Props> = ({ notifications, user }) => {
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [loaded, setLoaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!loaded && !(notifications.length > 0)) {
+    }
+  }, []);
+
+  if (!user) {
+    return null;
+  }
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -56,7 +71,8 @@ const NotificationWidget: React.FC = () => {
 };
 
 const mapStateToProps = (state: AppState) => ({
-  notifications: state.notifications
+  notifications: state.notifications,
+  user: state.user
 });
 
 export default connect(mapStateToProps)(NotificationWidget);
