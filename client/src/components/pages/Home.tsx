@@ -21,12 +21,14 @@ const Home: React.FC<Props> = ({ getVideosAction, videos }) => {
     }
   }, [loaded, getVideosAction, videos]);
 
+  console.log(videos);
+
   return (
     <Container maxWidth="xl" style={{ marginTop: "1rem" }}>
       <Typography variant="h5">Recommended</Typography>
       <div style={{ display: "flex", flexWrap: "wrap", marginTop: "1rem" }}>
         {videos.map((video: Video) => (
-          <VideoEntrySmall video={video} />
+          <VideoEntrySmall key={video.id} video={video} />
         ))}
       </div>
     </Container>

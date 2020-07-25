@@ -184,10 +184,7 @@ router.patch(
 router.get("/", async (req: express.Request, res: express.Response) => {
   try {
     const videos = await Video.findAll({
-      include: {
-        model: User,
-        as: "user"
-      }
+      include: User
     });
     res.status(200).json(videos);
   } catch (error) {
