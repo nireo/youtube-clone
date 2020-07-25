@@ -33,6 +33,8 @@ import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import { AppState } from "../../store";
 import { User } from "../../interfaces/User";
+import VideoCallIcon from "@material-ui/icons/VideoCall";
+import NotificationWidget from "../other/NotificationWidget";
 
 const drawerWidth = 240;
 
@@ -199,15 +201,27 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
               <Button variant="contained">Login</Button>
             </Link>
           ) : (
-            <Link to={`/channel/${user.id}`}>
-              <IconButton
-                edge="end"
-                aria-label="account of user"
-                style={{ color: "#fff" }}
-              >
-                <AccountCircle />
-              </IconButton>
-            </Link>
+            <div style={{ display: "flex" }}>
+              <NotificationWidget />
+              <Link to="/upload" style={{ marginRight: "1rem" }}>
+                <IconButton
+                  edge="end"
+                  aria-label="upload-video"
+                  style={{ color: "#fff" }}
+                >
+                  <VideoCallIcon />
+                </IconButton>
+              </Link>
+              <Link to={`/channel/${user.id}`}>
+                <IconButton
+                  edge="end"
+                  aria-label="account of user"
+                  style={{ color: "#fff" }}
+                >
+                  <AccountCircle />
+                </IconButton>
+              </Link>
+            </div>
           )}
         </Toolbar>
       </AppBar>

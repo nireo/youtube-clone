@@ -33,6 +33,18 @@ router.patch(
   }
 );
 
+router.get("/", authenticateToken, async (req: any, res: express.Response) => {
+  try {
+    const notifications = await Notification.findOne({
+      where: { userId: req.user.id }
+    });
+
+    res.json(notifications);
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+});
+
 router.delete(
   "/:notificationId",
   authenticateToken,

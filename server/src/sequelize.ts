@@ -31,7 +31,12 @@ export const Notification = NotificationModel(sequelize);
 
 // associations
 Video.belongsTo(User, { foreignKey: "userId" });
+
 Video.hasMany(Comment, { foreignKey: "videoId" });
 User.hasMany(Comment, { foreignKey: "userId" });
+Comment.belongsTo(User, { foreignKey: "userId" });
+
 Playlist.belongsTo(User, { foreignKey: "userId" });
+
 User.hasMany(Notification, { foreignKey: "userId" });
+Notification.belongsTo(User, { foreignKey: "userId" });

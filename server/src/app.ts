@@ -10,6 +10,7 @@ import authRoutes from "./components/auth/routes";
 import userRoutes from "./components/users/routes";
 import commentRouter from "./components/comments/routes";
 import playlistRouter from "./components/playlists/routes";
+import notificationRouter from "./components/notifications/routes";
 
 const app: express.Application = express();
 dotenv.config();
@@ -34,5 +35,6 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/comments", commentRouter);
 app.use("/playlist", playlistRouter);
+app.use("/notifications", notificationRouter);
 
 export default app;
