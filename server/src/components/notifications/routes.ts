@@ -1,6 +1,6 @@
 import express from "express";
 import authenticateToken from "../../middlewares/tokenAuth";
-import { Notification } from "../../sequelize";
+import { Notification, User } from "../../sequelize";
 
 const router: express.Router = express.Router();
 

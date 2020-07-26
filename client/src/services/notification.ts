@@ -10,7 +10,7 @@ const getConfig = () => ({
 });
 
 export const setToken = (newToken: string) => {
-  token = newToken;
+  token = `bearer ${newToken}`;
 };
 
 export const getNotifications = async () => {

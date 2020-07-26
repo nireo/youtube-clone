@@ -244,7 +244,7 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
         </div>
         <Divider />
         <List>
-          <Link to="/">
+          <Link to="/" style={{ textDecoration: "none" }}>
             <ListItem button>
               <ListItemIcon>
                 <HomeIcon />
@@ -260,7 +260,7 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
               <ListItemText style={{ color: "#fff" }} primary="Trending" />
             </ListItem>
           </Link>
-          <Link to="/subscriptions">
+          <Link to="/subscriptions" style={{ textDecoration: "none" }}>
             <ListItem button>
               <ListItemIcon>
                 <SubscriptionsIcon />

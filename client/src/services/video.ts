@@ -57,6 +57,6 @@ export const getUserVideos = async () => {
 };
 
 export const getTrendingVideos = async () => {
-  const response = await axios.get(`${baseUrl}/trending`, getConfig());
+  const response = await axios.get(`${baseUrl}/trending`);
   return response.data;
 };

@@ -8,7 +8,7 @@ import {
 
 const reducer = (state: Notification[] = [], action: any) => {
   switch (action.type) {
-    case "INIT_NOTIFICATION":
+    case "INIT_NOTIFICATIONS":
       return action.data;
     case "DELETE_NOTIFICATION":
       return state.filter(

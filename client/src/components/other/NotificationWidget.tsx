@@ -39,6 +39,8 @@ const NotificationWidget: React.FC<Props> = ({
     return null;
   }
 
+  console.log(notifications);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -69,7 +71,7 @@ const NotificationWidget: React.FC<Props> = ({
         {notifications.length > 0 ? (
           <List>
             {notifications.map((notification: Notification) => (
-              <ListItem button>
+              <ListItem button key={notification.id}>
                 <ListItemAvatar>
                   <Avatar />
                 </ListItemAvatar>
