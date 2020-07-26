@@ -13,6 +13,7 @@ import { Notification } from "../../interfaces/Notification";
 import { User } from "../../interfaces/User";
 import { initNotificationsAction } from "../../store/notificationReducer";
 import Typography from "@material-ui/core/Typography";
+import Badge from "@material-ui/core/Badge";
 
 type Props = {
   notifications: Notification[];
@@ -27,13 +28,25 @@ const NotificationWidget: React.FC<Props> = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [loaded, setLoaded] = useState<boolean>(false);
+  const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
     if (!loaded && !(notifications.length > 0)) {
       initNotificationsAction();
       setLoaded(true);
     }
-  }, [loaded, initNotificationsAction, notifications]);
+
+    if (count === null && notifications.length > 0) {
+      let tempCount = 0;
+      notifications.forEach((notification: Notification) => {
+        if (notification.read === false) {
+          tempCount++;
+        }
+      });
+
+      setCount(tempCount);
+    }
+  }, [loaded, initNotificationsAction, notifications, count]);
 
   if (!user) {
     return null;
@@ -51,7 +64,13 @@ const NotificationWidget: React.FC<Props> = ({
   return (
     <div>
       <IconButton onClick={handleClick}>
-        <NotificationsIcon />
+        {count !== null ? (
+          <Badge badgeContent={count} color="primary">
+            <NotificationsIcon />
+          </Badge>
+        ) : (
+          <NotificationsIcon />
+        )}
       </IconButton>
       <Popover
         open={open}
