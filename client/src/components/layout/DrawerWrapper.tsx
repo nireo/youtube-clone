@@ -35,6 +35,7 @@ import { AppState } from "../../store";
 import { User } from "../../interfaces/User";
 import VideoCallIcon from "@material-ui/icons/VideoCall";
 import NotificationWidget from "../other/NotificationWidget";
+import SubscriptionsWidget from "../other/SubscriptionsWidget";
 
 const drawerWidth = 240;
 
@@ -302,6 +303,8 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
             </ListItem>
           </Link>
         </List>
+        <Divider />
+        <SubscriptionsWidget />
       </Drawer>
       <main
         className={clsx(classes.content, {
