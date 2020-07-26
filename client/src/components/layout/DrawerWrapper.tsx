@@ -150,8 +150,6 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
     setOpen(false);
   };
 
-  console.log(user);
-
   return (
     <div className={classes.root}>
       <CssBaseline />

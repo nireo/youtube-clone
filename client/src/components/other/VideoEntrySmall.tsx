@@ -27,7 +27,7 @@ export const VideoEntrySmall: React.FC<Props> = ({ video }) => {
           style={{ width: "15rem" }}
         />
         <div style={{ display: "flex" }}>
-          {video.User ? (
+          {video.User && video.User.avatar !== null ? (
             <Avatar
               className={classes.avatar}
               src={`http://localhost:3001/avatars/${video.User.avatar}`}

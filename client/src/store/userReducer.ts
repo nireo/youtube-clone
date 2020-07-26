@@ -49,7 +49,6 @@ export const loadLocalStorageUser = () => {
     }
 
     const userDataJSON: UserWithToken = JSON.parse(userDataString);
-    console.log(userDataJSON);
     setTokens(userDataJSON.token);
     dispatch({
       type: "LOGIN",

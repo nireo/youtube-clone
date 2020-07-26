@@ -33,11 +33,11 @@ const Subscriptions: React.FC<Props> = ({ user }) => {
   }, []);
 
   useEffect(() => {
-    if (users === null && loaded === false) {
+    if (users === null && loaded === false && user !== null) {
       loadSubscriptions();
       setLoaded(true);
     }
-  }, [loadSubscriptions, loaded, users]);
+  }, [loadSubscriptions, loaded, users, user]);
 
   if (!user) {
     return <Redirect to="/" />;
@@ -53,12 +53,17 @@ const Subscriptions: React.FC<Props> = ({ user }) => {
             <Link
               to={`/channel/${u.id}`}
               style={{ paddingBottom: "1rem", textDecoration: "none" }}
+              key={u.id}
             >
               <div style={{ display: "flex" }}>
-                <Avatar
-                  src={`http://localhost:3001/avatars/${u.avatar}`}
-                  className={classes.avatar}
-                />
+                {u.avatar !== null ? (
+                  <Avatar
+                    src={`http://localhost:3001/avatars/${u.avatar}`}
+                    className={classes.avatar}
+                  />
+                ) : (
+                  <Avatar className={classes.avatar} />
+                )}
                 <div>
                   <Typography
                     style={{ marginLeft: "1rem", fontSize: "2rem" }}

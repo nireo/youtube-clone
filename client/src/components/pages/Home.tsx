@@ -21,8 +21,6 @@ const Home: React.FC<Props> = ({ getVideosAction, videos }) => {
     }
   }, [loaded, getVideosAction, videos]);
 
-  console.log(videos);
-
   return (
     <Container maxWidth="xl" style={{ marginTop: "1rem" }}>
       <Typography variant="h5">Recommended</Typography>

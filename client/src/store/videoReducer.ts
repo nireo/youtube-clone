@@ -6,7 +6,6 @@ import {
   deleteVideo
 } from "../services/video";
 import { Video, UpdateVideo, RateActions } from "../interfaces/Video";
-import { createComment } from "../services/comment";
 
 const reducer = (state: Video[] = [], action: any) => {
   switch (action.type) {

@@ -7,7 +7,6 @@ import { Video } from "../../interfaces/Video";
 import { getWatchLaterList } from "../../services/user";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Helmet } from "react-helmet";
 import { List } from "@material-ui/core";

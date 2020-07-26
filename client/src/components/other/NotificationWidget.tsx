@@ -39,8 +39,6 @@ const NotificationWidget: React.FC<Props> = ({
     return null;
   }
 
-  console.log(notifications);
-
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
