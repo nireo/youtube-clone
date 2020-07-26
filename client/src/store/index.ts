@@ -3,11 +3,13 @@ import thunk from "redux-thunk";
 import userReducer from "./userReducer";
 import videoReducer from "./videoReducer";
 import notificationReducer from "./notificationReducer";
+import subscriptionsReducer from "./subscriptionReducer";
 
 const rootReducer = combineReducers({
   user: userReducer,
   videos: videoReducer,
-  notifications: notificationReducer
+  notifications: notificationReducer,
+  subscriptions: subscriptionsReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
