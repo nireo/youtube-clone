@@ -29,6 +29,7 @@ router.post(
         id: uuidv4(),
         content: "A new comment on your video",
         videoId: req.params.videoId,
+        userId: req.user.id,
         toUserId: video.userId
       });
 
