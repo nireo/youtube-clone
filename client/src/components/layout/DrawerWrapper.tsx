@@ -1,4 +1,4 @@
-import React from "react";
+import React, { KeyboardEvent } from "react";
 import clsx from "clsx";
 import {
   makeStyles,
@@ -6,7 +6,7 @@ import {
   createStyles,
   fade
 } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
@@ -142,6 +142,7 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [search, setSearch] = React.useState<string>("");
+  const history = useHistory();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -149,6 +150,12 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleEnterPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      history.push(`/search?search=${search}`);
+    }
   };
 
   return (
@@ -172,6 +179,7 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
                   edge="start"
                   className={clsx(classes.menuButton, open && classes.hide)}
                 >
+                  {" "}
                   <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" style={{ marginTop: "0.5rem" }} noWrap>
@@ -193,6 +201,7 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
               value={search}
               onChange={({ target }) => setSearch(target.value)}
               inputProps={{ "aria-label": "search" }}
+              onKeyPress={handleEnterPress}
             />
           </div>
           {user === null ? (

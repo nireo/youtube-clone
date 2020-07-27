@@ -51,10 +51,7 @@ export const Search: React.FC = () => {
       )}
       {loaded && videos.length > 0 && (
         <Container>
-          <Typography variant="h6">
-            For search: '{query.get("search")}', found {videos.length}{" "}
-            {videos.length === 1 ? "result" : "results"}.
-          </Typography>
+          <Typography variant="h6">Videos</Typography>
           <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
           {videos.map((video: Video) => (
             <VideoEntryFull video={video} />

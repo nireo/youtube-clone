@@ -25,8 +25,8 @@ import {
 
 const useStyles = makeStyles((theme: Theme) => ({
   channelAvatar: {
-    width: theme.spacing(16),
-    height: theme.spacing(16)
+    width: theme.spacing(12),
+    height: theme.spacing(12)
   }
 }));
 
@@ -127,13 +127,14 @@ const UserChannel: React.FC<Props> = ({
                 />
                 <div>
                   <Typography
-                    style={{ marginLeft: "1rem", fontSize: "2rem" }}
+                    style={{ marginLeft: "1rem" }}
+                    variant="h6"
                     color="textPrimary"
                   >
                     {channelUser.username}
                   </Typography>
                   <Typography
-                    variant="h6"
+                    variant="body2"
                     color="textSecondary"
                     style={{ marginLeft: "1rem" }}
                   >
