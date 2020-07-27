@@ -4,7 +4,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
-import { CreateVideo } from "./components/pages/CreateVideo";
+import CreateVideo from "./components/pages/CreateVideo";
 import { Search } from "./components/pages/Search";
 import WatchVideo from "./components/pages/WatchVideo";
 import { connect } from "react-redux";

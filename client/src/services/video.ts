@@ -14,8 +14,20 @@ const getConfig = () => ({
   }
 });
 
+const getConfigMultipart = () => ({
+  headers: {
+    Authorization: token,
+    "Content-Type": "multipart/form-data"
+  }
+});
+
 export const deleteVideo = async (videoId: string) => {
   const response = await axios.delete(`${baseUrl}${videoId}`, getConfig());
+  return response.data;
+};
+
+export const createVideo = async (formData: any) => {
+  const response = await axios.post("/videos", formData, getConfigMultipart());
   return response.data;
 };
 

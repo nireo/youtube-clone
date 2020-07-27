@@ -8,14 +8,26 @@ import axios from "axios";
 import UploadIcon from "@material-ui/icons/CloudUpload";
 import VideoCallIcon from "@material-ui/icons/VideoCall";
 import ImageIcon from "@material-ui/icons/Image";
+import { connect } from "react-redux";
+import { AppState } from "../../store";
+import { User } from "../../interfaces/User";
+import { Redirect } from "react-router-dom";
 
-export const CreateVideo: React.FC = () => {
+type Props = {
+  user: User | null;
+};
+
+const CreateVideo: React.FC<Props> = ({ user }) => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
   // files
   const [video, setVideo] = useState<any>(null);
   const [thumbnail, setThumbnail] = useState<any>(null);
+
+  if (!user) {
+    return <Redirect to="/" />;
+  }
 
   const handleVideoChange = (event: any) => {
     if (event.target.files[0] !== null) {
@@ -31,6 +43,10 @@ export const CreateVideo: React.FC = () => {
 
   const uploadVideo = async (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!user) {
+      return;
+    }
 
     const formData = new FormData();
     formData.append("video", video);
@@ -122,3 +138,9 @@ export const CreateVideo: React.FC = () => {
     </Container>
   );
 };
+
+const mapStateToProps = (state: AppState) => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps)(CreateVideo);
