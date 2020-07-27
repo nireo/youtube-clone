@@ -29,15 +29,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 type Props = {
   id: string;
   user: User | null;
+  subscriptions: User[];
 };
 
-const UserChannel: React.FC<Props> = ({ id, user }) => {
+const UserChannel: React.FC<Props> = ({ id, user, subscriptions }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [channelUser, setChannelUser] = useState<User | null>(null);
   const [channelVideos, setChannelVideos] = useState<Video[] | null>(null);
   const [page, setPage] = useState<number>(0);
   const [editing, setEditing] = useState<boolean>(false);
   const [newDescription, setNewDescription] = useState<string>("");
+  const [subscribed, setSubscribed] = useState<boolean | null>(null);
   const classes = useStyles();
 
   const loadChannelData = useCallback(async () => {
@@ -59,7 +61,19 @@ const UserChannel: React.FC<Props> = ({ id, user }) => {
       loadChannelData();
       setLoaded(true);
     }
-  }, [loaded, channelUser, loadChannelData]);
+
+    if (subscribed === null && user && channelUser && subscriptions.length) {
+      const found = subscriptions.find(
+        (subscription: User) => subscription.id === channelUser.id
+      );
+
+      if (found) {
+        setSubscribed(true);
+      } else {
+        setSubscribed(false);
+      }
+    }
+  }, [loaded, channelUser, loadChannelData, subscribed, subscriptions, user]);
 
   const handlePageChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setPage(newValue);
@@ -80,25 +94,36 @@ const UserChannel: React.FC<Props> = ({ id, user }) => {
               <meta charSet="utf-8" />
               <title>{channelUser.username} - TypeTube</title>
             </Helmet>
-            <div style={{ display: "flex" }}>
-              <Avatar
-                src={`http://localhost:3001/avatars/${channelUser.avatar}`}
-                className={classes.channelAvatar}
-              />
-              <div>
-                <Typography
-                  style={{ marginLeft: "1rem", fontSize: "2rem" }}
-                  color="textPrimary"
-                >
-                  {channelUser.username}
-                </Typography>
-                <Typography
-                  variant="h6"
-                  color="textSecondary"
-                  style={{ marginLeft: "1rem" }}
-                >
-                  {channelUser.subscribers} subscribers
-                </Typography>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div style={{ display: "flex" }}>
+                <Avatar
+                  src={`http://localhost:3001/avatars/${channelUser.avatar}`}
+                  className={classes.channelAvatar}
+                />
+                <div>
+                  <Typography
+                    style={{ marginLeft: "1rem", fontSize: "2rem" }}
+                    color="textPrimary"
+                  >
+                    {channelUser.username}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color="textSecondary"
+                    style={{ marginLeft: "1rem" }}
+                  >
+                    {channelUser.subscribers} subscribers
+                  </Typography>
+                </div>
+              </div>
+              <div style={{ marginTop: "2rem" }}>
+                {subscribed ? (
+                  <Button variant="contained">Subscribed</Button>
+                ) : (
+                  <Button variant="contained" color="secondary">
+                    Subscribe
+                  </Button>
+                )}
               </div>
             </div>
             <div style={{ flexGrow: 1 }}>
@@ -168,7 +193,8 @@ const UserChannel: React.FC<Props> = ({ id, user }) => {
 };
 
 const mapStateToProps = (state: AppState) => ({
-  user: state.user
+  user: state.user,
+  subscriptions: state.subscriptions
 });
 
 export default connect(mapStateToProps)(UserChannel);
