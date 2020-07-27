@@ -5,6 +5,9 @@ import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
+import UploadIcon from "@material-ui/icons/CloudUpload";
+import VideoCallIcon from "@material-ui/icons/VideoCall";
+import ImageIcon from "@material-ui/icons/Image";
 
 export const CreateVideo: React.FC = () => {
   const [title, setTitle] = useState<string>("");
@@ -45,37 +48,76 @@ export const CreateVideo: React.FC = () => {
 
   return (
     <Container maxWidth="md">
-      <Typography variant="h6">Upload Video</Typography>
-      <Divider style={{ marginTop: "2rem", marginBottom: "2rem" }} />
+      <Typography variant="h6">Upload video</Typography>
+      <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
       <form onSubmit={uploadVideo}>
         <TextField
           value={title}
           onChange={({ target }) => setTitle(target.value)}
           style={{ width: "100%", marginBottom: "1.5rem" }}
           placeholder="Title"
+          variant="filled"
+          color="secondary"
+          title="Title"
         />
         <TextField
           value={description}
           style={{ width: "100%", marginBottom: "1.5rem" }}
           onChange={({ target }) => setDescription(target.value)}
           placeholder="Description"
+          variant="filled"
+          color="secondary"
+          rows={4}
+          multiline
+          title="Description"
         />
-        <Typography>Video file</Typography>
         <div>
           <input
             placeholder="Video file"
+            id="video-upload"
             type="file"
-            style={{ width: "100%", marginBottom: "1.5rem" }}
+            style={{ width: "100%", marginBottom: "1.5rem", display: "none" }}
             onChange={handleVideoChange}
+            accept="video/*"
           />
+          <label htmlFor="video-upload">
+            <Button
+              variant="contained"
+              component="span"
+              color="secondary"
+              startIcon={<VideoCallIcon />}
+              style={{ marginRight: "1rem" }}
+            >
+              Video
+            </Button>
+          </label>
           <input
             placeholder="Thumbnail file"
             type="file"
-            style={{ marginBottom: "1.5rem" }}
+            id="thumbnail-upload"
+            style={{ display: "none" }}
             onChange={handleThumbnailChange}
+            accept="image/*"
           />
+          <label htmlFor="thumbnail-upload">
+            <Button
+              variant="contained"
+              component="span"
+              color="secondary"
+              startIcon={<ImageIcon />}
+            >
+              Thumbnail
+            </Button>
+          </label>
         </div>
-        <Button variant="contained">Upload</Button>
+        <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
+        <Button
+          variant="contained"
+          color="secondary"
+          startIcon={<UploadIcon />}
+        >
+          Upload
+        </Button>
       </form>
     </Container>
   );

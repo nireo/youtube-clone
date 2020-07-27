@@ -65,7 +65,7 @@ const NotificationWidget: React.FC<Props> = ({
     <div>
       <IconButton onClick={handleClick}>
         {count !== null ? (
-          <Badge badgeContent={count} color="primary">
+          <Badge badgeContent={count} color="error">
             <NotificationsIcon />
           </Badge>
         ) : (

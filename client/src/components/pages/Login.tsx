@@ -75,6 +75,7 @@ const Login: React.FC<Props> = ({ loginAction, user }) => {
           <TextField
             variant="outlined"
             margin="normal"
+            color="secondary"
             required
             fullWidth
             label="Username"
@@ -89,6 +90,7 @@ const Login: React.FC<Props> = ({ loginAction, user }) => {
             required
             fullWidth
             label="Password"
+            color="secondary"
             type="password"
             value={password}
             onChange={({ target }) => setPassword(target.value)}
@@ -97,7 +99,7 @@ const Login: React.FC<Props> = ({ loginAction, user }) => {
             type="submit"
             fullWidth
             variant="contained"
-            color="primary"
+            color="secondary"
             className={classes.submit}
           >
             {page === "register" ? "Register" : "Login"}

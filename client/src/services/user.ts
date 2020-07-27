@@ -30,7 +30,7 @@ export const deleteUser = async () => {
 };
 
 export const updateUser = async (updatedValues: UpdateUser) => {
-  const response = await axios.patch(baseUrl, getConfig());
+  const response = await axios.patch(baseUrl, updatedValues, getConfig());
   return response.data;
 };
 

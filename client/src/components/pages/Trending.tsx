@@ -5,6 +5,7 @@ import { VideoEntryFull } from "../other/VideoEntryFull";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import { Helmet } from "react-helmet";
+import Typography from "@material-ui/core/Typography";
 
 export const Trending: React.FC = () => {
   const [videos, setVideos] = useState<Video[]>([]);
@@ -29,6 +30,9 @@ export const Trending: React.FC = () => {
         <meta charSet="utf-8" />
         <title>Trending - TypeTube</title>
       </Helmet>
+      <Typography variant="body1">
+        <strong>Trending</strong>
+      </Typography>
       {loading ? (
         <div style={{ textAlign: "center", marginTop: "3rem" }}>
           <CircularProgress />

@@ -105,8 +105,8 @@ const UserChannel: React.FC<Props> = ({ id, user }) => {
               <Tabs
                 value={page}
                 onChange={handlePageChange}
-                indicatorColor="primary"
-                textColor="primary"
+                indicatorColor="secondary"
+                textColor="secondary"
                 centered
               >
                 <Tab label="Videos" />
