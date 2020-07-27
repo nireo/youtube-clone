@@ -20,7 +20,6 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Popover from "@material-ui/core/Popover";
-import { subscribeToUser } from "../../services/user";
 import TextField from "@material-ui/core/TextField";
 import { createComment, rateComment } from "../../services/comment";
 import IconButton from "@material-ui/core/IconButton";
@@ -29,6 +28,10 @@ import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import { Helmet } from "react-helmet";
 import Grid from "@material-ui/core/Grid";
 import { SmallListVideo } from "../other/SmallListVideo";
+import {
+  subscribeToUserAction,
+  removeSubscriptionAction
+} from "../../store/subscriptionReducer";
 
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
@@ -53,6 +56,8 @@ type Props = {
   id: string;
   user: User | null;
   subscriptions: User[];
+  subscribeToUserAction: (userId: string) => void;
+  removeSubscriptionAction: (userId: string) => void;
 };
 
 interface WatchPage {
@@ -62,7 +67,13 @@ interface WatchPage {
   users: User[];
 }
 
-const WatchVideo: React.FC<Props> = ({ id, user, subscriptions }) => {
+const WatchVideo: React.FC<Props> = ({
+  id,
+  user,
+  subscriptions,
+  subscribeToUserAction,
+  removeSubscriptionAction
+}) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [video, setVideo] = useState<WatchPage | null>(null);
   const classes = useStyles();
@@ -84,8 +95,6 @@ const WatchVideo: React.FC<Props> = ({ id, user, subscriptions }) => {
     userId: "bc5a913f-1177-4467-9687-22d55a30805a",
     views: 173
   });
-
-  console.log(video);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -119,14 +128,16 @@ const WatchVideo: React.FC<Props> = ({ id, user, subscriptions }) => {
   const open = Boolean(anchorEl);
 
   const handleSubscribe = async () => {
-    if (user !== null && video !== null) {
-      await subscribeToUser(video.user.username);
+    if (user !== null && video !== null && video.video.User !== undefined) {
+      subscribeToUserAction(video.video.User.id);
+      setSubscribed(true);
     }
   };
 
   const handleUnsubscribe = async () => {
     if (user !== null && video !== null && video.video.User !== undefined) {
-      await subscribeToUser(video.video.User.id);
+      removeSubscriptionAction(video.video.User.id);
+      setSubscribed(false);
     }
   };
 
@@ -429,4 +440,7 @@ const mapStateToProps = (state: AppState) => ({
   subscriptions: state.subscriptions
 });
 
-export default connect(mapStateToProps)(WatchVideo);
+export default connect(mapStateToProps, {
+  removeSubscriptionAction,
+  subscribeToUserAction
+})(WatchVideo);

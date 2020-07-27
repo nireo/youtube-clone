@@ -18,6 +18,10 @@ import CreateIcon from "@material-ui/icons/Create";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { UserPlaylists } from "./UserPlaylists";
+import {
+  removeSubscriptionAction,
+  subscribeToUserAction
+} from "../../store/subscriptionReducer";
 
 const useStyles = makeStyles((theme: Theme) => ({
   channelAvatar: {
@@ -30,9 +34,17 @@ type Props = {
   id: string;
   user: User | null;
   subscriptions: User[];
+  removeSubscriptionAction: (userId: string) => void;
+  subscribeToUserAction: (userId: string) => void;
 };
 
-const UserChannel: React.FC<Props> = ({ id, user, subscriptions }) => {
+const UserChannel: React.FC<Props> = ({
+  id,
+  user,
+  subscriptions,
+  removeSubscriptionAction,
+  subscribeToUserAction
+}) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [channelUser, setChannelUser] = useState<User | null>(null);
   const [channelVideos, setChannelVideos] = useState<Video[] | null>(null);
@@ -84,6 +96,19 @@ const UserChannel: React.FC<Props> = ({ id, user, subscriptions }) => {
     await updateUser({ description: newDescription });
   };
 
+  const handleUnsubscribe = () => {
+    if (user !== null && channelUser !== null) {
+      removeSubscriptionAction(channelUser.id);
+      setSubscribed(false);
+    }
+  };
+
+  const handleSubscription = () => {
+    if (user !== null && channelUser !== null) {
+      subscribeToUserAction(channelUser.id);
+    }
+  };
+
   return (
     <Container>
       {channelUser !== undefined &&
@@ -118,9 +143,15 @@ const UserChannel: React.FC<Props> = ({ id, user, subscriptions }) => {
               </div>
               <div style={{ marginTop: "2rem" }}>
                 {subscribed ? (
-                  <Button variant="contained">Subscribed</Button>
+                  <Button variant="contained" onClick={handleUnsubscribe}>
+                    Subscribed
+                  </Button>
                 ) : (
-                  <Button variant="contained" color="secondary">
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleSubscription}
+                  >
                     Subscribe
                   </Button>
                 )}
@@ -197,4 +228,7 @@ const mapStateToProps = (state: AppState) => ({
   subscriptions: state.subscriptions
 });
 
-export default connect(mapStateToProps)(UserChannel);
+export default connect(mapStateToProps, {
+  subscribeToUserAction,
+  removeSubscriptionAction
+})(UserChannel);
