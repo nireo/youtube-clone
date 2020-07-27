@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 type Props = {
   id: string;
   user: User | null;
+  subscriptions: User[];
 };
 
 interface WatchPage {
@@ -61,7 +62,7 @@ interface WatchPage {
   users: User[];
 }
 
-const WatchVideo: React.FC<Props> = ({ id, user }) => {
+const WatchVideo: React.FC<Props> = ({ id, user, subscriptions }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [video, setVideo] = useState<WatchPage | null>(null);
   const classes = useStyles();
@@ -69,6 +70,7 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
   const [comment, setComment] = useState<string>("");
   const [comments, setComments] = useState<Comment[] | null>(null);
   const [editing, setEditing] = useState<boolean>(false);
+  const [subscribed, setSubscribed] = useState<boolean | null>(null);
   const [testVideo] = useState({
     createdAt: "2020-07-17T21:11:07.197Z",
     description: "It really is kinda crazy",
@@ -100,13 +102,31 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
       loadVideo();
       setLoaded(true);
     }
-  }, [loaded, video, loadVideo]);
+
+    if (subscribed === null && user && video && subscriptions.length) {
+      const found = subscriptions.find(
+        (subscription: User) => subscription.id === video.video.userId
+      );
+
+      if (found) {
+        setSubscribed(true);
+      } else {
+        setSubscribed(false);
+      }
+    }
+  }, [loaded, video, loadVideo, user, subscribed, subscriptions]);
 
   const open = Boolean(anchorEl);
 
   const handleSubscribe = async () => {
     if (user !== null && video !== null) {
       await subscribeToUser(video.user.username);
+    }
+  };
+
+  const handleUnsubscribe = async () => {
+    if (user !== null && video !== null && video.video.User !== undefined) {
+      await subscribeToUser(video.video.User.id);
     }
   };
 
@@ -241,7 +261,11 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
                   </div>
                   {user === null ? (
                     <div>
-                      <Button variant="contained" onClick={handleClick}>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleClick}
+                      >
                         Subscribe
                       </Button>
                       <Popover
@@ -270,9 +294,21 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
                       </Popover>
                     </div>
                   ) : (
-                    <Button variant="contained" onClick={handleSubscribe}>
-                      Subscribe
-                    </Button>
+                    <div>
+                      {subscribed ? (
+                        <Button variant="contained" onClick={handleUnsubscribe}>
+                          Subscribed
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={handleSubscribe}
+                        >
+                          Subscribe
+                        </Button>
+                      )}
+                    </div>
                   )}
                 </div>
               )}
@@ -389,7 +425,8 @@ const WatchVideo: React.FC<Props> = ({ id, user }) => {
 
 const mapStateToProps = (state: AppState) => ({
   videos: state.videos,
-  user: state.user
+  user: state.user,
+  subscriptions: state.subscriptions
 });
 
 export default connect(mapStateToProps)(WatchVideo);
