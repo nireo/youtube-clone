@@ -405,7 +405,7 @@ router.post(
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
-      if (!req.files) {
+      if (!req.files.thumbnail) {
         return res.send({
           status: false,
           message: "No avatar image was provided"
@@ -420,6 +420,28 @@ router.post(
       await req.user.save();
 
       res.status(204);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
+router.delete(
+  "/banner",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      if (req.user.banner === null) {
+        return res.status(204);
+      }
+
+      fs.unlink(`./avatars/${req.user.banner}`, err => {
+        if (err) return res.status(500).json({ message: err });
+      });
+
+      req.user.banner = null;
+      await req.user.save();
+      return res.status(204);
     } catch (error) {
       return res.status(500).json({ message: error });
     }

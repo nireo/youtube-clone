@@ -13,6 +13,13 @@ const getConfig = () => ({
   }
 });
 
+const getConfigMultipart = () => ({
+  headers: {
+    Authorization: token,
+    "Content-Type": "multipart/form-data"
+  }
+});
+
 export const getUserVideos = async (userId: string) => {
   const response = await axios.get(`${baseUrl}/${userId}`);
   return response.data;
@@ -72,5 +79,29 @@ export const getHistoryList = async () => {
 
 export const getLibraryData = async () => {
   const response = await axios.get(`${baseUrl}/library`, getConfig());
+  return response.data;
+};
+
+export const setBanner = async (formData: any) => {
+  const response = await axios.post(
+    `${baseUrl}/banner`,
+    formData,
+    getConfigMultipart()
+  );
+  return response.data;
+};
+
+export const setDefaultBanner = async () => {
+  const response = await axios.delete(`${baseUrl}/banner`, getConfig());
+  return response.data;
+};
+
+export const setAvatar = async (formData: any) => {
+  const response = await axios.post(`${baseUrl}/avatar`, getConfigMultipart());
+  return response.data;
+};
+
+export const setDefaultAvatar = async () => {
+  const response = await axios.delete(`${baseUrl}/avatar`, getConfig());
   return response.data;
 };
