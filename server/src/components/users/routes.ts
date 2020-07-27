@@ -400,4 +400,30 @@ router.get(
   }
 );
 
+router.post(
+  "/banner",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      if (!req.files) {
+        return res.send({
+          status: false,
+          message: "No avatar image was provided"
+        });
+      }
+
+      const banner: any = req.files.banner;
+      const bannerFilename = `${req.user.id}.${getFileExtension(banner.name)}`;
+      banner.mv("./avatars/" + bannerFilename);
+
+      req.user.banner = bannerFilename;
+      await req.user.save();
+
+      res.status(204);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
 export default router;

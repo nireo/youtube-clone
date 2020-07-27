@@ -38,6 +38,9 @@ const UserModel = (sequelize: Sequelize) => {
     history: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: []
+    },
+    banner: {
+      type: DataTypes.STRING
     }
   });
 };
