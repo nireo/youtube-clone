@@ -141,7 +141,9 @@ const UserChannel: React.FC<Props> = ({
               <title>{channelUser.username} - TypeTube</title>
             </Helmet>
             <Modal open={open} onClose={closeModal} className={classes.modal}>
-              <div className={classes.paper}> </div>
+              <div className={classes.paper}>
+                 
+              </div>
             </Modal>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ display: "flex" }}>
