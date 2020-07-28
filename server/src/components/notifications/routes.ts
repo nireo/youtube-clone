@@ -46,6 +46,26 @@ router.get("/", authenticateToken, async (req: any, res: express.Response) => {
   }
 });
 
+router.get(
+  "/:notificationId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const notification = await Notification.findOne({
+        where: { id: req.params.notificationId }
+      });
+
+      if (!notification) {
+        return res.status(404);
+      }
+
+      res.status(200).json(notification)
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
 router.delete(
   "/:notificationId",
   authenticateToken,

@@ -22,11 +22,25 @@ import {
   removeSubscriptionAction,
   subscribeToUserAction
 } from "../../store/subscriptionReducer";
+import Modal from "@material-ui/core/Modal";
 
 const useStyles = makeStyles((theme: Theme) => ({
   channelAvatar: {
     width: theme.spacing(12),
     height: theme.spacing(12)
+  },
+  paper: {
+    position: "absolute",
+    width: 600,
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3)
+  },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   }
 }));
 
@@ -52,6 +66,9 @@ const UserChannel: React.FC<Props> = ({
   const [editing, setEditing] = useState<boolean>(false);
   const [newDescription, setNewDescription] = useState<string>("");
   const [subscribed, setSubscribed] = useState<boolean | null>(null);
+  const [avatarUpload, setAvatarUpload] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
+
   const classes = useStyles();
 
   const loadChannelData = useCallback(async () => {
@@ -66,6 +83,10 @@ const UserChannel: React.FC<Props> = ({
 
   const startEditing = () => {
     setEditing(true);
+  };
+
+  const closeModal = () => {
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -119,6 +140,9 @@ const UserChannel: React.FC<Props> = ({
               <meta charSet="utf-8" />
               <title>{channelUser.username} - TypeTube</title>
             </Helmet>
+            <Modal open={open} onClose={closeModal} className={classes.modal}>
+              <div className={classes.paper}> </div>
+            </Modal>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ display: "flex" }}>
                 <Avatar
