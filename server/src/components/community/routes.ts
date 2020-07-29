@@ -1,5 +1,5 @@
 import express from "express";
-import { User, Community } from "../../sequelize";
+import { User, Community, CommunityLike } from "../../sequelize";
 import authenticateToken from "../../middlewares/tokenAuth";
 import { v4 as uuidv4 } from "uuid";
 
@@ -57,6 +57,53 @@ router.delete(
       }
 
       await communityPost.destroy();
+      res.status(204);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
+router.patch(
+  "/:postId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const communityPost: any = await Community.findOne({
+        where: { id: req.params.postId }
+      });
+
+      if (!communityPost) {
+        return res.status(404);
+      }
+
+      const action = req.query.action;
+      const communityLike: any = await CommunityLike.findOne({
+        where: { userId: req.user.id, likedPostId: communityPost.id }
+      });
+
+      if (communityLike) {
+        if (action === "like" && communityLike.like) {
+          await communityLike.destroy();
+          communityPost.likes--;
+        } else if (action !== "like" && !communityLike.like) {
+          await communityLike.destroy();
+          communityPost.likes++;
+        } else {
+          communityLike.like = action === "like";
+          communityPost.likes += action === "like" ? 1 : -1;
+        }
+      } else {
+        await CommunityLike.create({
+          id: uuidv4(),
+          userId: req.user.id,
+          likedPostId: communityPost.id,
+          like: action === "like"
+        });
+        communityPost.likes += action === "like" ? 1 : -1;
+      }
+
+      await communityPost.save();
       res.status(204);
     } catch (error) {
       return res.status(500).json({ message: error });
