@@ -21,6 +21,7 @@ import DrawerWrapper from "./components/layout/DrawerWrapper";
 import HistoryPage from "./components/pages/History";
 import PlaylistVideos from "./components/pages/PlaylistVideos";
 import { Trending } from "./components/pages/Trending";
+import red from "@material-ui/core/colors/red";
 
 type Props = {
   user: User | null;
@@ -32,7 +33,8 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const darkTheme = createMuiTheme({
     palette: {
-      type: "dark"
+      type: "dark",
+      secondary: red
     }
   });
 

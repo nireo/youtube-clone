@@ -37,7 +37,7 @@ import VideoCallIcon from "@material-ui/icons/VideoCall";
 import NotificationWidget from "../other/NotificationWidget";
 import SubscriptionsWidget from "../other/SubscriptionsWidget";
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -80,7 +80,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing(3),
       transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
@@ -319,6 +318,7 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
         className={clsx(classes.content, {
           [classes.contentShift]: open
         })}
+        style={{ width: "100%" }}
       >
         <div className={classes.drawerHeader} />
         {children}

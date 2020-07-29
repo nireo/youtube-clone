@@ -131,122 +131,143 @@ const UserChannel: React.FC<Props> = ({
   };
 
   return (
-    <Container>
+    <div>
       {channelUser !== undefined &&
         channelUser !== null &&
         channelVideos !== null && (
-          <div style={{ marginTop: "3rem" }}>
+          <div>
             <Helmet>
               <meta charSet="utf-8" />
               <title>{channelUser.username} - TypeTube</title>
             </Helmet>
             <Modal open={open} onClose={closeModal} className={classes.modal}>
-              <div className={classes.paper}>
-                 
-              </div>
+              <div className={classes.paper}></div>
             </Modal>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div style={{ display: "flex" }}>
-                <Avatar
-                  src={`http://localhost:3001/avatars/${channelUser.avatar}`}
-                  className={classes.channelAvatar}
-                />
-                <div>
-                  <Typography
-                    style={{ marginLeft: "1rem" }}
-                    variant="h6"
-                    color="textPrimary"
-                  >
-                    {channelUser.username}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    style={{ marginLeft: "1rem" }}
-                  >
-                    {channelUser.subscribers} subscribers
-                  </Typography>
-                </div>
-              </div>
-              <div style={{ marginTop: "2rem" }}>
-                {subscribed ? (
-                  <Button variant="contained" onClick={handleUnsubscribe}>
-                    Subscribed
-                  </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleSubscription}
-                  >
-                    Subscribe
-                  </Button>
-                )}
-              </div>
-            </div>
-            <div style={{ flexGrow: 1 }}>
-              <Tabs
-                value={page}
-                onChange={handlePageChange}
-                indicatorColor="secondary"
-                textColor="secondary"
-                centered
+            <div
+              style={{
+                width: "100%",
+                height: "27vh",
+                backgroundColor: "#e33371"
+              }}
+            ></div>
+            <div
+              style={{
+                backgroundColor: "#282828"
+              }}
+            >
+              <Container
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  paddingTop: "1rem",
+                  paddingBottom: "1rem"
+                }}
               >
-                <Tab label="Videos" />
-                <Tab label="Playlists" />
-                <Tab label="About" />
-              </Tabs>
+                <div style={{ display: "flex" }}>
+                  <Avatar
+                    src={`http://localhost:3001/avatars/${channelUser.avatar}`}
+                    className={classes.channelAvatar}
+                  />
+                  <div>
+                    <Typography
+                      style={{ marginLeft: "1rem" }}
+                      variant="h6"
+                      color="textPrimary"
+                    >
+                      {channelUser.username}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      style={{ marginLeft: "1rem" }}
+                    >
+                      {channelUser.subscribers} subscribers
+                    </Typography>
+                  </div>
+                </div>
+                <div style={{ marginTop: "2rem" }}>
+                  {subscribed ? (
+                    <Button variant="contained" onClick={handleUnsubscribe}>
+                      Subscribed
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleSubscription}
+                    >
+                      Subscribe
+                    </Button>
+                  )}
+                </div>
+              </Container>
+              <Container>
+                <div style={{ flexGrow: 1 }}>
+                  <Tabs
+                    value={page}
+                    onChange={handlePageChange}
+                    indicatorColor="secondary"
+                    textColor="secondary"
+                  >
+                    <Tab label="Videos" />
+                    <Tab label="Playlists" />
+                    <Tab label="About" />
+                  </Tabs>
+                </div>
+              </Container>
             </div>
             <Divider style={{ marginBottom: "1.5rem" }} />
-            {page === 0 && (
-              <div>
-                {channelVideos.map((video: Video) => (
-                  <VideoEntryFull video={video} />
-                ))}
-              </div>
-            )}
-            {page === 1 && <UserPlaylists id={id} />}
-            {page === 2 && (
-              <div>
-                <Typography variant="body1">
-                  {channelUser.description}
-                </Typography>
-                {user !== null && user.id === id && (
-                  <div>
-                    {editing === false ? (
-                      <IconButton onClick={startEditing}>
-                        <CreateIcon />
-                      </IconButton>
-                    ) : (
-                      <form onSubmit={handleChannelUpdate}>
-                        <TextField
-                          value={newDescription}
-                          onChange={({ target }) =>
-                            setNewDescription(target.value)
-                          }
-                          variant="filled"
-                          rows={3}
-                          multiline
-                          fullWidth
-                        />
-                        <div style={{ float: "right", marginTop: "0.5rem" }}>
-                          <Button onClick={stopEditing}>Cancel</Button>
-                          <Button
-                            style={{ marginLeft: "0.5rem" }}
-                            variant="contained"
-                          >
-                            Update
-                          </Button>
-                        </div>
-                      </form>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+            <Container>
+              {page === 0 && (
+                <div>
+                  {channelVideos.map((video: Video) => (
+                    <VideoEntryFull video={video} />
+                  ))}
+                </div>
+              )}
+              {page === 1 && <UserPlaylists id={id} />}
+              {page === 2 && (
+                <div>
+                  <Typography variant="body1">
+                    {channelUser.description}
+                  </Typography>
+                  {user !== null && user.id === id && (
+                    <div>
+                      {editing === false ? (
+                        <IconButton onClick={startEditing}>
+                          <CreateIcon />
+                        </IconButton>
+                      ) : (
+                        <form onSubmit={handleChannelUpdate}>
+                          <TextField
+                            value={newDescription}
+                            onChange={({ target }) =>
+                              setNewDescription(target.value)
+                            }
+                            variant="filled"
+                            rows={3}
+                            multiline
+                            fullWidth
+                          />
+                          <div style={{ float: "right", marginTop: "0.5rem" }}>
+                            <Button onClick={stopEditing}>Cancel</Button>
+                            <Button
+                              style={{ marginLeft: "0.5rem" }}
+                              variant="contained"
+                            >
+                              Update
+                            </Button>
+                          </div>
+                        </form>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </Container>
           </div>
         )}
-    </Container>
+    </div>
   );
 };
 
