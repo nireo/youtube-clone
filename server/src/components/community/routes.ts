@@ -65,7 +65,7 @@ router.delete(
 );
 
 router.patch(
-  "/:postId",
+  "/rate/:postId",
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
@@ -105,6 +105,34 @@ router.patch(
 
       await communityPost.save();
       res.status(204);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
+router.patch(
+  "/:postId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const { content } = req.body;
+      if (!content) {
+        return res.status(401);
+      }
+
+      const communityPost: any = await Community.findOne({
+        where: { id: req.params.postId }
+      });
+      if (!communityPost) {
+        return res.status(404);
+      }
+
+      communityPost.content = content;
+      communityPost.edited = true;
+      await communityPost.save();
+
+      res.status(200).json(communityPost);
     } catch (error) {
       return res.status(500).json({ message: error });
     }

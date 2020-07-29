@@ -18,6 +18,10 @@ const CommunityLikeModel = (sequelize: Sequelize) => {
     like: {
       type: DataTypes.BOOLEAN,
       allowNull: false
+    },
+    edited: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   });
 };
