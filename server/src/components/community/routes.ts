@@ -13,7 +13,10 @@ router.get("/:userId", async (req: express.Request, res: express.Response) => {
       return res.status(204);
     }
 
-    const communityPosts = await Community.findAll({ where: { userId } });
+    const communityPosts = await Community.findAll({
+      where: { userId },
+      include: User
+    });
     res.status(200).json(communityPosts);
   } catch (error) {
     return res.status(500).json({ message: error });
@@ -126,6 +129,10 @@ router.patch(
       });
       if (!communityPost) {
         return res.status(404);
+      }
+
+      if (req.user.id !== communityPost.userId) {
+        return res.status(403);
       }
 
       communityPost.content = content;

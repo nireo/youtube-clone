@@ -26,6 +26,7 @@ import Modal from "@material-ui/core/Modal";
 import AvatarUpdate from "../other/AvatarUpdate";
 import BannerUpdate from "../other/BannerUpdate";
 import { UserSubscriptions } from "./UserSubscriptions";
+import UserCommunity from "./UserCommunity";
 
 const useStyles = makeStyles((theme: Theme) => ({
   channelAvatar: {
@@ -258,6 +259,7 @@ const UserChannel: React.FC<Props> = ({
                     <Tab label="Videos" />
                     <Tab label="Playlists" />
                     <Tab label="Subscriptions" />
+                    <Tab label="Community" />
                     <Tab label="About" />
                   </Tabs>
                 </div>
@@ -274,7 +276,8 @@ const UserChannel: React.FC<Props> = ({
               )}
               {page === 1 && <UserPlaylists id={id} />}
               {page === 2 && <UserSubscriptions id={id} />}
-              {page === 3 && (
+              {page === 3 && <UserCommunity id={id} />}
+              {page === 4 && (
                 <div>
                   <Typography variant="body1">
                     {channelUser.description}
