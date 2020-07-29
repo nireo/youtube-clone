@@ -39,4 +39,29 @@ router.post("/", authenticateToken, async (req: any, res: express.Response) => {
   }
 });
 
+router.delete(
+  "/:postId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const communityPost: any = await Community.findOne({
+        where: { id: req.params.postId }
+      });
+
+      if (!communityPost) {
+        return res.status(404);
+      }
+
+      if (req.user.id !== communityPost.userId) {
+        return res.status(403);
+      }
+
+      await communityPost.destroy();
+      res.status(204);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
 export default router;
