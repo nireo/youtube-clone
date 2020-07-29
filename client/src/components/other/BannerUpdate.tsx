@@ -62,9 +62,16 @@ const BannerUpdate: React.FC<Props> = ({ user }) => {
               color="secondary"
               style={{ marginRight: "1rem" }}
             >
-              Upload Avatar
+              Upload banner
             </Button>
           </label>
+          {banner !== null && (
+            <div style={{ marginTop: "1rem" }}>
+              <Button variant="contained" color="secondary" type="submit">
+                Set as new banner
+              </Button>
+            </div>
+          )}
         </form>
         {user !== null && user.avatar !== null && (
           <Button
@@ -72,7 +79,7 @@ const BannerUpdate: React.FC<Props> = ({ user }) => {
             variant="contained"
             color="secondary"
           >
-            Set default avatar
+            Set default banner
           </Button>
         )}
       </div>
@@ -86,9 +93,6 @@ const BannerUpdate: React.FC<Props> = ({ user }) => {
             width="200"
             style={{ marginTop: "0.5rem" }}
           />
-          <Button variant="contained" color="secondary">
-            Set as new avatar
-          </Button>
         </div>
       )}
     </Container>

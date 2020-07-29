@@ -24,6 +24,7 @@ import {
 } from "../../store/subscriptionReducer";
 import Modal from "@material-ui/core/Modal";
 import AvatarUpdate from "../other/AvatarUpdate";
+import BannerUpdate from "../other/BannerUpdate";
 
 const useStyles = makeStyles((theme: Theme) => ({
   channelAvatar: {
@@ -131,6 +132,16 @@ const UserChannel: React.FC<Props> = ({
     }
   };
 
+  const showBannerModal = () => {
+    setAvatarUpload(false);
+    setOpen(true);
+  };
+
+  const showAvatarModal = () => {
+    setAvatarUpload(true);
+    setOpen(true);
+  };
+
   return (
     <div>
       {channelUser !== undefined &&
@@ -143,14 +154,14 @@ const UserChannel: React.FC<Props> = ({
             </Helmet>
             <Modal open={open} onClose={closeModal} className={classes.modal}>
               <div className={classes.paper}>
-                <AvatarUpdate />
+                {avatarUpload === true ? <AvatarUpdate /> : <BannerUpdate />}
               </div>
             </Modal>
             <div
               style={{
                 width: "100%",
                 height: "27vh",
-                backgroundColor: "#e33371"
+                backgroundColor: "#ff1744"
               }}
             ></div>
             <div
@@ -191,11 +202,19 @@ const UserChannel: React.FC<Props> = ({
                 {user !== null && user.id === channelUser.id ? (
                   <div style={{ marginTop: "2rem" }}>
                     <Button
+                      style={{ marginRight: "1rem" }}
                       variant="contained"
                       color="secondary"
-                      onClick={() => setOpen(true)}
+                      onClick={() => showAvatarModal()}
                     >
-                      Update images
+                      Update avatar
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => showBannerModal()}
+                    >
+                      Update banner
                     </Button>
                   </div>
                 ) : (

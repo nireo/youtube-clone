@@ -414,7 +414,7 @@ router.post(
 
       const banner: any = req.files.banner;
       const bannerFilename = `${req.user.id}.${getFileExtension(banner.name)}`;
-      banner.mv("./avatars/" + bannerFilename);
+      banner.mv("./banners/" + bannerFilename);
 
       req.user.banner = bannerFilename;
       await req.user.save();

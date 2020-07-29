@@ -29,6 +29,7 @@ app.use(helmet());
 app.use("/video", express.static("./videos"));
 app.use("/avatars", express.static("./avatars"));
 app.use("/thumbnails", express.static("./thumbnails"));
+app.use("/banners", express.static("./banners"));
 
 app.use("/videos", videoRoutes);
 app.use("/auth", authRoutes);
