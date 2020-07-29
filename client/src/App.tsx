@@ -22,6 +22,7 @@ import HistoryPage from "./components/pages/History";
 import PlaylistVideos from "./components/pages/PlaylistVideos";
 import { Trending } from "./components/pages/Trending";
 import red from "@material-ui/core/colors/red";
+import Settings from "./components/pages/Settings";
 
 type Props = {
   user: User | null;
@@ -75,6 +76,7 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
             <Route path="/library" exact render={() => <Library />} />
             <Route path="/history" exact render={() => <HistoryPage />} />
             <Route path="/trending" exact render={() => <Trending />} />
+            <Route path="/settings" exact render={() => <Settings />} />
             <Route
               path="/playlist/:id"
               exact

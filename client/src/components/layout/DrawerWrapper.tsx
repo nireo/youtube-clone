@@ -36,6 +36,7 @@ import { User } from "../../interfaces/User";
 import VideoCallIcon from "@material-ui/icons/VideoCall";
 import NotificationWidget from "../other/NotificationWidget";
 import SubscriptionsWidget from "../other/SubscriptionsWidget";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 const drawerWidth = 200;
 
@@ -210,6 +211,15 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
           ) : (
             <div style={{ display: "flex" }}>
               <NotificationWidget />
+              <Link to="/settings" style={{ marginRight: "1rem" }}>
+                <IconButton
+                  edge="end"
+                  aria-label="settings-page"
+                  style={{ color: "#fff" }}
+                >
+                  <SettingsIcon />
+                </IconButton>
+              </Link>
               <Link to="/upload" style={{ marginRight: "1rem" }}>
                 <IconButton
                   edge="end"
