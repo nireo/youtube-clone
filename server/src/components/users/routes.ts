@@ -448,4 +448,28 @@ router.delete(
   }
 );
 
+router.get(
+  "/subscriptions/:userId",
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const subscriptions: any = await Subscription.findAll({
+        where: { subscriberId: req.params.userId }
+      });
+
+      let users: any = [];
+      for (let i = 0; i < subscriptions.length; ++i) {
+        const user = await User.findOne({
+          where: { id: subscriptions[i].subscribedId }
+        });
+
+        users = [...users, user];
+      }
+
+      res.status(200).json(users);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
 export default router;

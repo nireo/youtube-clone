@@ -109,3 +109,8 @@ export const setDefaultAvatar = async () => {
   const response = await axios.delete(`${baseUrl}/avatar`, getConfig());
   return response.data;
 };
+
+export const getUserSubscriptions = async (userId: string) => {
+  const response = await axios.get(`${baseUrl}/subscriptions/${userId}`);
+  return response.data;
+};
