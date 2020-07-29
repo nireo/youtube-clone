@@ -157,13 +157,24 @@ const UserChannel: React.FC<Props> = ({
                 {avatarUpload === true ? <AvatarUpdate /> : <BannerUpdate />}
               </div>
             </Modal>
-            <div
-              style={{
-                width: "100%",
-                height: "27vh",
-                backgroundColor: "#ff1744"
-              }}
-            ></div>
+            {channelUser !== null && channelUser.banner !== null ? (
+              <div
+                style={{
+                  width: "100%",
+                  height: "27vh",
+                  backgroundImage: `url(http://localhost:3001/banners/${channelUser.banner})`,
+                  backgroundSize: "100% 100%"
+                }}
+              ></div>
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  height: "27vh",
+                  backgroundColor: "#ff1744"
+                }}
+              ></div>
+            )}
             <div
               style={{
                 backgroundColor: "#282828"
@@ -255,7 +266,7 @@ const UserChannel: React.FC<Props> = ({
               {page === 0 && (
                 <div>
                   {channelVideos.map((video: Video) => (
-                    <VideoEntryFull video={video} />
+                    <VideoEntryFull video={video} key={video.id} />
                   ))}
                 </div>
               )}

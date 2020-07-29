@@ -15,6 +15,7 @@ export interface User {
   createdAt: string;
   subscribers: number;
   description: string;
+  banner: string;
 }
 
 export interface UserWithToken {

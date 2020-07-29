@@ -405,10 +405,10 @@ router.post(
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
-      if (!req.files.thumbnail) {
+      if (!req.files.banner) {
         return res.send({
           status: false,
-          message: "No avatar image was provided"
+          message: "No banner image was provided"
         });
       }
 
