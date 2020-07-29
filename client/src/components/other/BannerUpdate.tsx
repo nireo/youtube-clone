@@ -86,6 +86,9 @@ const BannerUpdate: React.FC<Props> = ({ user }) => {
             width="200"
             style={{ marginTop: "0.5rem" }}
           />
+          <Button variant="contained" color="secondary">
+            Set as new avatar
+          </Button>
         </div>
       )}
     </Container>

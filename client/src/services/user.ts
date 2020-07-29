@@ -97,7 +97,11 @@ export const setDefaultBanner = async () => {
 };
 
 export const setAvatar = async (formData: any) => {
-  const response = await axios.post(`${baseUrl}/avatar`, getConfigMultipart());
+  const response = await axios.post(
+    `${baseUrl}/avatar`,
+    formData,
+    getConfigMultipart()
+  );
   return response.data;
 };
 

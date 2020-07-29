@@ -65,6 +65,13 @@ const AvatarUpdate: React.FC<Props> = ({ user }) => {
               Upload Avatar
             </Button>
           </label>
+          {avatar !== null && (
+            <div style={{ marginTop: "1rem" }}>
+              <Button variant="contained" color="secondary" type="submit">
+                Set as new avatar
+              </Button>
+            </div>
+          )}
         </form>
         {user !== null && user.avatar !== null && (
           <Button
