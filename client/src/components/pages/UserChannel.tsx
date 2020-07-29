@@ -23,6 +23,7 @@ import {
   subscribeToUserAction
 } from "../../store/subscriptionReducer";
 import Modal from "@material-ui/core/Modal";
+import AvatarUpdate from "../other/AvatarUpdate";
 
 const useStyles = makeStyles((theme: Theme) => ({
   channelAvatar: {
@@ -141,7 +142,9 @@ const UserChannel: React.FC<Props> = ({
               <title>{channelUser.username} - TypeTube</title>
             </Helmet>
             <Modal open={open} onClose={closeModal} className={classes.modal}>
-              <div className={classes.paper}></div>
+              <div className={classes.paper}>
+                <AvatarUpdate />
+              </div>
             </Modal>
             <div
               style={{
@@ -185,21 +188,33 @@ const UserChannel: React.FC<Props> = ({
                     </Typography>
                   </div>
                 </div>
-                <div style={{ marginTop: "2rem" }}>
-                  {subscribed ? (
-                    <Button variant="contained" onClick={handleUnsubscribe}>
-                      Subscribed
-                    </Button>
-                  ) : (
+                {user !== null && user.id === channelUser.id ? (
+                  <div style={{ marginTop: "2rem" }}>
                     <Button
                       variant="contained"
                       color="secondary"
-                      onClick={handleSubscription}
+                      onClick={() => setOpen(true)}
                     >
-                      Subscribe
+                      Update images
                     </Button>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <div style={{ marginTop: "2rem" }}>
+                    {subscribed ? (
+                      <Button variant="contained" onClick={handleUnsubscribe}>
+                        Subscribed
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleSubscription}
+                      >
+                        Subscribe
+                      </Button>
+                    )}
+                  </div>
+                )}
               </Container>
               <Container>
                 <div style={{ flexGrow: 1 }}>
