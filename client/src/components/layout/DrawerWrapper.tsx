@@ -71,7 +71,8 @@ const useStyles = makeStyles((theme: Theme) =>
       flexShrink: 0
     },
     drawerPaper: {
-      width: drawerWidth
+      width: drawerWidth,
+      backgroundColor: "rgba(33, 33, 33, 0.98)"
     },
     drawerHeader: {
       display: "flex",
@@ -185,7 +186,7 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open
         })}
-        style={{ backgroundColor: "#424242" }}
+        style={{ backgroundColor: "rgba(33, 33, 33, 0.98)" }}
       >
         <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
           <div>

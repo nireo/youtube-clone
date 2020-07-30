@@ -32,6 +32,7 @@ import {
   subscribeToUserAction,
   removeSubscriptionAction
 } from "../../store/subscriptionReducer";
+import { CommentEntry } from "../other/CommentEntry";
 
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
@@ -378,46 +379,12 @@ const WatchVideo: React.FC<Props> = ({
                   </div>
                 )}
 
-                {comments.map((comment: Comment, index: number) => (
-                  <div style={{ marginTop: "0.75rem" }}>
-                    <div style={{ display: "flex" }}>
-                      <Avatar
-                        src={`http://localhost:3001/avatars/${video.users[index].avatar}`}
-                        className={classes.commentAvatar}
-                        style={{ marginRight: "1rem" }}
-                      />
-                      <div>
-                        <Typography>
-                          <strong>{video.users[index].username}</strong>
-                        </Typography>
-                        <Typography>{comment.content}</Typography>
-                      </div>
-                    </div>
-                    <div style={{ display: "flex" }}>
-                      <IconButton
-                        onClick={() =>
-                          handleCommentRate(RateComment.Like, comment.id)
-                        }
-                        style={{ backgroundColor: "transparent" }}
-                      >
-                        <ThumbUpIcon fontSize="small" />
-                      </IconButton>
-                      <Typography style={{ marginTop: "0.5rem" }}>
-                        {comment.likes}
-                      </Typography>
-                      <IconButton
-                        onClick={() =>
-                          handleCommentRate(RateComment.Like, comment.id)
-                        }
-                        style={{ backgroundColor: "transparent" }}
-                      >
-                        <ThumbDownIcon fontSize="small" />
-                      </IconButton>
-                      <Typography style={{ marginTop: "0.5rem" }}>
-                        {comment.dislikes}
-                      </Typography>
-                    </div>
-                  </div>
+                {comments.map((comment: Comment) => (
+                  <CommentEntry
+                    key={comment.id}
+                    comment={comment}
+                    handleCommentRate={handleCommentRate}
+                  />
                 ))}
               </div>
             </Grid>

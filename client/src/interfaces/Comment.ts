@@ -1,3 +1,5 @@
+import { User } from "./User";
+
 export interface Comment {
   content: string;
   id: string;
@@ -6,6 +8,7 @@ export interface Comment {
   edited: boolean;
   likes: number;
   dislikes: number;
+  User?: User;
 }
 
 export interface CreateComment {

@@ -6,6 +6,7 @@ import { AppState } from "../../store";
 import { getVideosAction } from "../../store/videoReducer";
 import { Video } from "../../interfaces/Video";
 import { VideoEntrySmall } from "../other/VideoEntrySmall";
+import { Helmet } from "react-helmet";
 
 type Props = {
   getVideosAction: () => void;
