@@ -5,7 +5,6 @@ import { Playlist } from "../../interfaces/Playlist";
 import { Video } from "../../interfaces/Video";
 import { getPlaylistVideos, updatePlaylistInfo } from "../../services/playlist";
 import Typography from "@material-ui/core/Typography";
-import { VideoEntryFull } from "../other/VideoEntryFull";
 import Paper from "@material-ui/core/Paper";
 import { connect } from "react-redux";
 import { AppState } from "../../store";

@@ -1,5 +1,10 @@
 import express from "express";
-import { User, Community, CommunityLike } from "../../sequelize";
+import {
+  User,
+  Community,
+  CommunityLike,
+  CommunityComment
+} from "../../sequelize";
 import authenticateToken from "../../middlewares/tokenAuth";
 import { v4 as uuidv4 } from "uuid";
 
@@ -140,6 +145,32 @@ router.patch(
       await communityPost.save();
 
       res.status(200).json(communityPost);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
+// add comment route
+router.post(
+  "/:postId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const { postId } = req.params;
+      const post = await Community.findOne({ where: { id: postId } });
+      if (!post) {
+        return res.status(404);
+      }
+
+      const newComment = await CommunityComment.create({
+        id: uuidv4(),
+        content: req.body.content,
+        userId: req.user.id,
+        communityPostId: postId
+      });
+
+      res.status(200).json(newComment);
     } catch (error) {
       return res.status(500).json({ message: error });
     }
