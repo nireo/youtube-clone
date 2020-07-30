@@ -8,6 +8,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { addVideoToPlaylist as service_addVideoToPlaylist } from "../../services/playlist";
+import Typography from "@material-ui/core/Typography";
 
 type Props = {
   user: User | null;
@@ -44,11 +45,17 @@ const AddVideoToPlaylistWidget: React.FC<Props> = ({ user, videoId }) => {
 
   return (
     <List style={{ width: "100%" }}>
-      {playlists.map((playlist: Playlist) => (
-        <ListItem button onClick={() => addVideoToPlaylist(playlist.id)}>
-          <ListItemText primary={playlist.title} />
-        </ListItem>
-      ))}
+      {playlists.length === 0 ? (
+        <Typography>No playlists</Typography>
+      ) : (
+        <div>
+          {playlists.map((playlist: Playlist) => (
+            <ListItem button onClick={() => addVideoToPlaylist(playlist.id)}>
+              <ListItemText primary={playlist.title} />
+            </ListItem>
+          ))}
+        </div>
+      )}
     </List>
   );
 };

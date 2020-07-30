@@ -30,6 +30,9 @@ import {
   removeSubscriptionAction
 } from "../../store/subscriptionReducer";
 import { CommentEntry } from "../other/CommentEntry";
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
+import AddVideoToPlaylistWidget from "../other/AddVideoToPlaylistWidget";
+import Modal from "@material-ui/core/Modal";
 
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
@@ -47,6 +50,19 @@ const useStyles = makeStyles((theme: Theme) => ({
   commentAvatar: {
     width: theme.spacing(5),
     height: theme.spacing(5)
+  },
+  paper: {
+    position: "absolute",
+    width: 300,
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3)
+  },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   }
 }));
 
@@ -78,6 +94,8 @@ const WatchVideo: React.FC<Props> = ({
   const [comments, setComments] = useState<Comment[] | null>(null);
   const [editing, setEditing] = useState<boolean>(false);
   const [subscribed, setSubscribed] = useState<boolean | null>(null);
+  const [openPlaylist, setOpenPlaylist] = useState<boolean>(false);
+
   const [testVideo] = useState({
     createdAt: "2020-07-17T21:11:07.197Z",
     description: "It really is kinda crazy",
@@ -213,23 +231,45 @@ const WatchVideo: React.FC<Props> = ({
                   type="video/webm"
                 />
               </video>
-              <Typography variant="h5">{video.video.title}</Typography>
-              <div style={{ display: "flex", marginTop: "0.75rem" }}>
-                <Typography
-                  variant="body2"
-                  style={{ marginRight: "0.25rem" }}
-                  color="textSecondary"
-                >
-                  {video.video.views} views
-                </Typography>
-                •
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  style={{ marginLeft: "0.25rem" }}
-                >
-                  {new Date(video.video.createdAt).toDateString()}
-                </Typography>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <Typography variant="h6">{video.video.title}</Typography>
+                  <div style={{ display: "flex", marginTop: "0.75rem" }}>
+                    <Typography
+                      variant="body2"
+                      style={{ marginRight: "0.25rem" }}
+                      color="textSecondary"
+                    >
+                      {video.video.views} views
+                    </Typography>
+                    •
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      style={{ marginLeft: "0.25rem" }}
+                    >
+                      {new Date(video.video.createdAt).toDateString()}
+                    </Typography>
+                  </div>
+                </div>
+                <div>
+                  <Button
+                    startIcon={<PlaylistAddIcon />}
+                    style={{ background: "transparent" }}
+                    onClick={() => setOpenPlaylist(true)}
+                  >
+                    Save
+                  </Button>
+                  <Modal
+                    open={openPlaylist}
+                    onClose={() => setOpenPlaylist(false)}
+                    className={classes.modal}
+                  >
+                    <div className={classes.paper}>
+                      <AddVideoToPlaylistWidget videoId={id} />
+                    </div>
+                  </Modal>
+                </div>
               </div>
               <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
               {video.video.User !== undefined && (
