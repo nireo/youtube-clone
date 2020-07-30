@@ -54,10 +54,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   paper: {
     position: "absolute",
     width: 300,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "rgba(33, 33, 33, 0.98)",
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3)
+    padding: theme.spacing(2, 2, 3)
   },
   modal: {
     display: "flex",

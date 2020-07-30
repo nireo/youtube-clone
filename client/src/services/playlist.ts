@@ -5,7 +5,7 @@ const baseUrl: string = "/playlist";
 let token: string | null = null;
 
 export const setToken = (newToken: string) => {
-  token = newToken;
+  token = `bearer ${newToken}`;
 };
 
 const getConfig = () => ({

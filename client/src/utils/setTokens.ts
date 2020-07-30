@@ -11,7 +11,7 @@ const setTokens = (token: string) => {
   setCommentToken(token);
   setPlaylistToken(token);
   setNotificationToken(token);
-  setCommentToken(token);
+  setCommunityToken(token);
 };
 
 export default setTokens;
