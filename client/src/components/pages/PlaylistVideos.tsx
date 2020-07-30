@@ -36,7 +36,8 @@ const PlaylistVideos: React.FC<Props> = ({ playlistId, user }) => {
     const data = await getPlaylistVideos(playlistId);
     setPlaylist(data);
     setTitle(data.playlist.title);
-    setDescription(data.playlist.description);
+
+    if (data.playlist.description) setDescription(data.playlist.description);
   }, [playlistId]);
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const PlaylistVideos: React.FC<Props> = ({ playlistId, user }) => {
   };
 
   return (
-    <Container>
+    <Container maxWidth="lg">
       {playlist !== null && (
         <Grid container spacing={3}>
           <Grid xs={4}>
@@ -110,8 +111,8 @@ const PlaylistVideos: React.FC<Props> = ({ playlistId, user }) => {
             </Paper>
           </Grid>
           <Grid xs={8}>
-            <div style={{ marginLeft: "1rem" }}>
-              {playlist.videos.length === 0 ? (
+            <div style={{ marginLeft: "1rem", width: "100%" }}>
+              {playlist !== null && playlist.videos.length === 0 ? (
                 <div>
                   <Typography variant="h6">No videos.</Typography>
                   <Typography variant="body2" color="textSecondary">
@@ -120,8 +121,8 @@ const PlaylistVideos: React.FC<Props> = ({ playlistId, user }) => {
                 </div>
               ) : (
                 <div>
-                  {playlist.videos.map((video: Video) => (
-                    <VideoEntryFull video={video} />
+                  {playlist.videos.map((video: any) => (
+                    <VideoEntryFull video={video[0]} key={video.id} />
                   ))}
                 </div>
               )}

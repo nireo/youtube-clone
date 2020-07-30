@@ -17,6 +17,7 @@ import TextField from "@material-ui/core/TextField";
 type Props = {
   user: User | null;
   videoId: string;
+  closeModal: () => void;
 };
 
 const AddVideoToPlaylistWidget: React.FC<Props> = ({ user, videoId }) => {

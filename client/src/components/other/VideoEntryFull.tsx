@@ -11,6 +11,7 @@ type Props = {
 // VideoEntryFull is the way video information is displayed on some pages, where one
 // video takes up all of the width i.e. search page, history, trending
 export const VideoEntryFull: React.FC<Props> = ({ video }) => {
+  console.log(video);
   return (
     <Link to={`/watch/${video.id}`} style={{ textDecoration: "none" }}>
       <Grid container style={{ marginTop: "0.75rem" }} key={video.id}>

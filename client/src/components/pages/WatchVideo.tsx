@@ -114,6 +114,10 @@ const WatchVideo: React.FC<Props> = ({
     setAnchorEl(event.currentTarget);
   };
 
+  const closeModal = () => {
+    setOpenPlaylist(false);
+  };
+
   const loadVideo = useCallback(async () => {
     const data = await getSingleVideo(id);
     setVideo(data);
@@ -266,7 +270,10 @@ const WatchVideo: React.FC<Props> = ({
                     className={classes.modal}
                   >
                     <div className={classes.paper}>
-                      <AddVideoToPlaylistWidget videoId={id} />
+                      <AddVideoToPlaylistWidget
+                        videoId={id}
+                        closeModal={closeModal}
+                      />
                     </div>
                   </Modal>
                 </div>
