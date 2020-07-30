@@ -25,19 +25,26 @@ const CreateVideo: React.FC<Props> = ({ user }) => {
   const [video, setVideo] = useState<any>(null);
   const [thumbnail, setThumbnail] = useState<any>(null);
 
+  const [thumbnailPreviewUrl, setThumbnailPreviewUrl] = useState<string>("");
+
   if (!user) {
     return <Redirect to="/" />;
   }
 
   const handleVideoChange = (event: any) => {
-    if (event.target.files[0] !== null) {
-      setVideo(event.target.files[0]);
-    }
+    if (event.target.files[0] !== null) setVideo(event.target.files[0]);
   };
 
   const handleThumbnailChange = (event: any) => {
     if (event.target.files[0] !== null) {
       setThumbnail(event.target.files[0]);
+
+      let reader: any = new FileReader();
+      reader.onloadend = () => {
+        setThumbnailPreviewUrl(reader.result);
+      };
+
+      reader.readAsDataURL(event.target.files[0]);
     }
   };
 
@@ -126,6 +133,17 @@ const CreateVideo: React.FC<Props> = ({ user }) => {
             </Button>
           </label>
         </div>
+        {thumbnailPreviewUrl && (
+          <div>
+            <Typography variant="body2">Preview</Typography>
+            <img
+              style={{ width: "12rem" }}
+              alt="video-thumbnail"
+              src={thumbnailPreviewUrl}
+            />
+          </div>
+        )}
+
         <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
         <Button
           variant="contained"

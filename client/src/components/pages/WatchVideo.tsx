@@ -244,27 +244,40 @@ const WatchVideo: React.FC<Props> = ({
                     <Link to={`/channel/${video.video.User.id}`}>
                       <Avatar
                         className={classes.avatar}
-                        src={`http://localhost:3001/avatars/${video.video.User.id}${video.video.User.avatar}`}
+                        src={`http://localhost:3001/avatars/${video.video.User.avatar}`}
                       ></Avatar>
                     </Link>
-                    <Link
-                      to={`/channel/${video.video.User.id}`}
-                      style={{ textDecoration: "none" }}
-                    >
+                    <div>
+                      <Link
+                        to={`/channel/${video.video.User.id}`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Typography
+                          style={{ marginLeft: "0.5rem" }}
+                          color="textPrimary"
+                        >
+                          <strong>{video.video.User.username}</strong>
+                        </Typography>
+                        <Typography
+                          style={{ marginLeft: "0.5rem" }}
+                          color="textSecondary"
+                          variant="body2"
+                        >
+                          {video.video.User.subscribers} subscribers
+                        </Typography>
+                      </Link>
                       <Typography
-                        style={{ marginLeft: "0.5rem" }}
+                        variant="body1"
                         color="textPrimary"
+                        style={{
+                          fontSize: "0.9rem",
+                          marginLeft: "0.5rem",
+                          marginTop: "1rem"
+                        }}
                       >
-                        <strong>{video.video.User.username}</strong>
+                        {video.video.description}
                       </Typography>
-                      <Typography
-                        style={{ marginLeft: "0.5rem" }}
-                        color="textSecondary"
-                        variant="body2"
-                      >
-                        {video.video.User.subscribers} subscribers
-                      </Typography>
-                    </Link>
+                    </div>
                   </div>
                   {user === null ? (
                     <div>
@@ -319,15 +332,6 @@ const WatchVideo: React.FC<Props> = ({
                   )}
                 </div>
               )}
-              <Container maxWidth="lg">
-                <Typography
-                  variant="body1"
-                  color="textPrimary"
-                  style={{ fontSize: "0.9rem" }}
-                >
-                  {video.video.description}
-                </Typography>
-              </Container>
               <div style={{ marginTop: "2rem" }}>
                 <Divider />
                 <Typography variant="h6" style={{ marginTop: "1rem" }}>
