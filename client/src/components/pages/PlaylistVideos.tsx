@@ -14,6 +14,7 @@ import CreateIcon from "@material-ui/icons/Create";
 import { User } from "../../interfaces/User";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import { PlaylistVideoEntry } from "../other/VideoPlaylistEntry";
 
 type Props = {
   playlistId: string;
@@ -53,7 +54,7 @@ const PlaylistVideos: React.FC<Props> = ({ playlistId, user }) => {
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" style={{ marginTop: "3rem" }}>
       {playlist !== null && (
         <Grid container spacing={3}>
           <Grid xs={4}>
@@ -122,7 +123,7 @@ const PlaylistVideos: React.FC<Props> = ({ playlistId, user }) => {
               ) : (
                 <div>
                   {playlist.videos.map((video: any) => (
-                    <VideoEntryFull video={video[0]} key={video.id} />
+                    <PlaylistVideoEntry video={video[0]} key={video.id} />
                   ))}
                 </div>
               )}

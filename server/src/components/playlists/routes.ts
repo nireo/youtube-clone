@@ -108,7 +108,8 @@ router.get(
       let videos: any = [];
       for (let i = 0; i < playlist.videos.length; ++i) {
         const video = await Video.findAll({
-          where: { id: playlist.videos[i] }
+          where: { id: playlist.videos[i] },
+          include: User
         });
         if (!video) {
           return res.status(404);
