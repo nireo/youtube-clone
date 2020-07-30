@@ -14,6 +14,16 @@ const reducer = (state: User | null = null, action: any) => {
   }
 };
 
+const loadUserDataFromLocalstorage = (): UserWithToken => {
+  const userDataString: string | null = localStorage.getItem("youtube-user");
+  if (!userDataString) {
+    return;
+  }
+
+  const userDataJSON: UserWithToken = JSON.parse(userDataString);
+  return userDataJSON;
+};
+
 export const loginAction = (credentials: Credentials) => {
   return async (dispatch: Dispatch) => {
     const data: UserWithToken = await login(credentials);
@@ -43,16 +53,25 @@ export const logoutAction = () => {
 
 export const loadLocalStorageUser = () => {
   return async (dispatch: Dispatch) => {
-    const userDataString: string | null = localStorage.getItem("youtube-user");
-    if (!userDataString) {
-      return;
-    }
-
-    const userDataJSON: UserWithToken = JSON.parse(userDataString);
+    const userDataJSON = loadUserDataFromLocalstorage();
     setTokens(userDataJSON.token);
     dispatch({
       type: "LOGIN",
       data: userDataJSON.user
+    });
+  };
+};
+
+export const updateUser = (newUserData: User) => {
+  return async (dispatch: Dispatch) => {
+    // update the localstorage
+    let userDataJSON = loadUserDataFromLocalstorage();
+    userDataJSON.user = newUserData;
+
+    localStorage.setItem("youtube-user", JSON.stringify(userDataJSON));
+    dispatch({
+      type: "LOGIN",
+      data: newUserData
     });
   };
 };

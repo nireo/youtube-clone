@@ -12,6 +12,7 @@ import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
 import AvatarUpdate from "../other/AvatarUpdate";
 import BannerUpdate from "../other/BannerUpdate";
+import UserUpdate from "../other/UserUpdate";
 
 const useStyles = makeStyles((theme: Theme) => ({
   avatar: {
@@ -39,19 +40,24 @@ type Props = {
 
 const SettingsPage: React.FC<Props> = ({ user }) => {
   const classes = useStyles();
-  const [avatarUpload, setAvatarUpload] = useState<boolean>(false);
+  const [modalPage, setModalPage] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
   if (!user) {
     return <Redirect to="/" />;
   }
 
   const showAvatarModal = () => {
-    setAvatarUpload(true);
+    setModalPage(0);
     setOpen(true);
   };
 
   const showBannerModal = () => {
-    setAvatarUpload(false);
+    setModalPage(1);
+    setOpen(true);
+  };
+
+  const showUsernameModal = () => {
+    setModalPage(2);
     setOpen(true);
   };
 
@@ -63,7 +69,9 @@ const SettingsPage: React.FC<Props> = ({ user }) => {
     <Container style={{ marginTop: "2rem" }}>
       <Modal open={open} onClose={closeModal} className={classes.modal}>
         <div className={classes.paper}>
-          {avatarUpload === true ? <AvatarUpdate /> : <BannerUpdate />}
+          {modalPage === 0 && <AvatarUpdate />}
+          {modalPage === 1 && <BannerUpdate />}
+          {modalPage === 2 && <UserUpdate />}
         </div>
       </Modal>
       <Typography variant="body1">
@@ -76,7 +84,6 @@ const SettingsPage: React.FC<Props> = ({ user }) => {
       <Typography variant="body1" style={{ marginBottom: "1rem" }}>
         <strong>Your public information</strong>
       </Typography>
-
       <div
         style={{
           display: "flex",
@@ -109,11 +116,19 @@ const SettingsPage: React.FC<Props> = ({ user }) => {
           Update avatar
         </Button>
         <Button
+          style={{ marginRight: "1rem" }}
           variant="contained"
           color="secondary"
           onClick={() => showBannerModal()}
         >
           Update banner
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => showUsernameModal()}
+        >
+          Update username
         </Button>
       </div>
     </Container>
