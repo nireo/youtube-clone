@@ -1,4 +1,4 @@
-import React, { KeyboardEvent } from "react";
+import React, { KeyboardEvent, useState } from "react";
 import clsx from "clsx";
 import {
   makeStyles,
@@ -36,7 +36,8 @@ import { User } from "../../interfaces/User";
 import VideoCallIcon from "@material-ui/icons/VideoCall";
 import NotificationWidget from "../other/NotificationWidget";
 import SubscriptionsWidget from "../other/SubscriptionsWidget";
-import SettingsIcon from "@material-ui/icons/Settings";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const drawerWidth = 200;
 
@@ -140,8 +141,11 @@ type Props = {
 
 const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const [search, setSearch] = React.useState<string>("");
+  const [open, setOpen] = useState(true);
+  const [search, setSearch] = useState<string>("");
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const isMenuOpen = Boolean(anchorEl);
+
   const history = useHistory();
 
   const handleDrawerOpen = () => {
@@ -156,6 +160,21 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
     if (event.key === "Enter") {
       history.push(`/search?search=${search}`);
     }
+  };
+
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleRedirect = (page: string) => {
+    history.push(page);
+
+    // close the menu
+    setAnchorEl(null);
   };
 
   return (
@@ -211,15 +230,6 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
           ) : (
             <div style={{ display: "flex" }}>
               <NotificationWidget />
-              <Link to="/settings" style={{ marginRight: "1rem" }}>
-                <IconButton
-                  edge="end"
-                  aria-label="settings-page"
-                  style={{ color: "#fff" }}
-                >
-                  <SettingsIcon />
-                </IconButton>
-              </Link>
               <Link to="/upload" style={{ marginRight: "1rem" }}>
                 <IconButton
                   edge="end"
@@ -229,15 +239,30 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
                   <VideoCallIcon />
                 </IconButton>
               </Link>
-              <Link to={`/channel/${user.id}`}>
-                <IconButton
-                  edge="end"
-                  aria-label="account of user"
-                  style={{ color: "#fff" }}
-                >
-                  <AccountCircle />
-                </IconButton>
-              </Link>
+              <IconButton
+                edge="end"
+                aria-label="account of user"
+                style={{ color: "#fff" }}
+                onClick={handleProfileMenuOpen}
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                keepMounted
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                open={isMenuOpen}
+                onClose={handleMenuClose}
+              >
+                <MenuItem onClick={() => handleRedirect(`/channel/${user.id}`)}>
+                  My Channel
+                </MenuItem>
+                <MenuItem onClick={() => handleRedirect("/settings")}>
+                  Settings
+                </MenuItem>
+                <MenuItem></MenuItem>
+              </Menu>
             </div>
           )}
         </Toolbar>
