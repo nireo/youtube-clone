@@ -37,26 +37,50 @@ export const CommentEntry: React.FC<Props> = ({
           style={{ marginRight: "1rem" }}
         />
         <div>
-          <Typography>{comment.content}</Typography>
+          <Typography>
+            {comment.User.username}
+            <span
+              style={{
+                fontSize: "0.80rem",
+                color: "#909090",
+                marginLeft: "0.5rem"
+              }}
+            >
+              {new Date(comment.createdAt).toDateString()}
+            </span>
+          </Typography>
+          <Typography style={{ fontSize: "0.90rem" }}>
+            {comment.content}
+          </Typography>
+          <div style={{ display: "flex" }}>
+            <IconButton
+              onClick={() => handleCommentRate(RateComment.Like, comment.id)}
+              style={{
+                backgroundColor: "transparent",
+                paddingLeft: "0",
+                paddingTop: "4px"
+              }}
+            >
+              <ThumbUpIcon style={{ fontSize: "0.80rem", color: "#909090" }} />
+            </IconButton>
+            <Typography
+              style={{
+                fontSize: "0.80rem",
+                color: "#909090"
+              }}
+            >
+              {comment.likes}
+            </Typography>
+            <IconButton
+              onClick={() => handleCommentRate(RateComment.Like, comment.id)}
+              style={{ backgroundColor: "transparent", paddingTop: "4px" }}
+            >
+              <ThumbDownIcon
+                style={{ fontSize: "0.80rem", color: "#909090" }}
+              />
+            </IconButton>
+          </div>
         </div>
-      </div>
-      <div style={{ display: "flex" }}>
-        <IconButton
-          onClick={() => handleCommentRate(RateComment.Like, comment.id)}
-          style={{ backgroundColor: "transparent" }}
-        >
-          <ThumbUpIcon fontSize="small" />
-        </IconButton>
-        <Typography style={{ marginTop: "0.5rem" }}>{comment.likes}</Typography>
-        <IconButton
-          onClick={() => handleCommentRate(RateComment.Like, comment.id)}
-          style={{ backgroundColor: "transparent" }}
-        >
-          <ThumbDownIcon fontSize="small" />
-        </IconButton>
-        <Typography style={{ marginTop: "0.5rem" }}>
-          {comment.dislikes}
-        </Typography>
       </div>
     </div>
   );

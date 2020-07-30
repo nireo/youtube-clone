@@ -22,9 +22,6 @@ import Button from "@material-ui/core/Button";
 import Popover from "@material-ui/core/Popover";
 import TextField from "@material-ui/core/TextField";
 import { createComment, rateComment } from "../../services/comment";
-import IconButton from "@material-ui/core/IconButton";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import { Helmet } from "react-helmet";
 import Grid from "@material-ui/core/Grid";
 import { SmallListVideo } from "../other/SmallListVideo";
@@ -64,8 +61,6 @@ type Props = {
 interface WatchPage {
   comments: Comment[];
   video: Video;
-  user: User;
-  users: User[];
 }
 
 const WatchVideo: React.FC<Props> = ({
