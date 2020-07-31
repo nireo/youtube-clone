@@ -23,6 +23,7 @@ import PlaylistVideos from "./components/pages/PlaylistVideos";
 import { Trending } from "./components/pages/Trending";
 import red from "@material-ui/core/colors/red";
 import Settings from "./components/pages/Settings";
+import CommunityPost from "./components/pages/CommunityPost";
 
 type Props = {
   user: User | null;
@@ -77,6 +78,11 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
             <Route path="/history" exact render={() => <HistoryPage />} />
             <Route path="/trending" exact render={() => <Trending />} />
             <Route path="/settings" exact render={() => <Settings />} />
+            <Route
+              path="/post/:id"
+              exact
+              render={({ match }) => <CommunityPost id={match.params.id} />}
+            />
             <Route
               path="/playlist/:id"
               exact

@@ -8,9 +8,10 @@ import { Link } from "react-router-dom";
 
 type Props = {
   post: Community;
+  page?: boolean;
 };
 
-export const CommunityPost: React.FC<Props> = ({ post }) => {
+export const CommunityPost: React.FC<Props> = ({ post, page }) => {
   return (
     <div
       style={{
@@ -36,11 +37,13 @@ export const CommunityPost: React.FC<Props> = ({ post }) => {
           <Typography variant="body2" color="textSecondary">
             {post.content}
           </Typography>
-          <Link to={`/post/${post.id}`}>
-            <IconButton style={{ marginTop: "0.5rem" }}>
-              <CommentIcon style={{ fontSize: "0.80rem" }} />
-            </IconButton>
-          </Link>
+          {!page && (
+            <Link to={`/post/${post.id}`}>
+              <IconButton style={{ marginTop: "0.5rem" }}>
+                <CommentIcon style={{ fontSize: "0.80rem" }} />
+              </IconButton>
+            </Link>
+          )}
         </div>
       </div>
     </div>
