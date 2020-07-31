@@ -9,6 +9,7 @@ import PlaylistModel from "./components/playlists/model";
 import NotificationModel from "./components/notifications/model";
 import CommunityModel from "./components/community/model";
 import CommunityLikeModel from "./components/community/communityLikeModel";
+import CommunityCommentModel from "./components/community/communityComment";
 
 let database = "youtube";
 if (process.env.NODE_ENV === "test") {
@@ -33,6 +34,7 @@ export const Playlist = PlaylistModel(sequelize);
 export const Notification = NotificationModel(sequelize);
 export const Community = CommunityModel(sequelize);
 export const CommunityLike = CommunityLikeModel(sequelize);
+export const CommunityComment = CommunityCommentModel(sequelize);
 
 // associations
 Video.belongsTo(User, { foreignKey: "userId" });

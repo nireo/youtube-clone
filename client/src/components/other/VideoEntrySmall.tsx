@@ -40,10 +40,17 @@ export const VideoEntrySmall: React.FC<Props> = ({ video }) => {
             />
           )}
           <div style={{ marginLeft: "0.2rem" }}>
-            <Typography color="textSecondary" style={{ fontSize: "1rem" }}>
-              <strong>{video.title}</strong>
+            <Typography
+              color="textPrimary"
+              style={{ fontSize: "0.90rem", lineHeight: "1rem" }}
+            >
+              {video.title}
             </Typography>
-            <Typography variant="body2" color="textSecondary">
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              style={{ fontSize: "0.8rem" }}
+            >
               {video.views} views • {new Date(video.createdAt).toDateString()}
             </Typography>
           </div>

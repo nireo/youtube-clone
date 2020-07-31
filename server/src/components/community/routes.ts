@@ -153,7 +153,7 @@ router.patch(
 
 // add comment route
 router.post(
-  "/:postId",
+  "/comment/:postId",
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
@@ -171,6 +171,30 @@ router.post(
       });
 
       res.status(200).json(newComment);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
+router.delete(
+  "/comment/:commentId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const comment: any = CommunityComment.findOne({
+        where: { id: req.params.commentId }
+      });
+      if (!comment) {
+        return res.status(404);
+      }
+
+      if (comment.userId !== req.user.id) {
+        return res.status(403);
+      }
+
+      await comment.destroy();
+      res.status(204);
     } catch (error) {
       return res.status(500).json({ message: error });
     }
