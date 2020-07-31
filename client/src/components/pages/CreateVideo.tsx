@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { User } from "../../interfaces/User";
 import { Redirect } from "react-router-dom";
+import { createVideo } from "../../services/video";
 
 type Props = {
   user: User | null;
@@ -60,13 +61,8 @@ const CreateVideo: React.FC<Props> = ({ user }) => {
     formData.append("thumbnail", thumbnail);
     formData.append("title", title);
     formData.append("description", description);
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data"
-      }
-    };
 
-    await axios.post("/videos", formData, config);
+    createVideo(formData);
   };
 
   return (
@@ -149,6 +145,7 @@ const CreateVideo: React.FC<Props> = ({ user }) => {
           variant="contained"
           color="secondary"
           startIcon={<UploadIcon />}
+          type="submit"
         >
           Upload
         </Button>
