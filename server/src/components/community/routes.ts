@@ -44,7 +44,12 @@ router.get(
         return res.status(404);
       }
 
-      res.status(200).json(post);
+      const comments = await CommunityComment.findAll({
+        where: { communityPostId: req.params.postId },
+        include: User
+      });
+
+      res.status(200).json({ post, comments });
     } catch (error) {
       return res.status(500).json({ message: error });
     }

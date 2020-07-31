@@ -51,3 +51,4 @@ Notification.belongsTo(User, { foreignKey: "userId" });
 Notification.hasOne(Video, { foreignKey: "videoId" });
 
 Community.belongsTo(User, { foreignKey: "userId" });
+CommunityComment.belongsTo(User, { foreignKey: "userId" });
