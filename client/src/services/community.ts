@@ -13,7 +13,12 @@ const getConfig = () => ({
 });
 
 export const getUserCommunityPosts = async (userId: string) => {
-  const response = await axios.get(`${baseUrl}/${userId}`);
+  const response = await axios.get(`${baseUrl}/user/${userId}`);
+  return response.data;
+};
+
+export const getCommunityPostWithId = async (postId: string) => {
+  const response = await axios.get(`${baseUrl}/post/${postId}`);
   return response.data;
 };
 

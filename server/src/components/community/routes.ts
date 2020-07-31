@@ -10,23 +10,46 @@ import { v4 as uuidv4 } from "uuid";
 
 const router: express.Router = express.Router();
 
-router.get("/:userId", async (req: express.Request, res: express.Response) => {
-  try {
-    const { userId } = req.params;
-    const user = await User.findOne({ where: { id: userId } });
-    if (!user) {
-      return res.status(204);
-    }
+router.get(
+  "/user/:userId",
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const { userId } = req.params;
+      const user = await User.findOne({ where: { id: userId } });
+      if (!user) {
+        return res.status(204);
+      }
 
-    const communityPosts = await Community.findAll({
-      where: { userId },
-      include: User
-    });
-    res.status(200).json(communityPosts);
-  } catch (error) {
-    return res.status(500).json({ message: error });
+      const communityPosts = await Community.findAll({
+        where: { userId },
+        include: User
+      });
+      res.status(200).json(communityPosts);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
   }
-});
+);
+
+router.get(
+  "/post/:postId",
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const post = await Community.findOne({
+        where: { id: req.params.postId },
+        include: User
+      });
+
+      if (!post) {
+        return res.status(404);
+      }
+
+      res.status(200).json(post);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
 
 router.post("/", authenticateToken, async (req: any, res: express.Response) => {
   try {
