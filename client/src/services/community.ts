@@ -43,3 +43,23 @@ export const updateCommunityPost = async (postId: string, content: string) => {
   );
   return response.data;
 };
+
+export const createCommunityComment = async (
+  postId: string,
+  content: string
+) => {
+  const response = await axios.post(
+    `${baseUrl}/comment/${postId}`,
+    { content },
+    getConfig()
+  );
+  return response.data;
+};
+
+export const deleteCommunityComment = async (commentId: string) => {
+  const response = await axios.post(
+    `${baseUrl}/comment/${commentId}`,
+    getConfig()
+  );
+  return response.data;
+};
