@@ -40,7 +40,9 @@ export const Trending: React.FC = () => {
       ) : (
         <div>
           {videos.map((video: Video) => (
-            <VideoEntryFull key={video.id} video={video} />
+            <div style={{ marginTop: "1rem" }}>
+              <VideoEntryFull key={video.id} video={video} />
+            </div>
           ))}
         </div>
       )}

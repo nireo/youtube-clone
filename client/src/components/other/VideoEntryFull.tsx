@@ -1,6 +1,5 @@
 import React from "react";
 import { Video } from "../../interfaces/Video";
-import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 
@@ -12,17 +11,26 @@ type Props = {
 // video takes up all of the width i.e. search page, history, trending
 export const VideoEntryFull: React.FC<Props> = ({ video }) => {
   return (
-    <Link to={`/watch/${video.id}`} style={{ textDecoration: "none" }}>
-      <Grid container style={{ marginTop: "0.75rem" }} key={video.id}>
-        <Grid item xs={2}>
-          <img
-            style={{ width: "12rem", marginRight: "1rem" }}
-            alt="video-thumbnail"
-            src={`http://localhost:3001/thumbnails/${video.id}.${video.thumbnail}`}
-          />
-        </Grid>
-        <Grid item xs={10}>
-          <Typography variant="h5" color="textPrimary">
+    <Link
+      to={`/watch/${video.id}`}
+      style={{
+        textDecoration: "none",
+        marginBottom: "1rem"
+      }}
+    >
+      <div style={{ display: "flex" }}>
+        <div style={{ width: "15rem", height: "8.5rem" }}>
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              backgroundSize: "100% 100%",
+              backgroundImage: `url(http://localhost:3001/thumbnails/${video.id}.${video.thumbnail})`
+            }}
+          ></div>
+        </div>
+        <div style={{ marginLeft: "1rem" }}>
+          <Typography variant="h6" color="textPrimary">
             {video.title}
           </Typography>
           {video.User ? (
@@ -42,8 +50,8 @@ export const VideoEntryFull: React.FC<Props> = ({ video }) => {
           >
             {video.description.slice(0, 65)}
           </Typography>
-        </Grid>
-      </Grid>
+        </div>
+      </div>
     </Link>
   );
 };

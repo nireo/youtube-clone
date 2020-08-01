@@ -82,7 +82,9 @@ const History: React.FC<Props> = ({ user }) => {
           ) : (
             <div>
               {filteredVideos.map((video: Video) => (
-                <VideoEntryFull video={video} />
+                <div style={{ marginTop: "1rem" }}>
+                  <VideoEntryFull video={video} />
+                </div>
               ))}
             </div>
           )}
