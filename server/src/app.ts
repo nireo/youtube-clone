@@ -13,6 +13,7 @@ import commentRouter from "./components/comments/routes";
 import playlistRouter from "./components/playlists/routes";
 import notificationRouter from "./components/notifications/routes";
 import communityRouter from "./components/community/routes";
+import { handleSequelizeBaseError } from "./utils/sequelizeErrorHandler";
 
 const app: express.Application = express();
 dotenv.config();
@@ -28,6 +29,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(morgan("tiny"));
+app.use(handleSequelizeBaseError);
 
 app.use("/video", express.static("./videos"));
 app.use("/avatars", express.static("./avatars"));
