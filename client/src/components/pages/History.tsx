@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { VideoEntryFull } from "../other/VideoEntryFull";
+import TextField from "@material-ui/core/TextField";
 
 type Props = {
   user: User | null;
@@ -64,9 +65,27 @@ const History: React.FC<Props> = ({ user }) => {
       )}
       {loaded && videos.length > 0 && (
         <div style={{ marginTop: "1rem" }}>
-          {filteredVideos.map((video: Video) => (
-            <VideoEntryFull video={video} />
-          ))}
+          <TextField
+            value={search}
+            onChange={({ target }) => setSearch(target.value)}
+            fullWidth
+            placeholder="Search"
+            label="Search"
+            color="secondary"
+          />
+          {filteredVideos.length === 0 ? (
+            <div>
+              <Typography variant="h6" style={{ marginTop: "1.5rem" }}>
+                Not found
+              </Typography>
+            </div>
+          ) : (
+            <div>
+              {filteredVideos.map((video: Video) => (
+                <VideoEntryFull video={video} />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </Container>

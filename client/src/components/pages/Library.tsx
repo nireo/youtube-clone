@@ -9,6 +9,7 @@ import { Video } from "../../interfaces/Video";
 import { getLibraryData } from "../../services/user";
 import { Helmet } from "react-helmet";
 import { VideoEntrySmall } from "../other/VideoEntrySmall";
+import Divider from "@material-ui/core/Divider";
 
 type Props = {
   user: User | null;
@@ -45,6 +46,7 @@ const Library: React.FC<Props> = ({ user }) => {
       <Typography variant="h5" style={{ marginTop: "2rem" }}>
         History
       </Typography>
+      <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
       {historyVideos.length === 0 ? (
         <div>
           <Typography style={{ marginTop: "1rem" }} variant="h6">
@@ -65,6 +67,7 @@ const Library: React.FC<Props> = ({ user }) => {
       <Typography variant="h5" style={{ marginTop: "2rem" }}>
         Watch later
       </Typography>
+      <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
       {watchLaterVideos.length === 0 ? (
         <div>
           <Typography variant="h6">No watch later videos.</Typography>
