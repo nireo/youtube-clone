@@ -22,18 +22,6 @@ describe("Register route tests", () => {
       .expect(200)
       .expect("Content-Type", /application\/json/);
   });
-
-  test("A bad request body returns a 400 Bad Request error", async () => {
-    const credentials = {
-      uname: "hello",
-      pword: "secret"
-    };
-
-    await api
-      .post("/auth/register")
-      .send(credentials)
-      .expect(400);
-  });
 });
 
 describe("Login route tests", () => {
@@ -52,18 +40,6 @@ describe("Login route tests", () => {
     expect(response.body.token).not.toBeUndefined();
     token = response.body.token;
   });
-
-  test("A bad request body returns a 400 Bad Request error", async () => {
-    const credentials = {
-      uname: "hello",
-      pword: "secret"
-    };
-
-    await api
-      .post("/auth/login")
-      .send(credentials)
-      .expect(400);
-  });
 });
 
 test("Me route works", async () => {
@@ -77,5 +53,6 @@ test("Me route works", async () => {
 });
 
 afterAll(async () => {
+  await User.destroy({ where: { username: "user" } });
   await sequelize.close();
 });
