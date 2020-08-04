@@ -1,6 +1,5 @@
 import supertest from "supertest";
 import app from "../../app";
-import { sequelize, Community } from "../../sequelize";
 import {
   TestUser,
   generateTestUserAndToken,

@@ -105,7 +105,7 @@ router.patch(
       }
 
       await req.user.save();
-      res.status(204);
+      res.status(200).json(req.user);
     } catch (error) {
       return res.status(500).json({ message: error });
     }
@@ -132,6 +132,7 @@ router.delete(
       }
 
       await user.destroy();
+      res.status(204);
     } catch (error) {
       res.status(500).json({ message: error });
     }

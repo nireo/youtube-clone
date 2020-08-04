@@ -83,3 +83,7 @@ describe("Playlist routes", () => {
     }
   });
 });
+
+afterAll(async () => {
+  await removeTestUser();
+});
