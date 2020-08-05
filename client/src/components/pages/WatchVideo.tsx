@@ -215,7 +215,7 @@ const WatchVideo: React.FC<Props> = ({
             <title>{video.video.title} - TypeTube</title>
           </Helmet>
           <Grid container spacing={2}>
-            <Grid item xs={9}>
+            <Grid item xs={12} lg={9} md={9}>
               <video style={{ width: "100%" }} controls>
                 <source
                   src={`http://localhost:3001/video/${video.video.id}.${video.video.fileExtension}`}
@@ -366,6 +366,15 @@ const WatchVideo: React.FC<Props> = ({
                   )}
                 </div>
               )}
+            </Grid>
+            <Grid item sm={12} lg={3} md={3}>
+              {video.next.map((video: Video) => (
+                <SmallListVideo video={video} />
+              ))}
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid sm={12} lg={9} md={9}>
               <div style={{ marginTop: "2rem" }}>
                 <Divider />
                 <Typography variant="h6" style={{ marginTop: "1rem" }}>
@@ -420,14 +429,6 @@ const WatchVideo: React.FC<Props> = ({
                   />
                 ))}
               </div>
-            </Grid>
-            <Grid item xs={3}>
-              <Typography variant="h6" style={{ marginBottom: "0.75rem" }}>
-                Up next
-              </Typography>
-              {video.next.map((video: Video) => (
-                <SmallListVideo video={video} />
-              ))}
             </Grid>
           </Grid>
         </div>

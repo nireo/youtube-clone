@@ -25,12 +25,28 @@ export const SmallListVideo: React.FC<Props> = ({ video }) => {
           <Typography style={{ fontSize: "1rem" }} color="textPrimary">
             {video.title}
           </Typography>
-          <Typography variant="body2" color="textSecondary">
-            {video.views} views •
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            {new Date(video.createdAt).toDateString()}
-          </Typography>
+          {video.User ? (
+            <div>
+              <Typography variant="body2" color="textSecondary">
+                {video.User.username}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {video.views} views •
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {new Date(video.createdAt).toDateString()}
+              </Typography>
+            </div>
+          ) : (
+            <div>
+              <Typography variant="body2" color="textSecondary">
+                {video.views} views •
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {new Date(video.createdAt).toDateString()}
+              </Typography>
+            </div>
+          )}
         </div>
       </div>
     </Link>
