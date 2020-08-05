@@ -253,7 +253,7 @@ router.get(
       });
 
       // prepare a list of videos to watch next, this is just basically ~10 videos which don't include the current video
-      let next = await Video.findAll({ limit: 10 });
+      let next = await Video.findAll({ limit: 10, include: User });
       // since sequelize doesn't have a feature to exclude query results, we need to filter it
       next = next.filter((v: any) => v.id !== videoId);
 
