@@ -77,6 +77,7 @@ type Props = {
 interface WatchPage {
   comments: Comment[];
   video: Video;
+  next: Video[];
 }
 
 const WatchVideo: React.FC<Props> = ({
@@ -95,20 +96,6 @@ const WatchVideo: React.FC<Props> = ({
   const [editing, setEditing] = useState<boolean>(false);
   const [subscribed, setSubscribed] = useState<boolean | null>(null);
   const [openPlaylist, setOpenPlaylist] = useState<boolean>(false);
-
-  const [testVideo] = useState({
-    createdAt: "2020-07-17T21:11:07.197Z",
-    description: "It really is kinda crazy",
-    dislikes: 0,
-    fileExtension: "webm",
-    id: "dce9c774-3da9-4b3e-8aed-935e6099cbd7",
-    likes: 0,
-    thumbnail: "jpg",
-    title: "You wil not believe how crazy this is!",
-    updatedAt: "2020-07-24T10:15:27.678Z",
-    userId: "bc5a913f-1177-4467-9687-22d55a30805a",
-    views: 173
-  });
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -438,7 +425,9 @@ const WatchVideo: React.FC<Props> = ({
               <Typography variant="h6" style={{ marginBottom: "0.75rem" }}>
                 Up next
               </Typography>
-              <SmallListVideo video={testVideo} />
+              {video.next.map((video: Video) => (
+                <SmallListVideo video={video} />
+              ))}
             </Grid>
           </Grid>
         </div>
