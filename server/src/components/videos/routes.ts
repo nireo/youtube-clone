@@ -280,14 +280,14 @@ router.get(
 
 // this route is the used when the user wants to edit a video that is why it has token checking
 router.get(
-  "/single/:videoId",
+  "/edit/:videoId",
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
-      const { videoId } = req.params.videoId;
+      const { videoId } = req.params;
       const video: any = await Video.findOne({ where: { id: videoId } });
       if (!video) {
-        return res.status(500);
+        return res.status(404);
       }
 
       if (video.userId !== req.user.id) {

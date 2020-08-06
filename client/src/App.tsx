@@ -24,6 +24,7 @@ import { Trending } from "./components/pages/Trending";
 import red from "@material-ui/core/colors/red";
 import Settings from "./components/pages/Settings";
 import CommunityPost from "./components/pages/CommunityPost";
+import EditVideo from "./components/pages/EditVideo";
 
 type Props = {
   user: User | null;
@@ -71,6 +72,13 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
               path="/channel/:userId"
               exact
               render={({ match }) => <UserChannel id={match.params.userId} />}
+            />
+            <Route
+              path="/edit/:videoId"
+              exact
+              render={({ match }) => (
+                <EditVideo videoId={match.params.videoId} />
+              )}
             />
             <Route path="/your-videos" exact render={() => <YourVideos />} />
             <Route path="/watch-later" exact render={() => <WatchLater />} />

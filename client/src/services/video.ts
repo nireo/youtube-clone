@@ -72,3 +72,8 @@ export const getTrendingVideos = async () => {
   const response = await axios.get(`${baseUrl}/trending`);
   return response.data;
 };
+
+export const getEditData = async (videoId: string) => {
+  const response = await axios.get(`${baseUrl}/edit/${videoId}`, getConfig());
+  return response.data;
+};
