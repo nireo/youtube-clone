@@ -83,7 +83,7 @@ router.delete(
 );
 
 router.patch(
-  "/:action/:videoId",
+  "/rate/:action/:videoId",
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
@@ -149,7 +149,7 @@ router.patch(
 );
 
 router.patch(
-  "/:videoId",
+  "/video/:videoId",
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
@@ -321,5 +321,37 @@ router.get("/trending", async (req: express.Request, res: express.Response) => {
     return res.status(500).json({ message: error });
   }
 });
+
+router.patch(
+  "/thumbnail/:videoId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      if (!req.files.thumbnail) return res.status(400);
+      const { videoId } = req.params;
+      const video: any = await Video.findOne({ where: { id: videoId } });
+      if (!video) {
+        return res.status(404);
+      }
+
+      if (video.userId !== req.user.id) return res.status(403);
+
+      // remove the old thumbnail
+      fs.unlink(`./thumbnails/${video.id}.${video.thumbnail}`, err => {
+        if (err) return res.status(500).json({ message: err });
+      });
+
+      const thumbnail: any = req.files.thumbnail;
+      const thumbnailExtension = getFileExtension(thumbnail.name);
+      thumbnail.mv(`./thumbnails/` + `${videoId}.${thumbnailExtension}`);
+
+      video.thumbnail = thumbnailExtension;
+      await video.save();
+      return res.status(204);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
 
 export default router;
