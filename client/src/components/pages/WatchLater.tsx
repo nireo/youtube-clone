@@ -12,6 +12,7 @@ import { Helmet } from "react-helmet";
 import { List } from "@material-ui/core";
 import { ListVideoEntry } from "../other/ListVideoEntry";
 import TextField from "@material-ui/core/TextField";
+import Divider from "@material-ui/core/Divider";
 
 type Props = {
   user: User | null;
@@ -49,11 +50,12 @@ const WatchLater: React.FC<Props> = ({ user }) => {
         <title>Watch later - TypeTube</title>
       </Helmet>
       <Typography
-        style={{ marginTop: "1.5rem", marginBottom: "1.5rem" }}
+        style={{ marginTop: "1rem", marginBottom: "1rem" }}
         variant="h5"
       >
         Watch Later
       </Typography>
+      <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
       {loaded && videos.length === 0 && (
         <div>
           <Typography variant="h6">Your watch later list is empty.</Typography>

@@ -278,6 +278,31 @@ router.get(
   }
 );
 
+// this route is the used when the user wants to edit a video that is why it has token checking
+router.get(
+  "/single/:videoId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const { videoId } = req.params.videoId;
+      const video: any = await Video.findOne({ where: { id: videoId } });
+      if (!video) {
+        return res.status(500);
+      }
+
+      if (video.userId !== req.user.id) {
+        return res.status(403);
+      }
+
+      const comments = await Comment.findAll({ where: { videoId } });
+
+      res.status(200).json({ video, comments });
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
 // can't really bother with implementing an algorithm which rates how "trendy" some videos are
 // since this is the case, we only get the videos with the most views
 router.get("/trending", async (req: express.Request, res: express.Response) => {
