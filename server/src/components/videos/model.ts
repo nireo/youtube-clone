@@ -33,6 +33,12 @@ const VideoModel = (sequelize: Sequelize) => {
     views: {
       type: DataTypes.INTEGER,
       defaultValue: 0
+    },
+
+    // The privacy level is stored as a integer, where: 0=public, 1=with link, 2=private
+    privacyLevel: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
     }
   });
 };

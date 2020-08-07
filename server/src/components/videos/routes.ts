@@ -357,4 +357,22 @@ router.patch(
   }
 );
 
+router.patch(
+  "/privacy/:videoId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const { videoId } = req.params;
+      const video = await Video.findOne({ where: { id: videoId } });
+      if (!video) return res.status(404);
+
+      const newPrivacyLevel = Number(req.query.level);
+      if (newPrivacyLevel === NaN)
+        return res.status(400).json({ message: "Invalid privacy level" });
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
 export default router;

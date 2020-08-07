@@ -12,7 +12,7 @@ type Props = {
 export const VideoEntryFull: React.FC<Props> = ({ video }) => {
   return (
     <Link
-      to={`/edit/${video.id}`}
+      to={`/watch/${video.id}`}
       style={{
         textDecoration: "none",
         marginBottom: "1rem"
