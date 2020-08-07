@@ -20,6 +20,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ImageIcon from "@material-ui/icons/Image";
 import { EditVideoComments } from "./EditVideoComments";
+import { VideoManage } from "./VideoManage";
 
 type Props = {
   user: User | null;
@@ -112,6 +113,7 @@ const EditVideo: React.FC<Props> = ({ user, videoId }) => {
             >
               <Tab label="Video" />
               <Tab label="Comments" />
+              <Tab label="Manage" />
             </Tabs>
           </div>
         </Container>
@@ -291,6 +293,7 @@ const EditVideo: React.FC<Props> = ({ user, videoId }) => {
                 )}
               </div>
             )}
+            {page === 2 && <VideoManage videoId={videoId} />}
           </div>
         )}
       </Container>
