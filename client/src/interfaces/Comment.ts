@@ -8,7 +8,7 @@ export interface Comment {
   edited: boolean;
   likes: number;
   dislikes: number;
-  User?: User;
+  User: User;
 }
 
 export interface CreateComment {

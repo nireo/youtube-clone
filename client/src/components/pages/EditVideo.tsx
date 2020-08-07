@@ -1,24 +1,25 @@
-import React, { useState, useCallback, useEffect, ChangeEvent } from 'react';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
-import { connect } from 'react-redux';
-import { AppState } from '../../store';
-import { User } from '../../interfaces/User';
-import { Video, UpdateVideo } from '../../interfaces/Video';
+import React, { useState, useCallback, useEffect, ChangeEvent } from "react";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import { connect } from "react-redux";
+import { AppState } from "../../store";
+import { User } from "../../interfaces/User";
+import { Video, UpdateVideo } from "../../interfaces/Video";
 import {
   getEditData,
   updateVideo,
-  updateVideoThumbnail,
-} from '../../services/video';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { Comment } from '../../interfaces/Comment';
-import TextField from '@material-ui/core/TextField';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import ImageIcon from '@material-ui/icons/Image';
+  updateVideoThumbnail
+} from "../../services/video";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { Comment } from "../../interfaces/Comment";
+import TextField from "@material-ui/core/TextField";
+import Tab from "@material-ui/core/Tab";
+import Tabs from "@material-ui/core/Tabs";
+import Divider from "@material-ui/core/Divider";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import ImageIcon from "@material-ui/icons/Image";
+import { EditVideoComments } from "./EditVideoComments";
 
 type Props = {
   user: User | null;
@@ -31,9 +32,9 @@ const EditVideo: React.FC<Props> = ({ user, videoId }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(0);
   const [thumbnail, setThumbnail] = useState<any>(null);
-  const [thumbnailPreview, setThumbnailPreview] = useState<string>('');
-  const [title, setTitle] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [editing, setEditing] = useState<boolean>(false);
 
   const loadVideo = useCallback(async () => {
@@ -83,7 +84,7 @@ const EditVideo: React.FC<Props> = ({ user, videoId }) => {
     event.preventDefault();
     const data: UpdateVideo = {
       title,
-      description,
+      description
     };
 
     await updateVideo(videoId, data);
@@ -92,14 +93,14 @@ const EditVideo: React.FC<Props> = ({ user, videoId }) => {
   const handleThumbnailUpdate = async (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append('thumbnail', thumbnail);
+    formData.append("thumbnail", thumbnail);
 
     await updateVideoThumbnail(videoId, formData);
   };
 
   return (
     <div>
-      <div style={{ backgroundColor: '#282828' }}>
+      <div style={{ backgroundColor: "#282828" }}>
         <Container>
           <div style={{ flexGrow: 1 }}>
             <Tabs
@@ -116,156 +117,174 @@ const EditVideo: React.FC<Props> = ({ user, videoId }) => {
         </Container>
       </div>
       <Container>
-        {loading ? (
-          <div style={{ marginTop: '4rem', textAlign: 'center' }}>
+        {loading && (
+          <div style={{ marginTop: "4rem", textAlign: "center" }}>
             <CircularProgress />
           </div>
-        ) : (
+        )}
+        {!loading && (
           <div>
-            {video !== null && (
-              <div style={{ marginTop: '1rem' }}>
-                <Grid container spacing={3}>
-                  <Grid item md={6} lg={6} sm={12}>
-                    <Typography variant="h5">Basic information</Typography>
-                    <Divider />
-                    {!editing ? (
-                      <div>
-                        <Typography variant="h6">{video.title}</Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          {video.description}
-                        </Typography>
-                        <Button
-                          style={{ marginTop: '1rem' }}
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => setEditing(true)}
-                        >
-                          Update Info
-                        </Button>
-                      </div>
-                    ) : (
-                      <form
-                        onSubmit={updateVideoInformation}
-                        style={{ marginTop: '1rem' }}
-                      >
-                        <TextField
-                          value={title}
-                          onChange={({ target }) => setTitle(target.value)}
-                          placeholder="Title"
-                          label="Title"
-                          fullWidth
-                          color="secondary"
-                          variant="outlined"
-                        />
-                        <TextField
-                          value={description}
-                          onChange={({ target }) =>
-                            setDescription(target.value)
-                          }
-                          multiline
-                          variant="outlined"
-                          fullWidth
-                          rows={4}
-                          label="Description"
-                          placeholder="Description"
-                          style={{ marginTop: '1rem' }}
-                          color="secondary"
-                        />
-                        <div style={{ marginTop: '1rem' }}>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            type="submit"
+            {page === 0 && (
+              <div>
+                {video !== null && (
+                  <div style={{ marginTop: "1rem" }}>
+                    <Grid container spacing={3}>
+                      <Grid item md={6} lg={6} sm={12}>
+                        <Typography variant="h5">Basic information</Typography>
+                        <Divider />
+                        {!editing ? (
+                          <div>
+                            <Typography variant="h6">{video.title}</Typography>
+                            <Typography color="textSecondary" variant="body2">
+                              {video.description}
+                            </Typography>
+                            <Button
+                              style={{ marginTop: "1rem" }}
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => setEditing(true)}
+                            >
+                              Update Info
+                            </Button>
+                          </div>
+                        ) : (
+                          <form
+                            onSubmit={updateVideoInformation}
+                            style={{ marginTop: "1rem" }}
                           >
-                            Update info
-                          </Button>
-                          <Button
-                            style={{ marginLeft: '0.5rem' }}
-                            onClick={() => setEditing(false)}
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      </form>
-                    )}
-                  </Grid>
-                  <Grid item md={6} lg={6} sm={12}>
-                    <Typography variant="h5">Files</Typography>
-                    <Divider />
-                    <div
-                      style={{
-                        width: '15rem',
-                        height: '8rem',
-                        marginTop: '1rem',
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          backgroundSize: '100% 100%',
-                          backgroundImage: `url(http://localhost:3001/thumbnails/${video.id}.${video.thumbnail})`,
-                        }}
-                      ></div>
-                    </div>
-                    <form
-                      onSubmit={handleThumbnailUpdate}
-                      style={{ marginTop: '1rem' }}
-                    >
-                      <input
-                        placeholder="Thumbnail file"
-                        type="file"
-                        id="thumbnail-upload"
-                        style={{ display: 'none' }}
-                        onChange={handleThumbnailChange}
-                        accept="image/*"
-                      />
-                      {thumbnail === null ? (
-                        <label htmlFor="thumbnail-upload">
-                          <Button
-                            variant="contained"
-                            component="span"
-                            color="secondary"
-                            startIcon={<ImageIcon />}
-                          >
-                            Thumbnail
-                          </Button>
-                        </label>
-                      ) : (
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          type="submit"
-                        >
-                          Update thumbnail
-                        </Button>
-                      )}
-                    </form>
-                    {thumbnailPreview !== '' && (
-                      <div style={{ marginTop: '2rem' }}>
-                        <Typography variant="body2" color="textSecondary">
-                          Thumbnail preview
-                        </Typography>
+                            <TextField
+                              value={title}
+                              onChange={({ target }) => setTitle(target.value)}
+                              placeholder="Title"
+                              label="Title"
+                              fullWidth
+                              color="secondary"
+                              variant="outlined"
+                            />
+                            <TextField
+                              value={description}
+                              onChange={({ target }) =>
+                                setDescription(target.value)
+                              }
+                              multiline
+                              variant="outlined"
+                              fullWidth
+                              rows={4}
+                              label="Description"
+                              placeholder="Description"
+                              style={{ marginTop: "1rem" }}
+                              color="secondary"
+                            />
+                            <div style={{ marginTop: "1rem" }}>
+                              <Button
+                                variant="contained"
+                                color="secondary"
+                                type="submit"
+                              >
+                                Update info
+                              </Button>
+                              <Button
+                                style={{ marginLeft: "0.5rem" }}
+                                onClick={() => setEditing(false)}
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          </form>
+                        )}
+                      </Grid>
+                      <Grid item md={6} lg={6} sm={12}>
+                        <Typography variant="h5">Files</Typography>
+                        <Divider />
                         <div
                           style={{
-                            width: '15rem',
-                            height: '8rem',
-                            marginTop: '1rem',
+                            width: "15rem",
+                            height: "8rem",
+                            marginTop: "1rem"
                           }}
                         >
                           <div
                             style={{
-                              width: '100%',
-                              height: '100%',
-                              backgroundSize: '100% 100%',
-                              backgroundImage: `url(${thumbnailPreview})`,
+                              width: "100%",
+                              height: "100%",
+                              backgroundSize: "100% 100%",
+                              backgroundImage: `url(http://localhost:3001/thumbnails/${video.id}.${video.thumbnail})`
                             }}
                           ></div>
                         </div>
-                      </div>
-                    )}
-                  </Grid>
-                </Grid>
+                        <form
+                          onSubmit={handleThumbnailUpdate}
+                          style={{ marginTop: "1rem" }}
+                        >
+                          <input
+                            placeholder="Thumbnail file"
+                            type="file"
+                            id="thumbnail-upload"
+                            style={{ display: "none" }}
+                            onChange={handleThumbnailChange}
+                            accept="image/*"
+                          />
+                          {thumbnail === null ? (
+                            <label htmlFor="thumbnail-upload">
+                              <Button
+                                variant="contained"
+                                component="span"
+                                color="secondary"
+                                startIcon={<ImageIcon />}
+                              >
+                                Thumbnail
+                              </Button>
+                            </label>
+                          ) : (
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              type="submit"
+                            >
+                              Update thumbnail
+                            </Button>
+                          )}
+                        </form>
+                        {thumbnailPreview !== "" && (
+                          <div style={{ marginTop: "2rem" }}>
+                            <Typography variant="body2" color="textSecondary">
+                              Thumbnail preview
+                            </Typography>
+                            <div
+                              style={{
+                                width: "15rem",
+                                height: "8rem",
+                                marginTop: "1rem"
+                              }}
+                            >
+                              <div
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  backgroundSize: "100% 100%",
+                                  backgroundImage: `url(${thumbnailPreview})`
+                                }}
+                              ></div>
+                            </div>
+                          </div>
+                        )}
+                      </Grid>
+                    </Grid>
+                  </div>
+                )}
+              </div>
+            )}
+            {page === 1 && (
+              <div>
+                {!comments ? (
+                  <div>
+                    <Typography variant="h6">Video has no comments</Typography>
+                  </div>
+                ) : (
+                  <div>
+                    <EditVideoComments comments={comments} />
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -276,7 +295,7 @@ const EditVideo: React.FC<Props> = ({ user, videoId }) => {
 };
 
 const mapStateToProps = (state: AppState) => ({
-  user: state.user,
+  user: state.user
 });
 
 export default connect(mapStateToProps)(EditVideo);

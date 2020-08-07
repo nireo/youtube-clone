@@ -294,7 +294,10 @@ router.get(
         return res.status(403);
       }
 
-      const comments = await Comment.findAll({ where: { videoId } });
+      const comments = await Comment.findAll({
+        where: { videoId },
+        include: User
+      });
 
       res.status(200).json({ video, comments });
     } catch (error) {
