@@ -26,6 +26,17 @@ export const createComment = async (
   return response.data;
 };
 
+export const removeCommentFromVideo = async (
+  videoId: string,
+  commentId: string
+) => {
+  const response = await axios.delete(
+    `${baseUrl}/${videoId}/${commentId}`,
+    getConfig()
+  );
+  return response.data;
+};
+
 export const getComments = async (videoId: string) => {
   const response = await axios.get(`${baseUrl}/${videoId}`);
   return response.data;

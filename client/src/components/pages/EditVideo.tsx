@@ -282,7 +282,11 @@ const EditVideo: React.FC<Props> = ({ user, videoId }) => {
                   </div>
                 ) : (
                   <div>
-                    <EditVideoComments comments={comments} />
+                    <EditVideoComments
+                      comments={comments}
+                      videoId={videoId}
+                      setComments={setComments}
+                    />
                   </div>
                 )}
               </div>
