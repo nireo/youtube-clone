@@ -183,7 +183,9 @@ router.patch(
 
 router.get("/", async (req: express.Request, res: express.Response) => {
   try {
+    // find all public videos, this excludes private and only with link videos
     const videos = await Video.findAll({
+      where: { privacyLevel: 0 },
       include: User
     });
     res.status(200).json(videos);
@@ -197,7 +199,10 @@ router.get("/search", async (req: express.Request, res: express.Response) => {
     const searchQuery = req.query.search;
 
     const matchingVideos = await Video.findAll({
-      where: { title: { [sequelize.Op.like]: "%" + searchQuery + "%" } },
+      where: {
+        title: { [sequelize.Op.like]: "%" + searchQuery + "%" },
+        privacyLevel: 0
+      },
       include: User
     });
 
@@ -231,9 +236,14 @@ router.get(
           model: User
         }
       });
+
       if (!video) {
         return res.status(404);
       }
+
+      // if the video is private return not found
+      if (video.privacyLevel === 3) return res.status(404);
+
       video.views++;
       await video.save();
 
@@ -311,6 +321,7 @@ router.get(
 router.get("/trending", async (req: express.Request, res: express.Response) => {
   try {
     const videos = await Video.findAll({
+      where: { privacyLevel: 0 },
       include: User
     });
 
