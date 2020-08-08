@@ -1,6 +1,12 @@
 import express from "express";
 import { v4 as uuidv4 } from "uuid";
-import { User, Video, Subscription, Playlist } from "../../sequelize";
+import {
+  User,
+  Video,
+  Subscription,
+  Playlist,
+  VideoLike
+} from "../../sequelize";
 import authenticateToken from "../../middlewares/tokenAuth";
 import getFileExtension from "../../utils/getFileExtension";
 import fs from "fs";
@@ -390,10 +396,23 @@ router.get(
         where: { userId: req.user.id }
       });
 
+      // get liked videos
+      const videoLikes: any = await VideoLike.findAll({
+        where: { userId: req.user.id, like: true }
+      });
+      let likedVideos: any = [];
+      for (let i = 0; i < videoLikes.length; ++i) {
+        const video = await Video.findOne({
+          where: { id: videoLikes[i].videoId }
+        });
+        likedVideos = [...likedVideos, video];
+      }
+
       res.status(200).json({
         history: historyVideos,
         watchLater: watchLaterVideos,
-        playlists
+        playlists,
+        liked: likedVideos
       });
     } catch (error) {
       return res.status(500).json({ message: error });
@@ -467,6 +486,29 @@ router.get(
       }
 
       res.status(200).json(users);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
+router.get(
+  "/liked",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const videoLikes: any = await VideoLike.findAll({
+        where: { userId: req.user.id, like: true }
+      });
+      let likedVideos: any = [];
+      for (let i = 0; i < videoLikes.length; ++i) {
+        const video = await Video.findOne({
+          where: { id: videoLikes[i].videoId }
+        });
+        likedVideos = [...likedVideos, video];
+      }
+
+      return res.status(200).json(likedVideos);
     } catch (error) {
       return res.status(500).json({ message: error });
     }

@@ -19,11 +19,13 @@ const Library: React.FC<Props> = ({ user }) => {
   const [historyVideos, setHistoryVideos] = useState<Video[]>([]);
   const [watchLaterVideos, setWatchLaterVideos] = useState<Video[]>([]);
   const [loaded, setLoaded] = useState<boolean>(false);
+  const [liked, setLiked] = useState<Video[]>([]);
 
   const loadLibraryData = useCallback(async () => {
     const data = await getLibraryData();
     setHistoryVideos(data.history);
     setWatchLaterVideos(data.watchLater);
+    setLiked(data.liked);
   }, []);
 
   useEffect(() => {
@@ -78,6 +80,25 @@ const Library: React.FC<Props> = ({ user }) => {
       ) : (
         <div>
           {watchLaterVideos.map((video: Video) => (
+            <VideoEntrySmall key={`watchLater-${video.id}`} video={video} />
+          ))}
+        </div>
+      )}
+      <Typography variant="h5" style={{ marginTop: "2rem" }}>
+        Liked videos
+      </Typography>
+      <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
+      {liked.length === 0 ? (
+        <div>
+          <Typography variant="h6">No liked videos</Typography>
+          <Typography>
+            You haven't liked any videos. This can be done on the video watch
+            page!
+          </Typography>
+        </div>
+      ) : (
+        <div>
+          {liked.map((video: Video) => (
             <VideoEntrySmall key={`watchLater-${video.id}`} video={video} />
           ))}
         </div>
