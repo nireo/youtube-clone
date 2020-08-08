@@ -181,6 +181,37 @@ router.patch(
         videoId,
         like: true
       });
+
+      video.likes++;
+      await video.save();
+      return res.status(204);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  }
+);
+
+router.patch(
+  "/rate/dislike/:videoId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const { videoId } = req.params;
+      const video: any = await Video.findOne({ where: { id: videoId } });
+      if (!video) return res.status(404);
+
+      const videoLike: any = await VideoLike.findOne({
+        where: { userId: req.user.id, videoId }
+      });
+      if (videoId) {
+        if (videoLike.like) {
+          videoLike.like = false;
+          video.likes++;
+          video.dislikes--;
+        } else {
+          await videoLike.destroy;
+        }
+      }
     } catch (error) {
       return res.status(500).json({ message: error });
     }
