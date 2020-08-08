@@ -22,5 +22,6 @@ export interface Video {
   updatedAt: string;
   userId: string;
   views: number;
+  privacyLevel: number;
   User?: User;
 }

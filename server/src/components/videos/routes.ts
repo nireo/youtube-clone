@@ -363,12 +363,15 @@ router.patch(
   async (req: any, res: express.Response) => {
     try {
       const { videoId } = req.params;
-      const video = await Video.findOne({ where: { id: videoId } });
-      if (!video) return res.status(404);
+      const { privacyLevel } = req.body;
+      const video: any = await Video.findOne({ where: { id: videoId } });
 
-      const newPrivacyLevel = Number(req.query.level);
-      if (newPrivacyLevel === NaN)
-        return res.status(400).json({ message: "Invalid privacy level" });
+      if (!video) return res.status(404);
+      if (privacyLevel < 0 || privacyLevel > 3) return res.status(404);
+
+      video.privacyLevel = privacyLevel;
+      await video.save();
+      res.status(204);
     } catch (error) {
       return res.status(500).json({ message: error });
     }

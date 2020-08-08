@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { RateActions, UpdateVideo } from '../interfaces/Video';
-const baseUrl: string = '/videos';
+import axios from "axios";
+import { RateActions, UpdateVideo } from "../interfaces/Video";
+const baseUrl: string = "/videos";
 
 let token: string | null = null;
 
@@ -10,15 +10,15 @@ export const setToken = (newToken: string) => {
 
 const getConfig = () => ({
   headers: {
-    Authorization: token,
-  },
+    Authorization: token
+  }
 });
 
 const getConfigMultipart = () => ({
   headers: {
     Authorization: token,
-    'Content-Type': 'multipart/form-data',
-  },
+    "Content-Type": "multipart/form-data"
+  }
 });
 
 export const deleteVideo = async (videoId: string) => {
@@ -27,7 +27,7 @@ export const deleteVideo = async (videoId: string) => {
 };
 
 export const createVideo = async (formData: any) => {
-  const response = await axios.post('/videos', formData, getConfigMultipart());
+  const response = await axios.post("/videos", formData, getConfigMultipart());
   return response.data;
 };
 
@@ -83,6 +83,17 @@ export const updateVideoThumbnail = async (videoId: string, formData: any) => {
     `${baseUrl}/thumbnail/${videoId}`,
     formData,
     getConfigMultipart()
+  );
+  return response.data;
+};
+
+export const updateVideoPrivacyLevel = async (
+  newPrivacyLevel: string,
+  videoId: string
+) => {
+  const response = await axios.patch(
+    `/privacy/${videoId}/?level=${newPrivacyLevel}`,
+    getConfig()
   );
   return response.data;
 };

@@ -124,7 +124,7 @@ const EditVideo: React.FC<Props> = ({ user, videoId }) => {
             <CircularProgress />
           </div>
         )}
-        {!loading && (
+        {!loading && video !== null && (
           <div>
             {page === 0 && (
               <div>
@@ -293,7 +293,7 @@ const EditVideo: React.FC<Props> = ({ user, videoId }) => {
                 )}
               </div>
             )}
-            {page === 2 && <VideoManage videoId={videoId} />}
+            {page === 2 && <VideoManage video={video} videoId={videoId} />}
           </div>
         )}
       </Container>
