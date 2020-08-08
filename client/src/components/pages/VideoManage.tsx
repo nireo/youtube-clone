@@ -37,36 +37,47 @@ export const VideoManage: React.FC<Props> = ({ videoId, video }) => {
 
   return (
     <div style={{ marginTop: "1rem" }}>
-      <Typography variant="h6">Delete video</Typography>
-      <Typography variant="body2" color="textSecondary">
-        This action irreversible, and you cannot get any data related to your
-        video back.
-      </Typography>
-      <Button
-        variant="contained"
-        onClick={handleVideoDeletion}
-        color="secondary"
-      >
-        Delete
-      </Button>
+      <div>
+        <Typography variant="h6">Delete video</Typography>
+        <Typography variant="body2" color="textSecondary">
+          This action irreversible, and you cannot get any data related to your
+          video back.
+        </Typography>
+        <Button
+          variant="contained"
+          onClick={handleVideoDeletion}
+          color="secondary"
+          style={{ marginTop: "0.5rem" }}
+        >
+          Delete
+        </Button>
+      </div>
 
-      <Typography variant="h6">Change privacy</Typography>
-      {privacyLevel !== null && (
-        <FormControl variant="outlined">
-          <InputLabel id="privacy-level-select">Privacy</InputLabel>
-          <Select
-            labelId="privacy-level-select"
-            id="privacy-level-select-outlined"
-            value={privacyLevel}
-            onChange={handleChange}
-            label="Age"
+      <div style={{ marginTop: "3rem" }}>
+        <Typography variant="h6">Change privacy</Typography>
+        {privacyLevel !== null && (
+          <FormControl
+            variant="outlined"
+            style={{ marginTop: "0.5rem", width: "100%" }}
           >
-            <MenuItem value={0}>Public</MenuItem>
-            <MenuItem value={1}>Only with link</MenuItem>
-            <MenuItem value={2}>Private</MenuItem>
-          </Select>
-        </FormControl>
-      )}
+            <InputLabel id="privacy-level-select" color="secondary">
+              Privacy
+            </InputLabel>
+            <Select
+              labelId="privacy-level-select"
+              id="privacy-level-select-outlined"
+              value={privacyLevel}
+              onChange={handleChange}
+              label="Privacy"
+              color="secondary"
+            >
+              <MenuItem value={0}>Public</MenuItem>
+              <MenuItem value={1}>Only with link</MenuItem>
+              <MenuItem value={2}>Private</MenuItem>
+            </Select>
+          </FormControl>
+        )}
+      </div>
     </div>
   );
 };

@@ -33,6 +33,10 @@ import { CommentEntry } from "../other/CommentEntry";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import AddVideoToPlaylistWidget from "../other/AddVideoToPlaylistWidget";
 import Modal from "@material-ui/core/Modal";
+import IconButton from "@material-ui/core/IconButton";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
@@ -63,6 +67,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center"
+  },
+  progress: {
+    colorPrimary: "#909090"
   }
 }));
 
@@ -222,9 +229,9 @@ const WatchVideo: React.FC<Props> = ({
                   type="video/webm"
                 />
               </video>
+              <Typography variant="h6">{video.video.title}</Typography>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div>
-                  <Typography variant="h6">{video.video.title}</Typography>
                   <div style={{ display: "flex", marginTop: "0.75rem" }}>
                     <Typography
                       variant="body2"
@@ -243,10 +250,43 @@ const WatchVideo: React.FC<Props> = ({
                     </Typography>
                   </div>
                 </div>
-                <div>
+                <div style={{ display: "flex" }}>
+                  <div>
+                    <div style={{ display: "flex" }}>
+                      <Button
+                        style={{
+                          backgroundColor: "transparent",
+                          color: "#909090",
+                          fontSize: "0.9rem"
+                        }}
+                        startIcon={<ThumbUpIcon />}
+                      >
+                        {video.video.likes}
+                      </Button>
+                      <Button
+                        style={{
+                          backgroundColor: "transparent",
+                          color: "#909090",
+                          fontSize: "0.9rem"
+                        }}
+                        startIcon={<ThumbDownIcon />}
+                      >
+                        {video.video.dislikes}
+                      </Button>
+                    </div>
+                    <LinearProgress
+                      variant="determinate"
+                      className={classes.progress}
+                      value={
+                        video.video.likes - video.video.dislikes > 0
+                          ? 0
+                          : video.video.likes - video.video.dislikes
+                      }
+                    />
+                  </div>
                   <Button
                     startIcon={<PlaylistAddIcon />}
-                    style={{ background: "transparent" }}
+                    style={{ background: "transparent", color: "#909090" }}
                     onClick={() => setOpenPlaylist(true)}
                   >
                     Save
@@ -265,7 +305,7 @@ const WatchVideo: React.FC<Props> = ({
                   </Modal>
                 </div>
               </div>
-              <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
+              <Divider style={{ marginBottom: "1rem" }} />
               {video.video.User !== undefined && (
                 <div
                   style={{

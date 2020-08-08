@@ -378,7 +378,7 @@ router.patch(
       const video: any = await Video.findOne({ where: { id: videoId } });
 
       if (!video) return res.status(404);
-      if (privacyLevel < 0 || privacyLevel > 3) return res.status(404);
+      if (privacyLevel < 0 || privacyLevel > 3) return res.status(400);
 
       video.privacyLevel = privacyLevel;
       await video.save();
