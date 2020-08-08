@@ -30,8 +30,9 @@ export const VideoManage: React.FC<Props> = ({ videoId, video }) => {
 
   const handleChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
     if (privacyLevel === null) return;
-    await updateVideoPrivacyLevel(String(privacyLevel), videoId);
-    setPrivacyLevel(event.target.value as number);
+    const newPrivacyLevel = event.target.value as number;
+    updateVideoPrivacyLevel(newPrivacyLevel, videoId);
+    setPrivacyLevel(newPrivacyLevel);
   };
 
   return (

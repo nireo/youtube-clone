@@ -88,11 +88,13 @@ export const updateVideoThumbnail = async (videoId: string, formData: any) => {
 };
 
 export const updateVideoPrivacyLevel = async (
-  newPrivacyLevel: string,
+  newPrivacyLevel: number,
   videoId: string
 ) => {
+  console.log("????");
   const response = await axios.patch(
-    `/privacy/${videoId}/?level=${newPrivacyLevel}`,
+    `${baseUrl}/privacy/${videoId}`,
+    { privacyLevel: newPrivacyLevel },
     getConfig()
   );
   return response.data;

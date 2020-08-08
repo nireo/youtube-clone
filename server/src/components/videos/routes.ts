@@ -371,7 +371,7 @@ router.patch(
 
       video.privacyLevel = privacyLevel;
       await video.save();
-      res.status(204);
+      return res.status(204);
     } catch (error) {
       return res.status(500).json({ message: error });
     }
