@@ -91,10 +91,25 @@ export const updateVideoPrivacyLevel = async (
   newPrivacyLevel: number,
   videoId: string
 ) => {
-  console.log("????");
   const response = await axios.patch(
     `${baseUrl}/privacy/${videoId}`,
     { privacyLevel: newPrivacyLevel },
+    getConfig()
+  );
+  return response.data;
+};
+
+export const likeVideoService = async (videoId: string) => {
+  const response = await axios.patch(
+    `${baseUrl}/rate/like/${videoId}`,
+    getConfig()
+  );
+  return response.data;
+};
+
+export const dislikeVideoService = async (videoId: string) => {
+  const response = await axios.patch(
+    `${baseUrl}/rate/dislike/${videoId}`,
     getConfig()
   );
   return response.data;

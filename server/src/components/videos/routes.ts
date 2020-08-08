@@ -83,74 +83,6 @@ router.delete(
 );
 
 router.patch(
-  "/rate/:videoId",
-  authenticateToken,
-  async (req: any, res: express.Response) => {
-    try {
-      const { videoId } = req.params;
-      const { action } = req.body;
-      if (action !== "like" && action !== "dislike") {
-        return res.status(400).json({ message: "No action provided" });
-      }
-
-      const video: any = await Video.findOne({
-        where: { id: videoId }
-      });
-
-      if (!video) {
-        return res.status(404).json({ message: "Video not found" });
-      }
-
-      // check for existing like model
-      const videoLike: any = await VideoLike.findOne({
-        where: { userId: req.user.id, videoId }
-      });
-
-      if (videoLike) {
-        // change like to dislike or remove like/dislike
-        if (video.like && action === "dislike") {
-          video.likes -= 1;
-          video.dislikes += 1;
-
-          videoLike.like = false;
-        } else if (videoLike.like === false && action === "like") {
-          video.likes += 1;
-          video.dislikes -= 1;
-
-          videoLike.like = true;
-        } else if (videoLike.like && action === "like") {
-          await videoLike.destroy();
-          return res.status(204);
-        } else if (videoLike.like === false && action === "dislike") {
-          await videoLike.destroy();
-          return res.status(204);
-        } else {
-          return res.status(400).json({ message: "Bad request" });
-        }
-
-        await video.save();
-        await videoLike.save();
-        return res.status(204).end();
-      }
-
-      await VideoLike.create({
-        id: uuidv4(),
-        userId: req.user.id,
-        videoId,
-        like: action === "like"
-      });
-
-      video.likes += req.params.action === "like" ? 1 : -1;
-      video.dislikes += req.params.action !== "like" ? 1 : -1;
-      await video.save();
-      return res.status(204).end();
-    } catch (error) {
-      res.status(500).send(error);
-    }
-  }
-);
-
-router.patch(
   "/rate/like/:videoId",
   authenticateToken,
   async (req: any, res: express.Response) => {
@@ -210,8 +142,19 @@ router.patch(
           video.dislikes--;
         } else {
           await videoLike.destroy;
+          return res.status(204);
         }
       }
+
+      await VideoLike.create({
+        id: uuidv4(),
+        userId: req.user.id,
+        videoId,
+        like: false
+      });
+
+      video.dislikes++;
+      return res.status(204);
     } catch (error) {
       return res.status(500).json({ message: error });
     }
@@ -311,6 +254,9 @@ router.get(
         return res.status(404);
       }
 
+      // 0=no likes, 1=liked, 2=disliked
+      let likeStatus: number = 0;
+
       // if the video is private return not found
       if (video.privacyLevel === 3) return res.status(404);
 
@@ -324,9 +270,18 @@ router.get(
           req.user.history = req.user.history.concat(videoId);
           await req.user.save();
         }
+
+        // check if the user has liked the video
+        const videoLike: any = await VideoLike.findOne({
+          where: { userId: req.user.id, videoId }
+        });
+        if (videoLike) {
+          console.log("this user has liked");
+          likeStatus += videoLike.like ? 1 : 2;
+        }
       }
 
-      // we return 404 if the video is not found, but the comments field can be empty
+      // we return 404 if the video is not found, but the comments field can be empty so no need to check it
       const comments: any = await Comment.findAll({
         where: { videoId: videoId },
         include: User
@@ -337,7 +292,7 @@ router.get(
       // since sequelize doesn't have a feature to exclude query results, we need to filter it
       next = next.filter((v: any) => v.id !== videoId);
 
-      return res.status(200).json({ video, comments, next });
+      return res.status(200).json({ video, comments, next, likeStatus });
     } catch (error) {
       return res.status(500).json({ message: error });
     }

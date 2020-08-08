@@ -8,7 +8,11 @@ import React, {
 import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { Video } from "../../interfaces/Video";
-import { getSingleVideo } from "../../services/video";
+import {
+  getSingleVideo,
+  likeVideoService,
+  dislikeVideoService
+} from "../../services/video";
 import { Comment, RateComment } from "../../interfaces/Comment";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -33,7 +37,6 @@ import { CommentEntry } from "../other/CommentEntry";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import AddVideoToPlaylistWidget from "../other/AddVideoToPlaylistWidget";
 import Modal from "@material-ui/core/Modal";
-import IconButton from "@material-ui/core/IconButton";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -85,6 +88,7 @@ interface WatchPage {
   comments: Comment[];
   video: Video;
   next: Video[];
+  likeStatus: number;
 }
 
 const WatchVideo: React.FC<Props> = ({
@@ -104,6 +108,9 @@ const WatchVideo: React.FC<Props> = ({
   const [subscribed, setSubscribed] = useState<boolean | null>(null);
   const [openPlaylist, setOpenPlaylist] = useState<boolean>(false);
 
+  // 0=no like, 1=liked, 2=disliked
+  const [likeStatus, setLikeStatus] = useState<number>(0);
+
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -116,6 +123,7 @@ const WatchVideo: React.FC<Props> = ({
     const data = await getSingleVideo(id);
     setVideo(data);
     setComments(data.comments);
+    setLikeStatus(data.likeStatus);
   }, [id]);
 
   useEffect(() => {
@@ -211,6 +219,24 @@ const WatchVideo: React.FC<Props> = ({
     }
 
     setComments(updatedComments);
+  };
+
+  const handleVideoLike = async () => {
+    if (video === null) return;
+    await likeVideoService(id);
+    let copy: WatchPage = video;
+    copy.video.likes++;
+
+    setVideo(copy);
+  };
+
+  const handleVideoDislike = async () => {
+    if (video === null) return;
+    await dislikeVideoService(id);
+    let copy: WatchPage = video;
+    copy.video.dislikes--;
+
+    setVideo(copy);
   };
 
   return (
