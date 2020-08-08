@@ -83,12 +83,13 @@ router.delete(
 );
 
 router.patch(
-  "/rate/:action/:videoId",
+  "/rate/:videoId",
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
-      const { action, videoId } = req.params.action;
-      if (action !== "like" || action !== "dislike") {
+      const { videoId } = req.params;
+      const { action } = req.body;
+      if (action !== "like" && action !== "dislike") {
         return res.status(400).json({ message: "No action provided" });
       }
 
@@ -129,7 +130,7 @@ router.patch(
 
         await video.save();
         await videoLike.save();
-        return res.status(204);
+        return res.status(204).end();
       }
 
       await VideoLike.create({
@@ -141,9 +142,47 @@ router.patch(
 
       video.likes += req.params.action === "like" ? 1 : -1;
       video.dislikes += req.params.action !== "like" ? 1 : -1;
-      res.status(204);
+      await video.save();
+      return res.status(204).end();
     } catch (error) {
       res.status(500).send(error);
+    }
+  }
+);
+
+router.patch(
+  "/rate/like/:videoId",
+  authenticateToken,
+  async (req: any, res: express.Response) => {
+    try {
+      const { videoId } = req.params;
+      const video: any = await Video.findOne({ where: { id: videoId } });
+      if (!video) return res.status(404);
+
+      // check for a existing like so that we can then remove it
+      const videoLike: any = await VideoLike.findOne({
+        where: { userId: req.user.id, videoId }
+      });
+      if (videoId) {
+        // remove dislike
+        if (!videoLike.like) {
+          videoLike.like = true;
+          video.likes++;
+          video.dislikes--;
+        } else {
+          await videoLike.destroy();
+          return res.status(204);
+        }
+      }
+
+      await VideoLike.create({
+        id: uuidv4(),
+        userId: req.user.id,
+        videoId,
+        like: true
+      });
+    } catch (error) {
+      return res.status(500).json({ message: error });
     }
   }
 );
