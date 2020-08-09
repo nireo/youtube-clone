@@ -209,7 +209,9 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 
 router.get("/search", async (req: express.Request, res: express.Response) => {
   try {
-    const searchQuery = req.query.search;
+    const searchQuery = req.query.search as string;
+    if (!searchQuery) return res.status(400);
+    const formattedQuery = searchQuery.split("%").join(" ");
 
     const matchingVideos = await Video.findAll({
       where: {
@@ -225,7 +227,7 @@ router.get("/search", async (req: express.Request, res: express.Response) => {
 
     // get matching users
     const matchingUsers = await User.findAll({
-      where: { username: { [sequelize.Op.like]: "%" + searchQuery + "%" } }
+      where: { username: { [sequelize.Op.like]: "%" + formattedQuery + "%" } }
     });
 
     res.status(200).json({ videos: matchingVideos, users: matchingUsers });

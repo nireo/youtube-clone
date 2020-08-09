@@ -135,7 +135,8 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
 
   const handleEnterPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      history.push(`/search?search=${search}`);
+      const formattedSearch = search.split(" ").join("%");
+      history.push(`/search?search=${formattedSearch}`);
     }
   };
 
@@ -213,7 +214,7 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
                 src={`http://localhost:3001/avatars/${user.avatar}`}
                 onClick={handleProfileMenuOpen}
                 className={classes.avatar}
-                style={{ marginTop: "0.7rem" }}
+                style={{ marginTop: "0.7rem", marginLeft: "0.7rem" }}
               />
               <Menu
                 anchorEl={anchorEl}

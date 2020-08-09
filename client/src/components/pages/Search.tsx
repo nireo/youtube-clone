@@ -44,48 +44,66 @@ export const Search: React.FC = () => {
 
   return (
     <div style={{ marginTop: "2rem" }}>
-      {loaded && videos.length === 0 && (
+      {loaded && videos.length === 0 && users.length === 0 && (
         <Container>
           <Typography variant="h5">404 Not found.</Typography>
         </Container>
       )}
-      {loaded && videos.length > 0 && (
+      {loaded && (videos.length > 0 || users.length > 0) && (
         <Container>
-          <Typography variant="h6">Videos</Typography>
+          <Typography style={{ fontSize: "1.2rem" }}>Videos</Typography>
+          {videos.length === 0 && (
+            <Typography variant="body2" color="textSecondary">
+              No videos found matching your search.
+            </Typography>
+          )}
           <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
-          {videos.map((video: Video) => (
-            <VideoEntryFull video={video} />
-          ))}
+          {videos.length > 0 && (
+            <div>
+              {videos.map((video: Video) => (
+                <VideoEntryFull video={video} />
+              ))}
+            </div>
+          )}
           <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
-          <Typography variant="h6">Users</Typography>
-          {users.map((u: User) => (
-            <Link
-              to={`/channel/${u.id}`}
-              style={{ paddingBottom: "1rem", textDecoration: "none" }}
-            >
-              <div style={{ display: "flex" }}>
-                <Avatar
-                  src={`http://localhost:3001/avatars/${u.avatar}`}
-                  className={classes.avatar}
-                />
-                <div>
-                  <Typography
-                    style={{ marginLeft: "1rem", fontSize: "2rem" }}
-                    color="textPrimary"
-                  >
-                    {u.username}
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    color="textSecondary"
-                    style={{ marginLeft: "1rem" }}
-                  >
-                    {u.subscribers} subscribers
-                  </Typography>
-                </div>
-              </div>
-            </Link>
-          ))}
+          <Typography style={{ fontSize: "1.2rem" }}>Users</Typography>
+          {users.length === 0 && (
+            <Typography variant="body2" color="textSecondary">
+              No users found matching your search.
+            </Typography>
+          )}
+          {users.length > 0 && (
+            <div>
+              {users.map((u: User) => (
+                <Link
+                  to={`/channel/${u.id}`}
+                  style={{ paddingBottom: "1rem", textDecoration: "none" }}
+                >
+                  <div style={{ display: "flex" }}>
+                    <Avatar
+                      src={`http://localhost:3001/avatars/${u.avatar}`}
+                      className={classes.avatar}
+                    />
+                    <div>
+                      <Typography
+                        style={{ marginLeft: "1rem", fontSize: "2rem" }}
+                        color="textPrimary"
+                      >
+                        {u.username}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        color="textSecondary"
+                        style={{ marginLeft: "1rem" }}
+                      >
+                        {u.subscribers} subscribers
+                      </Typography>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </Container>
       )}
     </div>
