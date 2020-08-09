@@ -27,6 +27,7 @@ import AvatarUpdate from "../other/AvatarUpdate";
 import BannerUpdate from "../other/BannerUpdate";
 import { UserSubscriptions } from "./UserSubscriptions";
 import UserCommunity from "./UserCommunity";
+import ChannelUpdateModal from "../other/ChannelUpdateModal";
 
 const useStyles = makeStyles((theme: Theme) => ({
   channelAvatar: {
@@ -144,6 +145,12 @@ const UserChannel: React.FC<Props> = ({
     setOpen(true);
   };
 
+  /*
+    <div className={classes.paper}>
+     {avatarUpload === true ? <AvatarUpdate /> : <BannerUpdate />}
+    </div>
+  */
+
   return (
     <div>
       {channelUser !== undefined &&
@@ -156,7 +163,7 @@ const UserChannel: React.FC<Props> = ({
             </Helmet>
             <Modal open={open} onClose={closeModal} className={classes.modal}>
               <div className={classes.paper}>
-                {avatarUpload === true ? <AvatarUpdate /> : <BannerUpdate />}
+                <ChannelUpdateModal />
               </div>
             </Modal>
             {channelUser !== null && channelUser.banner !== null ? (
