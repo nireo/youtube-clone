@@ -63,7 +63,7 @@ const NotificationWidget: React.FC<Props> = ({
   const open = Boolean(anchorEl);
   return (
     <div>
-      <IconButton onClick={handleClick}>
+      <IconButton onClick={handleClick} style={{ background: "transparent" }}>
         {count !== null ? (
           <Badge badgeContent={count} color="error">
             <NotificationsIcon />

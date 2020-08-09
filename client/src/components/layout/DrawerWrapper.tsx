@@ -38,6 +38,7 @@ import NotificationWidget from "../other/NotificationWidget";
 import SubscriptionsWidget from "../other/SubscriptionsWidget";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import Avatar from "@material-ui/core/Avatar";
 
 const drawerWidth = 200;
 
@@ -131,6 +132,13 @@ const useStyles = makeStyles((theme: Theme) =>
       width: "100%",
       [theme.breakpoints.up("md")]: {
         width: "20ch"
+      }
+    },
+    avatar: {
+      height: theme.spacing(3),
+      width: theme.spacing(3),
+      "&:hover": {
+        cursor: "pointer"
       }
     }
   })
@@ -240,14 +248,12 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
                   <VideoCallIcon />
                 </IconButton>
               </Link>
-              <IconButton
-                edge="end"
-                aria-label="account of user"
-                style={{ color: "#fff" }}
+              <Avatar
+                src={`http://localhost:3001/avatars/${user.avatar}`}
                 onClick={handleProfileMenuOpen}
-              >
-                <AccountCircle />
-              </IconButton>
+                className={classes.avatar}
+                style={{ marginTop: "0.7rem" }}
+              />
               <Menu
                 anchorEl={anchorEl}
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
