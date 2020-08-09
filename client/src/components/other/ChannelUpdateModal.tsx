@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { User } from "../../interfaces/User";
 import Container from "@material-ui/core/Container";
+import { updateUser } from "../../services/user";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
@@ -35,22 +37,40 @@ const ChannelUpdateModal: React.FC<Props> = ({ user }) => {
     }
   }, [loaded, user]);
 
+  const handleChannelUpdate = async (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    await updateUser({ description, username });
+
+    // refresh the site so that we don't need extra code to update user information instantly
+    window.location.reload(false);
+  };
+
   return (
     <Container>
-      <input
-        placeholder="Username"
-        value={username}
-        onChange={({ target }) => setUsername(target.value)}
-        className={classes.input}
-      />
-      <textarea
-        value={description}
-        onChange={({ target }) => setDescription(target.value)}
-        placeholder="Description"
-        className={classes.input}
-        rows={4}
-        style={{ resize: "none", marginTop: "1rem" }}
-      />
+      <form onSubmit={handleChannelUpdate}>
+        <input
+          placeholder="Username"
+          value={username}
+          onChange={({ target }) => setUsername(target.value)}
+          className={classes.input}
+        />
+        <textarea
+          value={description}
+          onChange={({ target }) => setDescription(target.value)}
+          placeholder="Description"
+          className={classes.input}
+          rows={4}
+          style={{ resize: "none", marginTop: "1rem" }}
+        />
+        <Button
+          color="secondary"
+          variant="contained"
+          type="submit"
+          style={{ marginTop: "1rem" }}
+        >
+          Update
+        </Button>
+      </form>
     </Container>
   );
 };

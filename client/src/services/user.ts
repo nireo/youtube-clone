@@ -37,7 +37,11 @@ export const deleteUser = async () => {
 };
 
 export const updateUser = async (updatedValues: UpdateUser) => {
-  const response = await axios.patch(baseUrl, updatedValues, getConfig());
+  const response = await axios.patch(
+    `${baseUrl}/update`,
+    updatedValues,
+    getConfig()
+  );
   return response.data;
 };
 
