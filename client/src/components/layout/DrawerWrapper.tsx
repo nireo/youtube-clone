@@ -23,6 +23,7 @@ import { AppState } from "../../store";
 import { User } from "../../interfaces/User";
 import SubscriptionsWidget from "../other/SubscriptionsWidget";
 import Navbar from "./Navbar";
+import { DrawerButtons } from "./DrawerButtons";
 
 const drawerWidth = 200;
 
@@ -67,43 +68,12 @@ type Props = {
   user: User | null;
 };
 
-const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
+const DrawerWrapper: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
-  const [search, setSearch] = useState<string>("");
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const isMenuOpen = Boolean(anchorEl);
-
-  const history = useHistory();
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
 
   const handleDrawerClose = () => {
     setOpen(false);
-  };
-
-  const handleEnterPress = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      const formattedSearch = search.split(" ").join("+");
-      history.push(`/search?search=${formattedSearch}`);
-    }
-  };
-
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleRedirect = (page: string) => {
-    history.push(page);
-
-    // close the menu
-    setAnchorEl(null);
   };
 
   return (
@@ -126,69 +96,7 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
             TypeTube
           </Typography>
         </div>
-        <Divider />
-        <List>
-          <Link to="/" style={{ textDecoration: "none" }}>
-            <ListItem button>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText style={{ color: "#fff" }} primary="Home" />
-            </ListItem>
-          </Link>
-          <Link to="/trending" style={{ textDecoration: "none" }}>
-            <ListItem button>
-              <ListItemIcon>
-                <WhatshotIcon />
-              </ListItemIcon>
-              <ListItemText style={{ color: "#fff" }} primary="Trending" />
-            </ListItem>
-          </Link>
-          <Link to="/subscriptions" style={{ textDecoration: "none" }}>
-            <ListItem button>
-              <ListItemIcon>
-                <SubscriptionsIcon />
-              </ListItemIcon>
-              <ListItemText style={{ color: "#fff" }} primary="Subscriptions" />
-            </ListItem>
-          </Link>
-        </List>
-        <Divider />
-        <List>
-          <Link to="/library" style={{ textDecoration: "none" }}>
-            <ListItem button>
-              <ListItemIcon>
-                <VideoLibraryIcon />
-              </ListItemIcon>
-              <ListItemText style={{ color: "#fff" }} primary="Library" />
-            </ListItem>
-          </Link>
-          <Link to="/history" style={{ textDecoration: "none" }}>
-            <ListItem button>
-              <ListItemIcon>
-                <HistoryIcon />
-              </ListItemIcon>
-              <ListItemText style={{ color: "#fff" }} primary="History" />
-            </ListItem>
-          </Link>
-          <Link to="/your-videos" style={{ textDecoration: "none" }}>
-            <ListItem button>
-              <ListItemIcon>
-                <OndemandVideoIcon />
-              </ListItemIcon>
-              <ListItemText style={{ color: "#fff" }} primary="Your videos" />
-            </ListItem>
-          </Link>
-          <Link to="/watch-later" style={{ textDecoration: "none" }}>
-            <ListItem button>
-              <ListItemIcon>
-                <WatchLaterIcon />
-              </ListItemIcon>
-              <ListItemText style={{ color: "#fff" }} primary="Watch Later" />
-            </ListItem>
-          </Link>
-        </List>
-        <Divider />
+        <DrawerButtons />
         <SubscriptionsWidget />
       </Drawer>
       <main
