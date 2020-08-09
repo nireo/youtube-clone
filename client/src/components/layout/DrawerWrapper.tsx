@@ -1,11 +1,6 @@
 import React, { KeyboardEvent, useState } from "react";
 import clsx from "clsx";
-import {
-  makeStyles,
-  Theme,
-  createStyles,
-  fade
-} from "@material-ui/core/styles";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Link, useHistory } from "react-router-dom";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -26,9 +21,6 @@ import VideoLibraryIcon from "@material-ui/icons/VideoLibrary";
 import HistoryIcon from "@material-ui/icons/History";
 import OndemandVideoIcon from "@material-ui/icons/OndemandVideo";
 import WatchLaterIcon from "@material-ui/icons/WatchLater";
-import InputBase from "@material-ui/core/InputBase";
-import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import { AppState } from "../../store";
@@ -97,42 +89,8 @@ const useStyles = makeStyles((theme: Theme) =>
       }),
       marginLeft: 0
     },
-    searchIcon: {
-      padding: theme.spacing(0, 2),
-      height: "100%",
-      position: "absolute",
-      pointerEvents: "none",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    },
-    search: {
-      position: "relative",
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.15),
-      "&:hover": {
-        backgroundColor: fade(theme.palette.common.white, 0.25)
-      },
-      marginRight: 0,
-      marginLeft: 0,
-      width: "100%",
-      [theme.breakpoints.up("sm")]: {
-        marginLeft: 0,
-        width: "auto"
-      }
-    },
     inputRoot: {
       color: "inherit"
-    },
-    inputInput: {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-      transition: theme.transitions.create("width"),
-      width: "100%",
-      [theme.breakpoints.up("md")]: {
-        width: "20ch"
-      }
     },
     avatar: {
       height: theme.spacing(3),
@@ -140,6 +98,16 @@ const useStyles = makeStyles((theme: Theme) =>
       "&:hover": {
         cursor: "pointer"
       }
+    },
+    searchInput: {
+      backgroundColor: "#121212",
+      border: "none",
+      fontSize: "16px",
+      lineHeight: "24px",
+      width: "100%",
+      boxShadow: "none",
+      color: "rgba(255, 255, 255, 0.88)",
+      fontFamily: "Roboto, Noto, sans-serif"
     }
   })
 );
@@ -216,20 +184,13 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
               </div>
             )}
           </div>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
+          <div className="search-container">
+            <input
               placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput
-              }}
               value={search}
               onChange={({ target }) => setSearch(target.value)}
-              inputProps={{ "aria-label": "search" }}
               onKeyPress={handleEnterPress}
+              className={classes.searchInput}
             />
           </div>
           {user === null ? (
@@ -243,7 +204,7 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
                 <IconButton
                   edge="end"
                   aria-label="upload-video"
-                  style={{ color: "#fff" }}
+                  style={{ color: "#fff", background: "transparent" }}
                 >
                   <VideoCallIcon />
                 </IconButton>
