@@ -30,7 +30,8 @@ export const Search: React.FC = () => {
     if (search === null) {
       return;
     }
-    const data = await videoSearch(search);
+
+    const data = await videoSearch(search.split(" ").join("+"));
     setVideos(data.videos);
     setUsers(data.users);
   }, [query]);
@@ -61,7 +62,7 @@ export const Search: React.FC = () => {
           {videos.length > 0 && (
             <div>
               {videos.map((video: Video) => (
-                <VideoEntryFull video={video} />
+                <VideoEntryFull key={video.id} video={video} />
               ))}
             </div>
           )}
@@ -76,6 +77,7 @@ export const Search: React.FC = () => {
             <div>
               {users.map((u: User) => (
                 <Link
+                  key={u.id}
                   to={`/channel/${u.id}`}
                   style={{ paddingBottom: "1rem", textDecoration: "none" }}
                 >

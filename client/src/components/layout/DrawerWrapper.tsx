@@ -135,7 +135,7 @@ const DrawerWrapper: React.FC<Props> = ({ children, user }) => {
 
   const handleEnterPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      const formattedSearch = search.split(" ").join("%");
+      const formattedSearch = search.split(" ").join("+");
       history.push(`/search?search=${formattedSearch}`);
     }
   };

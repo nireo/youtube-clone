@@ -6,6 +6,7 @@ import fs from "fs";
 import getFileExtension from "../../utils/getFileExtension";
 import * as sequelize from "sequelize";
 import authenticateTokenNoStatus from "../../middlewares/tokenAuthNoStatus";
+import querystring from "querystring";
 
 const router: express.Router = express.Router();
 
@@ -209,9 +210,8 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 
 router.get("/search", async (req: express.Request, res: express.Response) => {
   try {
-    const searchQuery = req.query.search as string;
-    if (!searchQuery) return res.status(400);
-    const formattedQuery = searchQuery.split("%").join(" ");
+    let searchQuery = req.query.search;
+    console.log(searchQuery);
 
     const matchingVideos = await Video.findAll({
       where: {
@@ -227,7 +227,7 @@ router.get("/search", async (req: express.Request, res: express.Response) => {
 
     // get matching users
     const matchingUsers = await User.findAll({
-      where: { username: { [sequelize.Op.like]: "%" + formattedQuery + "%" } }
+      where: { username: { [sequelize.Op.like]: "%" + searchQuery + "%" } }
     });
 
     res.status(200).json({ videos: matchingVideos, users: matchingUsers });
