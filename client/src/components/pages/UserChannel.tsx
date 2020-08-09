@@ -23,8 +23,6 @@ import {
   subscribeToUserAction
 } from "../../store/subscriptionReducer";
 import Modal from "@material-ui/core/Modal";
-import AvatarUpdate from "../other/AvatarUpdate";
-import BannerUpdate from "../other/BannerUpdate";
 import { UserSubscriptions } from "./UserSubscriptions";
 import UserCommunity from "./UserCommunity";
 import ChannelUpdateModal from "../other/ChannelUpdateModal";
@@ -71,7 +69,6 @@ const UserChannel: React.FC<Props> = ({
   const [editing, setEditing] = useState<boolean>(false);
   const [newDescription, setNewDescription] = useState<string>("");
   const [subscribed, setSubscribed] = useState<boolean | null>(null);
-  const [avatarUpload, setAvatarUpload] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
   const classes = useStyles();
@@ -134,17 +131,6 @@ const UserChannel: React.FC<Props> = ({
       subscribeToUserAction(channelUser.id);
     }
   };
-
-  const showBannerModal = () => {
-    setAvatarUpload(false);
-    setOpen(true);
-  };
-
-  const showAvatarModal = () => {
-    setAvatarUpload(true);
-    setOpen(true);
-  };
-
   /*
     <div className={classes.paper}>
      {avatarUpload === true ? <AvatarUpdate /> : <BannerUpdate />}
@@ -225,16 +211,9 @@ const UserChannel: React.FC<Props> = ({
                       style={{ marginRight: "1rem" }}
                       variant="contained"
                       color="secondary"
-                      onClick={() => showAvatarModal()}
+                      onClick={() => setOpen(true)}
                     >
-                      Update avatar
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => showBannerModal()}
-                    >
-                      Update banner
+                      Update
                     </Button>
                   </div>
                 ) : (
@@ -289,37 +268,6 @@ const UserChannel: React.FC<Props> = ({
                   <Typography variant="body1">
                     {channelUser.description}
                   </Typography>
-                  {user !== null && user.id === id && (
-                    <div>
-                      {editing === false ? (
-                        <IconButton onClick={startEditing}>
-                          <CreateIcon />
-                        </IconButton>
-                      ) : (
-                        <form onSubmit={handleChannelUpdate}>
-                          <TextField
-                            value={newDescription}
-                            onChange={({ target }) =>
-                              setNewDescription(target.value)
-                            }
-                            variant="filled"
-                            rows={3}
-                            multiline
-                            fullWidth
-                          />
-                          <div style={{ float: "right", marginTop: "0.5rem" }}>
-                            <Button onClick={stopEditing}>Cancel</Button>
-                            <Button
-                              style={{ marginLeft: "0.5rem" }}
-                              variant="contained"
-                            >
-                              Update
-                            </Button>
-                          </div>
-                        </form>
-                      )}
-                    </div>
-                  )}
                 </div>
               )}
             </Container>
