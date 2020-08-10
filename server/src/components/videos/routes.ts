@@ -6,7 +6,7 @@ import fs from "fs";
 import getFileExtension from "../../utils/getFileExtension";
 import * as sequelize from "sequelize";
 import authenticateTokenNoStatus from "../../middlewares/tokenAuthNoStatus";
-import querystring from "querystring";
+import { optionalAuth } from "../../utils/withAuth";
 
 const router: express.Router = express.Router();
 
@@ -241,7 +241,7 @@ router.get("/search", async (req: express.Request, res: express.Response) => {
 // this controller also handles adding views to videos
 router.get(
   "/watch/:videoId",
-  authenticateTokenNoStatus,
+  optionalAuth,
   async (req: any, res: express.Response) => {
     try {
       const { videoId } = req.params;
