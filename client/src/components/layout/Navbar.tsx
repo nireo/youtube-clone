@@ -17,10 +17,10 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { useHistory, Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
 import NotificationWidget from "../other/NotificationWidget";
 import VideoCallIcon from "@material-ui/icons/VideoCall";
 import Avatar from "@material-ui/core/Avatar";
+import { logoutAction } from "../../store/userReducer";
 
 const drawerWidth = 200;
 
@@ -71,9 +71,10 @@ type Props = {
   user: User | null;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  logoutAction: () => void;
 };
 
-const Navbar: React.FC<Props> = ({ user, open, setOpen }) => {
+const Navbar: React.FC<Props> = ({ user, open, setOpen, logoutAction }) => {
   const [search, setSearch] = useState<string>("");
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const isMenuOpen = Boolean(anchorEl);
@@ -145,7 +146,7 @@ const Navbar: React.FC<Props> = ({ user, open, setOpen }) => {
         </div>
         {user === null ? (
           <Link to="/login">
-            <Button variant="contained">Login</Button>
+            <button className="button button-blue">Login</button>
           </Link>
         ) : (
           <div style={{ display: "flex" }}>
@@ -179,7 +180,7 @@ const Navbar: React.FC<Props> = ({ user, open, setOpen }) => {
               <MenuItem onClick={() => handleRedirect("/settings")}>
                 Settings
               </MenuItem>
-              <MenuItem></MenuItem>
+              <MenuItem onClick={logoutAction}>Logout</MenuItem>
             </Menu>
           </div>
         )}
@@ -192,4 +193,4 @@ const mapStateToProps = (state: AppState) => ({
   user: state.user
 });
 
-export default connect(mapStateToProps)(Navbar);
+export default connect(mapStateToProps, { logoutAction })(Navbar);

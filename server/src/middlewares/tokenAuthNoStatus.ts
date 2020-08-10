@@ -19,7 +19,6 @@ const authenticateTokenNoStatus = (
     token,
     process.env.TOKEN_SECRET as string,
     async (err: any, user: any) => {
-      if (!user) next();
       if (!user.username) next();
 
       // we could store the user in the token, but this way the information is surely up-to-date
