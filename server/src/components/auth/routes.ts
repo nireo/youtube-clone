@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { User } from "../../sequelize";
 import authenticateToken from "../../middlewares/tokenAuth";
 import jwt from "jsonwebtoken";
+import withAuth from "../../utils/withAuth";
 
 const router: express.Router = express.Router();
 
@@ -66,25 +67,23 @@ router.post("/login", async (req: express.Request, res: express.Response) => {
 
     const token = jwt.sign(
       { username: user.username, id: user.id },
-      process.env.TOKEN_SECRET as string
+      process.env.TOKEN_SECRET as string,
+      { expiresIn: "7d" }
     );
 
+    res.cookie("token", token, { httpOnly: true });
     res.json({ token, user });
   } catch (error) {
     res.status(500).json({ message: error });
   }
 });
 
-router.get(
-  "/me",
-  authenticateToken,
-  async (req: any, res: express.Response) => {
-    try {
-      res.json(req.user);
-    } catch (error) {
-      res.status(500).json({ message: error });
-    }
+router.get("/me", withAuth, async (req: any, res: express.Response) => {
+  try {
+    res.json(req.user);
+  } catch (error) {
+    res.status(500).json({ message: error });
   }
-);
+});
 
 export default router;

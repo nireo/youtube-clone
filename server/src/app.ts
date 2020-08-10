@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 
 import videoRoutes from "./components/videos/routes";
 import authRoutes from "./components/auth/routes";
@@ -30,6 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(morgan("tiny"));
 app.use(handleSequelizeBaseError);
+app.use(cookieParser());
 
 app.use("/video", express.static("./videos"));
 app.use("/avatars", express.static("./avatars"));

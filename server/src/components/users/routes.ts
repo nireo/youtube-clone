@@ -10,6 +10,7 @@ import {
 import authenticateToken from "../../middlewares/tokenAuth";
 import getFileExtension from "../../utils/getFileExtension";
 import fs from "fs";
+import withAuth from "../../utils/withAuth";
 
 const router: express.Router = express.Router();
 
@@ -214,7 +215,7 @@ router.delete(
 
 router.get(
   "/subscription",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const subscriptions: any = await Subscription.findAll({
