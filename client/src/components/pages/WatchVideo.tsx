@@ -381,13 +381,12 @@ const WatchVideo: React.FC<Props> = ({
                   </div>
                   {user === null ? (
                     <div>
-                      <Button
-                        variant="contained"
-                        color="secondary"
+                      <button
+                        className="button button-red"
                         onClick={handleClick}
                       >
                         Subscribe
-                      </Button>
+                      </button>
                       <Popover
                         open={open}
                         onClose={() => setAnchorEl(null)}
@@ -416,17 +415,19 @@ const WatchVideo: React.FC<Props> = ({
                   ) : (
                     <div>
                       {subscribed ? (
-                        <Button variant="contained" onClick={handleUnsubscribe}>
+                        <button
+                          className="button button-gray"
+                          onClick={handleUnsubscribe}
+                        >
                           Subscribed
-                        </Button>
+                        </button>
                       ) : (
-                        <Button
-                          variant="contained"
-                          color="secondary"
+                        <button
+                          className="button button-red"
                           onClick={handleSubscribe}
                         >
                           Subscribe
-                        </Button>
+                        </button>
                       )}
                     </div>
                   )}

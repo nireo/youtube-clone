@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, ChangeEvent } from "react";
 import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { User } from "../../interfaces/User";
-import { getChannelData, updateUser } from "../../services/user";
+import { getChannelData } from "../../services/user";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
@@ -13,9 +13,6 @@ import { VideoEntryFull } from "../other/VideoEntryFull";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { Helmet } from "react-helmet";
-import IconButton from "@material-ui/core/IconButton";
-import CreateIcon from "@material-ui/icons/Create";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { UserPlaylists } from "./UserPlaylists";
 import {
@@ -187,29 +184,27 @@ const UserChannel: React.FC<Props> = ({
                 </div>
                 {user !== null && user.id === channelUser.id ? (
                   <div style={{ marginTop: "2rem" }}>
-                    <Button
-                      style={{ marginRight: "1rem" }}
-                      variant="contained"
-                      color="secondary"
+                    <button
+                      className="button button-blue"
                       onClick={() => setOpen(true)}
                     >
                       Update
-                    </Button>
+                    </button>
                   </div>
                 ) : (
                   <div style={{ marginTop: "2rem" }}>
                     {subscribed ? (
-                      <Button variant="contained" onClick={handleUnsubscribe}>
-                        Subscribed
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={handleSubscription}
+                      <button
+                        onClick={handleUnsubscribe}
+                        className="button button-gray"
                       >
-                        Subscribe
-                      </Button>
+                        Subscribed
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleSubscription}
+                        className="button button-red"
+                      ></button>
                     )}
                   </div>
                 )}

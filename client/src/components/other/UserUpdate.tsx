@@ -52,6 +52,13 @@ const UsernameUpdate: React.FC<Props> = ({ user, updateUserAction }) => {
           color="secondary"
           fullWidth
         />
+        <button
+          className="button button-red"
+          type="submit"
+          style={{ marginTop: "2rem" }}
+        >
+          Update user
+        </button>
         <Button
           variant="contained"
           style={{ marginTop: "2rem" }}

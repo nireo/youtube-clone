@@ -5,7 +5,6 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import { User } from "../../interfaces/User";
 import Container from "@material-ui/core/Container";
 import { updateUser } from "../../services/user";
-import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
@@ -62,14 +61,13 @@ const ChannelUpdateModal: React.FC<Props> = ({ user }) => {
           rows={4}
           style={{ resize: "none", marginTop: "1rem" }}
         />
-        <Button
-          color="secondary"
-          variant="contained"
+        <button
+          className="button button-gray"
           type="submit"
           style={{ marginTop: "1rem" }}
         >
           Update
-        </Button>
+        </button>
       </form>
     </Container>
   );

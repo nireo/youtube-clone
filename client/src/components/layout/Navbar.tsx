@@ -21,6 +21,11 @@ import NotificationWidget from "../other/NotificationWidget";
 import VideoCallIcon from "@material-ui/icons/VideoCall";
 import Avatar from "@material-ui/core/Avatar";
 import { logoutAction } from "../../store/userReducer";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
+import SettingsIcon from "@material-ui/icons/Settings";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const drawerWidth = 200;
 
@@ -175,12 +180,25 @@ const Navbar: React.FC<Props> = ({ user, open, setOpen, logoutAction }) => {
               onClose={handleMenuClose}
             >
               <MenuItem onClick={() => handleRedirect(`/channel/${user.id}`)}>
-                My Channel
+                <ListItemIcon>
+                  <AccountBoxIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Your channel"} />
               </MenuItem>
               <MenuItem onClick={() => handleRedirect("/settings")}>
-                Settings
+                <ListItemIcon>
+                  <SettingsIcon />
+                </ListItemIcon>
+
+                <ListItemText primary={"Settings"} />
               </MenuItem>
-              <MenuItem onClick={logoutAction}>Logout</MenuItem>
+              <MenuItem onClick={logoutAction}>
+                <ListItemIcon>
+                  <ExitToAppIcon />
+                </ListItemIcon>
+
+                <ListItemText primary={"Logout"} />
+              </MenuItem>
             </Menu>
           </div>
         )}

@@ -4,12 +4,14 @@ import userReducer from "./userReducer";
 import videoReducer from "./videoReducer";
 import notificationReducer from "./notificationReducer";
 import subscriptionsReducer from "./subscriptionReducer";
+import playlistReducer from "./playlistReducer";
 
 const rootReducer = combineReducers({
   user: userReducer,
   videos: videoReducer,
   notifications: notificationReducer,
-  subscriptions: subscriptionsReducer
+  subscriptions: subscriptionsReducer,
+  playlists: playlistReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

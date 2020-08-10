@@ -11,9 +11,9 @@ const reducer = (state: Playlist[] = [], action: any) => {
   }
 };
 
-export const initPlaylistsAction = () => {
+export const initPlaylistsAction = (userId: string) => {
   return async (dispatch: Dispatch) => {
-    const playlists = await getUserPlaylists();
+    const playlists = await getUserPlaylists(userId);
     dispatch({
       type: "INIT_PLAYLISTS",
       data: playlists
