@@ -66,8 +66,6 @@ const UserChannel: React.FC<Props> = ({
   const [channelUser, setChannelUser] = useState<User | null>(null);
   const [channelVideos, setChannelVideos] = useState<Video[] | null>(null);
   const [page, setPage] = useState<number>(0);
-  const [editing, setEditing] = useState<boolean>(false);
-  const [newDescription, setNewDescription] = useState<string>("");
   const [subscribed, setSubscribed] = useState<boolean | null>(null);
   const [open, setOpen] = useState<boolean>(false);
 
@@ -78,14 +76,6 @@ const UserChannel: React.FC<Props> = ({
     setChannelUser(data.user);
     setChannelVideos(data.videos);
   }, [id]);
-
-  const stopEditing = () => {
-    setEditing(false);
-  };
-
-  const startEditing = () => {
-    setEditing(true);
-  };
 
   const closeModal = () => {
     setOpen(false);
@@ -114,11 +104,6 @@ const UserChannel: React.FC<Props> = ({
     setPage(newValue);
   };
 
-  const handleChannelUpdate = async (event: ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    await updateUser({ description: newDescription });
-  };
-
   const handleUnsubscribe = () => {
     if (user !== null && channelUser !== null) {
       removeSubscriptionAction(channelUser.id);
@@ -131,11 +116,6 @@ const UserChannel: React.FC<Props> = ({
       subscribeToUserAction(channelUser.id);
     }
   };
-  /*
-    <div className={classes.paper}>
-     {avatarUpload === true ? <AvatarUpdate /> : <BannerUpdate />}
-    </div>
-  */
 
   return (
     <div>

@@ -29,6 +29,9 @@ const Home: React.FC<Props> = ({ getVideosAction, videos }) => {
           <VideoEntrySmall key={video.id} video={video} />
         ))}
       </div>
+      <button style={{ marginTop: "5rem" }} className="button button-red">
+        Subscribe
+      </button>
     </Container>
   );
 };

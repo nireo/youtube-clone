@@ -21,7 +21,7 @@ export const formatDate = (dateString: string): string => {
     otherDate.getDate()
   );
 
-  // TODO: Rework since this looks kinda bad
+  // TODO: Rework, since this looks kinda bad
   const dayDiff = Math.floor((utc2 - utc1) / MS_IN_DAY);
   if (dayDiff === 0) {
     const hourDiff = Math.floor((utc2 - utc1) / MS_IN_HOUR);

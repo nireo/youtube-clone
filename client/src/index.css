@@ -30,3 +30,29 @@ code {
   margin-left: "1rem";
   margin-right: "1rem";
 }
+
+.button {
+  position: relative;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 10px 16px;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-family: "Roboto", "Ubuntu", sans-serif;
+  border: none;
+}
+
+.button-red {
+  color: #fff;
+  background-color: #c00;
+}
+
+.button-blue {
+  color: #030303;
+  background-color: #3ea6ff;
+}
+
+.button-gray {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #aaa;
+}
