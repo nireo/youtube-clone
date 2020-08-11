@@ -442,6 +442,8 @@ const WatchVideo: React.FC<Props> = ({
             <Grid item sm={12} lg={3} md={3}>
               {playlistMode && playlistVideos ? (
                 <div>
+                  <Typography>Playlist videos</Typography>
+                  <Divider />
                   {playlistVideos.map((video: Video) => (
                     <PlaylistVideoEntry video={video} key={video.id} />
                   ))}

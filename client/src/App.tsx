@@ -25,6 +25,7 @@ import red from "@material-ui/core/colors/red";
 import Settings from "./components/pages/Settings";
 import CommunityPost from "./components/pages/CommunityPost";
 import EditVideo from "./components/pages/EditVideo";
+import PlayPlaylist from "./components/pages/PlayPlaylist";
 
 type Props = {
   user: User | null;
@@ -96,6 +97,13 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
               exact
               render={({ match }) => (
                 <PlaylistVideos playlistId={match.params.id} />
+              )}
+            />
+            <Route
+              path="/play/playlist/:playlistId"
+              exact
+              render={({ match }) => (
+                <PlayPlaylist playlistId={match.params.playlistId} />
               )}
             />
             <Route render={() => <NotFound />} />

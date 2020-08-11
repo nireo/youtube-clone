@@ -14,6 +14,7 @@ import { User } from "../../interfaces/User";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { PlaylistVideoEntry } from "../other/VideoPlaylistEntry";
+import { Link } from "react-router-dom";
 
 type Props = {
   playlistId: string;
@@ -108,6 +109,14 @@ const PlaylistVideos: React.FC<Props> = ({ playlistId, user }) => {
                   </div>
                 </form>
               )}
+              <Link to={`/play/playlist/${playlistId}`}>
+                <button
+                  style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                  className="button button-blue"
+                >
+                  Play
+                </button>
+              </Link>
             </Paper>
           </Grid>
           <Grid xs={8}>

@@ -13,14 +13,14 @@ const PlayPlaylist: React.FC<Props> = ({ playlistId }) => {
   const [playlist, setPlaylist] = useState<null | Playlist>(null);
   const [videos, setVideos] = useState<null | Video[]>(null);
   const [loaded, setLoaded] = useState<boolean>(false);
-  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<Video[] | null>(null);
 
   const loadPlaylist = useCallback(async () => {
     const data = await getPlaylistVideos(playlistId);
     setPlaylist(data.playlist);
-    setVideos(data.videos);
+    setVideos(data.videos[0]);
     if (data.videos.length > 0) {
-      setSelectedVideo(null);
+      setSelectedVideo(data.videos[0]);
     }
   }, [playlistId]);
 
@@ -31,6 +31,8 @@ const PlayPlaylist: React.FC<Props> = ({ playlistId }) => {
     }
   }, [loaded, videos, playlist, loadPlaylist]);
 
+  console.log(videos);
+
   return (
     <div>
       {!loaded ? (
@@ -39,10 +41,10 @@ const PlayPlaylist: React.FC<Props> = ({ playlistId }) => {
         </div>
       ) : (
         <div>
-          {playlist && videos && selectedVideo && (
+          {playlist !== null && videos !== null && selectedVideo !== null && (
             <div>
               <WatchVideo
-                id={selectedVideo.id}
+                id={selectedVideo[0].id}
                 playlistMode
                 playlistVideos={videos}
               />
