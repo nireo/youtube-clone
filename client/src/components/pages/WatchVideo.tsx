@@ -170,7 +170,8 @@ const WatchVideo: React.FC<Props> = ({
     subscribed,
     subscriptions,
     selectedVideo,
-    id
+    id,
+    currentVideoId
   ]);
 
   const open = Boolean(anchorEl);
@@ -463,25 +464,33 @@ const WatchVideo: React.FC<Props> = ({
               )}
             </Grid>
             <Grid item sm={12} lg={3} md={3}>
-              {playlistMode && playlistVideos && setSelectedVideo ? (
-                <div>
-                  <Typography>Playlist videos</Typography>
-                  <Divider />
-                  {playlistVideos.map((video: any) => (
-                    <PlaylistVideoEntry
-                      video={video[0]}
-                      key={video[0].id}
-                      setSelectedVideo={setSelectedVideo}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div>
-                  {video.next.map((video: Video) => (
-                    <SmallListVideo key={video.id} video={video} />
-                  ))}
-                </div>
-              )}
+              {playlistMode &&
+                playlistVideos &&
+                setSelectedVideo &&
+                selectedVideo && (
+                  <div
+                    style={{
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                      padding: "1rem 1rem"
+                    }}
+                  >
+                    <Typography>Playlist videos</Typography>
+                    <Divider />
+                    {playlistVideos.map((video: any) => (
+                      <PlaylistVideoEntry
+                        video={video[0]}
+                        key={video[0].id}
+                        setSelectedVideo={setSelectedVideo}
+                        selectedVideoId={selectedVideo.id}
+                      />
+                    ))}
+                  </div>
+                )}
+              <div style={{ marginTop: "1rem" }}>
+                {video.next.map((video: Video) => (
+                  <SmallListVideo key={video.id} video={video} />
+                ))}
+              </div>
             </Grid>
           </Grid>
           <Grid container>

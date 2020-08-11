@@ -7,15 +7,25 @@ import { Link } from "react-router-dom";
 type Props = {
   video: Video;
   setSelectedVideo?: Dispatch<SetStateAction<Video | null>>;
+  selectedVideoId?: string;
 };
 
 export const PlaylistVideoEntry: React.FC<Props> = ({
   video,
-  setSelectedVideo
+  setSelectedVideo,
+  selectedVideoId
 }) => {
   if (setSelectedVideo !== undefined) {
     return (
-      <ListItem button onClick={() => setSelectedVideo(video)}>
+      <ListItem
+        button
+        className={`${
+          selectedVideoId && selectedVideoId === video.id
+            ? "selected-playlist-item"
+            : ""
+        } `}
+        onClick={() => setSelectedVideo(video)}
+      >
         <ListItemText
           style={{ color: "#fff" }}
           primary={video.title}
