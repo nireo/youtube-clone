@@ -160,7 +160,7 @@ router.post(
   }
 );
 
-router.patch(
+router.delete(
   "/video/:playlistId",
   authenticateToken,
   async (req: any, res: express.Response) => {

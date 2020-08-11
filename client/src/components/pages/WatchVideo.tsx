@@ -3,7 +3,9 @@ import React, {
   useEffect,
   useCallback,
   MouseEvent,
-  ChangeEvent
+  ChangeEvent,
+  Dispatch,
+  SetStateAction
 } from "react";
 import { connect } from "react-redux";
 import { AppState } from "../../store";
@@ -84,7 +86,9 @@ type Props = {
   subscribeToUserAction: (userId: string) => void;
   removeSubscriptionAction: (userId: string) => void;
   playlistMode?: boolean;
-  playlistVideos?: Video[];
+  playlistVideos?: any;
+  setSelectedVideo?: Dispatch<SetStateAction<Video | null>>;
+  selectedVideo?: Video | null;
 };
 
 interface WatchPage {
@@ -101,7 +105,9 @@ const WatchVideo: React.FC<Props> = ({
   subscribeToUserAction,
   removeSubscriptionAction,
   playlistMode,
-  playlistVideos
+  playlistVideos,
+  setSelectedVideo,
+  selectedVideo
 }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [video, setVideo] = useState<WatchPage | null>(null);
@@ -112,6 +118,7 @@ const WatchVideo: React.FC<Props> = ({
   const [editing, setEditing] = useState<boolean>(false);
   const [subscribed, setSubscribed] = useState<boolean | null>(null);
   const [openPlaylist, setOpenPlaylist] = useState<boolean>(false);
+  const [currentVideoId, setCurrentVideoId] = useState<string>("");
 
   // 0=no like, 1=liked, 2=disliked
   const [likeStatus, setLikeStatus] = useState<number>(0);
@@ -133,6 +140,7 @@ const WatchVideo: React.FC<Props> = ({
 
   useEffect(() => {
     if (!loaded && video === null) {
+      setCurrentVideoId(id);
       loadVideo();
       setLoaded(true);
     }
@@ -148,7 +156,22 @@ const WatchVideo: React.FC<Props> = ({
         setSubscribed(false);
       }
     }
-  }, [loaded, video, loadVideo, user, subscribed, subscriptions]);
+
+    if (selectedVideo && selectedVideo.id !== currentVideoId) {
+      console.log("COME ON UPDATE");
+      setVideo(null);
+      setLoaded(false);
+    }
+  }, [
+    loaded,
+    video,
+    loadVideo,
+    user,
+    subscribed,
+    subscriptions,
+    selectedVideo,
+    id
+  ]);
 
   const open = Boolean(anchorEl);
 
@@ -440,12 +463,16 @@ const WatchVideo: React.FC<Props> = ({
               )}
             </Grid>
             <Grid item sm={12} lg={3} md={3}>
-              {playlistMode && playlistVideos ? (
+              {playlistMode && playlistVideos && setSelectedVideo ? (
                 <div>
                   <Typography>Playlist videos</Typography>
                   <Divider />
-                  {playlistVideos.map((video: Video) => (
-                    <PlaylistVideoEntry video={video} key={video.id} />
+                  {playlistVideos.map((video: any) => (
+                    <PlaylistVideoEntry
+                      video={video[0]}
+                      key={video[0].id}
+                      setSelectedVideo={setSelectedVideo}
+                    />
                   ))}
                 </div>
               ) : (
