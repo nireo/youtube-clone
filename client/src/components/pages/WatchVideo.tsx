@@ -40,6 +40,7 @@ import Modal from "@material-ui/core/Modal";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import { PlaylistVideoEntry } from "../other/VideoPlaylistEntry";
 
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
@@ -82,6 +83,8 @@ type Props = {
   subscriptions: User[];
   subscribeToUserAction: (userId: string) => void;
   removeSubscriptionAction: (userId: string) => void;
+  playlistMode?: boolean;
+  playlistVideos?: Video[];
 };
 
 interface WatchPage {
@@ -96,7 +99,9 @@ const WatchVideo: React.FC<Props> = ({
   user,
   subscriptions,
   subscribeToUserAction,
-  removeSubscriptionAction
+  removeSubscriptionAction,
+  playlistMode,
+  playlistVideos
 }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [video, setVideo] = useState<WatchPage | null>(null);
@@ -435,9 +440,19 @@ const WatchVideo: React.FC<Props> = ({
               )}
             </Grid>
             <Grid item sm={12} lg={3} md={3}>
-              {video.next.map((video: Video) => (
-                <SmallListVideo video={video} />
-              ))}
+              {playlistMode && playlistVideos ? (
+                <div>
+                  {playlistVideos.map((video: Video) => (
+                    <PlaylistVideoEntry video={video} key={video.id} />
+                  ))}
+                </div>
+              ) : (
+                <div>
+                  {video.next.map((video: Video) => (
+                    <SmallListVideo key={video.id} video={video} />
+                  ))}
+                </div>
+              )}
             </Grid>
           </Grid>
           <Grid container>
