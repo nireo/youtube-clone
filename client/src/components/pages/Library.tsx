@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { connect } from 'react-redux';
-import { AppState } from '../../store';
-import Container from '@material-ui/core/Container';
-import { User } from '../../interfaces/User';
-import { Redirect } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
-import { Video } from '../../interfaces/Video';
-import { getLibraryData } from '../../services/user';
-import { Helmet } from 'react-helmet';
-import { VideoEntrySmall } from '../other/VideoEntrySmall';
-import Divider from '@material-ui/core/Divider';
+import React, { useState, useEffect, useCallback } from "react";
+import { connect } from "react-redux";
+import { AppState } from "../../store";
+import Container from "@material-ui/core/Container";
+import { User } from "../../interfaces/User";
+import { Redirect } from "react-router-dom";
+import Typography from "@material-ui/core/Typography";
+import { Video } from "../../interfaces/Video";
+import { getLibraryData } from "../../services/user";
+import { Helmet } from "react-helmet";
+import { VideoEntrySmall } from "../other/VideoEntrySmall";
+import Divider from "@material-ui/core/Divider";
+import { Playlist } from "../../interfaces/Playlist";
+import { PlaylistListEntry } from "../other/PlaylistListEntry";
 
 type Props = {
   user: User | null;
@@ -20,12 +22,14 @@ const Library: React.FC<Props> = ({ user }) => {
   const [watchLaterVideos, setWatchLaterVideos] = useState<Video[]>([]);
   const [loaded, setLoaded] = useState<boolean>(false);
   const [liked, setLiked] = useState<Video[]>([]);
+  const [playlists, setPlaylists] = useState<Playlist[]>([]);
 
   const loadLibraryData = useCallback(async () => {
     const data = await getLibraryData();
     setHistoryVideos(data.history);
     setWatchLaterVideos(data.watchLater);
     setLiked(data.liked);
+    setPlaylists(data.playlists);
   }, []);
 
   useEffect(() => {
@@ -46,7 +50,7 @@ const Library: React.FC<Props> = ({ user }) => {
         <meta charSet="utf-8" />
       </Helmet>
       <Typography
-        style={{ marginTop: '2rem', fontSize: '1.1rem', marginBottom: '1rem' }}
+        style={{ marginTop: "2rem", fontSize: "1.1rem", marginBottom: "1rem" }}
       >
         <strong>History</strong>
       </Typography>
@@ -57,17 +61,17 @@ const Library: React.FC<Props> = ({ user }) => {
           </Typography>
         </div>
       ) : (
-        <div>
+        <div style={{ display: "flex" }}>
           {historyVideos.map((video: Video) => (
             <VideoEntrySmall key={`history-${video.id}`} video={video} />
           ))}
         </div>
       )}
-      <Divider style={{ marginTop: '3rem', marginBottom: '1rem' }} />
+      <Divider style={{ marginTop: "3rem", marginBottom: "1rem" }} />
       <Typography
         style={{
-          marginTop: '2rem',
-          fontSize: '1.1rem',
+          marginTop: "2rem",
+          fontSize: "1.1rem"
         }}
         variant="body1"
       >
@@ -87,10 +91,10 @@ const Library: React.FC<Props> = ({ user }) => {
           ))}
         </div>
       )}
-      <Divider style={{ marginTop: '1rem', marginBottom: '1rem' }} />
+      <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
       <Typography
         style={{
-          fontSize: '1.1rem',
+          fontSize: "1.1rem"
         }}
         variant="body1"
       >
@@ -110,12 +114,33 @@ const Library: React.FC<Props> = ({ user }) => {
           ))}
         </div>
       )}
+      <Divider style={{ marginTop: "1rem", marginBottom: "1rem" }} />
+      <Typography style={{ fontSize: "1.1rem" }} variant="body1">
+        <strong>Playlists</strong>
+      </Typography>
+      {playlists.length === 0 ? (
+        <div>
+          <Typography color="textSecondary" variant="body2">
+            You haven't created any playlists, you can create playlists when
+            watching videos!
+          </Typography>
+        </div>
+      ) : (
+        <div>
+          {playlists.map((playlist: Playlist) => (
+            <PlaylistListEntry
+              key={`playlist-${playlist.id}`}
+              playlist={playlist}
+            />
+          ))}
+        </div>
+      )}
     </Container>
   );
 };
 
 const mapStateToProps = (state: AppState) => ({
-  user: state.user,
+  user: state.user
 });
 
 export default connect(mapStateToProps)(Library);
