@@ -43,6 +43,7 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { PlaylistVideoEntry } from "../other/VideoPlaylistEntry";
+import CommentField from "./WatchPageComponents/CommentField";
 
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
@@ -495,60 +496,11 @@ const WatchVideo: React.FC<Props> = ({
           </Grid>
           <Grid container>
             <Grid sm={12} lg={9} md={9}>
-              <div style={{ marginTop: "2rem" }}>
-                <Divider />
-                <Typography variant="h6" style={{ marginTop: "1rem" }}>
-                  {video.comments.length} comments
-                </Typography>
-                {user !== null ? (
-                  <div style={{ marginTop: "1rem", marginBottom: "2rem" }}>
-                    <div style={{ display: "flex" }}>
-                      <Avatar
-                        src={`http://localhost:3001/avatars/${user.avatar}`}
-                        className={classes.commentAvatar}
-                        style={{ marginRight: "1rem" }}
-                      />
-                      <TextField
-                        placeholder="Add public comment"
-                        value={comment}
-                        onChange={handleCommentInputChange}
-                        fullWidth
-                      />
-                    </div>
-                    {editing && (
-                      <div style={{ float: "right", display: "flex" }}>
-                        <Button onClick={cancelCommentEdit}>Cancel</Button>
-                        <form onSubmit={handleCommentCreation}>
-                          <Button variant="contained" type="submit">
-                            Create comment
-                          </Button>
-                        </form>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div style={{ display: "flex", marginTop: "1rem" }}>
-                    <Avatar
-                      src=""
-                      className={classes.commentAvatar}
-                      style={{ marginRight: "1rem" }}
-                    />
-                    <TextField
-                      placeholder="Add public comment"
-                      fullWidth
-                      disabled
-                    />
-                  </div>
-                )}
-
-                {comments.map((comment: Comment) => (
-                  <CommentEntry
-                    key={comment.id}
-                    comment={comment}
-                    handleCommentRate={handleCommentRate}
-                  />
-                ))}
-              </div>
+              <CommentField
+                comments={video.comments}
+                handleCommentRate={handleCommentRate}
+                handleCommentCreation={handleCommentCreation}
+              />
             </Grid>
           </Grid>
         </div>

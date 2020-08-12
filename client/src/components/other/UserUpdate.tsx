@@ -4,7 +4,6 @@ import { AppState } from "../../store";
 import { User } from "../../interfaces/User";
 import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
-import Button from "@material-ui/core/Button";
 import { updateUser } from "../../services/user";
 import { updateUserAction } from "../../store/userReducer";
 
