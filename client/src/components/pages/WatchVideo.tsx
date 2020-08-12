@@ -26,7 +26,6 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Popover from "@material-ui/core/Popover";
-import TextField from "@material-ui/core/TextField";
 import { createComment, rateComment } from "../../services/comment";
 import { Helmet } from "react-helmet";
 import Grid from "@material-ui/core/Grid";
@@ -35,7 +34,6 @@ import {
   subscribeToUserAction,
   removeSubscriptionAction
 } from "../../store/subscriptionReducer";
-import { CommentEntry } from "../other/CommentEntry";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import AddVideoToPlaylistWidget from "../other/AddVideoToPlaylistWidget";
 import Modal from "@material-ui/core/Modal";
@@ -114,9 +112,7 @@ const WatchVideo: React.FC<Props> = ({
   const [video, setVideo] = useState<WatchPage | null>(null);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const [comment, setComment] = useState<string>("");
   const [comments, setComments] = useState<Comment[] | null>(null);
-  const [editing, setEditing] = useState<boolean>(false);
   const [subscribed, setSubscribed] = useState<boolean | null>(null);
   const [openPlaylist, setOpenPlaylist] = useState<boolean>(false);
   const [currentVideoId, setCurrentVideoId] = useState<string>("");
@@ -189,19 +185,6 @@ const WatchVideo: React.FC<Props> = ({
       removeSubscriptionAction(video.video.User.id);
       setSubscribed(false);
     }
-  };
-
-  const handleCommentInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value !== "") {
-      setEditing(true);
-    }
-
-    setComment(event.target.value);
-  };
-
-  const cancelCommentEdit = () => {
-    setComment("");
-    setEditing(false);
   };
 
   const handleCommentCreation = async (event: ChangeEvent<HTMLFormElement>) => {
