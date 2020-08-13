@@ -20,12 +20,6 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import { User } from "../../interfaces/User";
-import Avatar from "@material-ui/core/Avatar";
-import { deepOrange, deepPurple } from "@material-ui/core/colors";
-import { makeStyles, Theme } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import Popover from "@material-ui/core/Popover";
 import { createComment, rateComment } from "../../services/comment";
 import { Helmet } from "react-helmet";
 import Grid from "@material-ui/core/Grid";
@@ -34,49 +28,9 @@ import {
   subscribeToUserAction,
   removeSubscriptionAction
 } from "../../store/subscriptionReducer";
-import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
-import AddVideoToPlaylistWidget from "../other/AddVideoToPlaylistWidget";
-import Modal from "@material-ui/core/Modal";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ThumbDownIcon from "@material-ui/icons/ThumbDown";
-import LinearProgress from "@material-ui/core/LinearProgress";
 import { PlaylistVideoEntry } from "../other/VideoPlaylistEntry";
 import CommentField from "./WatchPageComponents/CommentField";
-
-const useStyles = makeStyles((theme: Theme) => ({
-  orange: {
-    color: theme.palette.getContrastText(deepOrange[500]),
-    backgroundColor: deepOrange[500]
-  },
-  purple: {
-    color: theme.palette.getContrastText(deepPurple[500]),
-    backgroundColor: deepPurple[500]
-  },
-  avatar: {
-    width: theme.spacing(6),
-    height: theme.spacing(6)
-  },
-  commentAvatar: {
-    width: theme.spacing(5),
-    height: theme.spacing(5)
-  },
-  paper: {
-    position: "absolute",
-    width: 300,
-    backgroundColor: "rgba(33, 33, 33, 0.98)",
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 2, 3)
-  },
-  modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  progress: {
-    colorPrimary: "#909090"
-  }
-}));
+import VideoInformation from "./WatchPageComponents/VideoInformation";
 
 type Props = {
   id: string;
@@ -110,23 +64,12 @@ const WatchVideo: React.FC<Props> = ({
 }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [video, setVideo] = useState<WatchPage | null>(null);
-  const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [comments, setComments] = useState<Comment[] | null>(null);
   const [subscribed, setSubscribed] = useState<boolean | null>(null);
-  const [openPlaylist, setOpenPlaylist] = useState<boolean>(false);
   const [currentVideoId, setCurrentVideoId] = useState<string>("");
 
   // 0=no like, 1=liked, 2=disliked
   const [likeStatus, setLikeStatus] = useState<number>(0);
-
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const closeModal = () => {
-    setOpenPlaylist(false);
-  };
 
   const loadVideo = useCallback(async () => {
     const data = await getSingleVideo(id);
@@ -155,7 +98,6 @@ const WatchVideo: React.FC<Props> = ({
     }
 
     if (selectedVideo && selectedVideo.id !== currentVideoId) {
-      console.log("COME ON UPDATE");
       setVideo(null);
       setLoaded(false);
     }
@@ -170,8 +112,6 @@ const WatchVideo: React.FC<Props> = ({
     id,
     currentVideoId
   ]);
-
-  const open = Boolean(anchorEl);
 
   const handleSubscribe = async () => {
     if (user !== null && video !== null && video.video.User !== undefined) {
@@ -268,184 +208,12 @@ const WatchVideo: React.FC<Props> = ({
                   type="video/webm"
                 />
               </video>
-              <Typography variant="h6">{video.video.title}</Typography>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                  <div style={{ display: "flex", marginTop: "0.75rem" }}>
-                    <Typography
-                      variant="body2"
-                      style={{ marginRight: "0.25rem" }}
-                      color="textSecondary"
-                    >
-                      {video.video.views} views
-                    </Typography>
-                    •
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      style={{ marginLeft: "0.25rem" }}
-                    >
-                      {new Date(video.video.createdAt).toDateString()}
-                    </Typography>
-                  </div>
-                </div>
-                <div style={{ display: "flex" }}>
-                  <div>
-                    <div style={{ display: "flex" }}>
-                      <Button
-                        style={{
-                          backgroundColor: "transparent",
-                          color: "#909090",
-                          fontSize: "0.9rem"
-                        }}
-                        startIcon={<ThumbUpIcon />}
-                      >
-                        {video.video.likes}
-                      </Button>
-                      <Button
-                        style={{
-                          backgroundColor: "transparent",
-                          color: "#909090",
-                          fontSize: "0.9rem"
-                        }}
-                        startIcon={<ThumbDownIcon />}
-                      >
-                        {video.video.dislikes}
-                      </Button>
-                    </div>
-                    <LinearProgress
-                      variant="determinate"
-                      className={classes.progress}
-                      value={
-                        video.video.likes - video.video.dislikes > 0
-                          ? 0
-                          : video.video.likes - video.video.dislikes
-                      }
-                    />
-                  </div>
-                  <Button
-                    startIcon={<PlaylistAddIcon />}
-                    style={{ background: "transparent", color: "#909090" }}
-                    onClick={() => setOpenPlaylist(true)}
-                  >
-                    Save
-                  </Button>
-                  <Modal
-                    open={openPlaylist}
-                    onClose={() => setOpenPlaylist(false)}
-                    className={classes.modal}
-                  >
-                    <div className={classes.paper}>
-                      <AddVideoToPlaylistWidget
-                        videoId={id}
-                        closeModal={closeModal}
-                      />
-                    </div>
-                  </Modal>
-                </div>
-              </div>
-              <Divider style={{ marginBottom: "1rem" }} />
-              {video.video.User !== undefined && (
-                <div
-                  style={{
-                    display: "flex",
-                    marginBottom: "1rem",
-                    justifyContent: "space-between"
-                  }}
-                >
-                  <div style={{ display: "flex" }}>
-                    <Link to={`/channel/${video.video.User.id}`}>
-                      <Avatar
-                        className={classes.avatar}
-                        src={`http://localhost:3001/avatars/${video.video.User.avatar}`}
-                      ></Avatar>
-                    </Link>
-                    <div>
-                      <Link
-                        to={`/channel/${video.video.User.id}`}
-                        style={{ textDecoration: "none" }}
-                      >
-                        <Typography
-                          style={{ marginLeft: "0.5rem" }}
-                          color="textPrimary"
-                        >
-                          <strong>{video.video.User.username}</strong>
-                        </Typography>
-                        <Typography
-                          style={{ marginLeft: "0.5rem" }}
-                          color="textSecondary"
-                          variant="body2"
-                        >
-                          {video.video.User.subscribers} subscribers
-                        </Typography>
-                      </Link>
-                      <Typography
-                        variant="body1"
-                        color="textPrimary"
-                        style={{
-                          fontSize: "0.9rem",
-                          marginLeft: "0.5rem",
-                          marginTop: "1rem"
-                        }}
-                      >
-                        {video.video.description}
-                      </Typography>
-                    </div>
-                  </div>
-                  {user === null ? (
-                    <div>
-                      <button
-                        className="button button-red"
-                        onClick={handleClick}
-                      >
-                        Subscribe
-                      </button>
-                      <Popover
-                        open={open}
-                        onClose={() => setAnchorEl(null)}
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "center"
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "center"
-                        }}
-                      >
-                        <div style={{ padding: "1rem" }}>
-                          You need to be logged in to subscribe.
-                          <Divider
-                            style={{
-                              marginTop: "0.5rem",
-                              marginBottom: "0.5rem"
-                            }}
-                          />
-                          <Button variant="outlined">Login</Button>
-                        </div>
-                      </Popover>
-                    </div>
-                  ) : (
-                    <div>
-                      {subscribed ? (
-                        <button
-                          className="button button-gray"
-                          onClick={handleUnsubscribe}
-                        >
-                          Subscribed
-                        </button>
-                      ) : (
-                        <button
-                          className="button button-red"
-                          onClick={handleSubscribe}
-                        >
-                          Subscribe
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
+              <VideoInformation
+                subscribed={subscribed}
+                video={video.video}
+                handleUnsubscribe={handleUnsubscribe}
+                handleSubscribe={handleSubscribe}
+              />
             </Grid>
             <Grid item sm={12} lg={3} md={3}>
               {playlistMode &&

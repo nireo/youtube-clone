@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type Props = {
-  subscribed?: boolean;
+  subscribed: boolean | null;
   user: User | null;
   video: Video;
   handleSubscribe: () => Promise<void>;
