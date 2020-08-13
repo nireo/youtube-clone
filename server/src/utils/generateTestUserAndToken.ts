@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { User } from "../sequelize";
+import { User, Video } from "../sequelize";
 import jwt from "jsonwebtoken";
 
 export interface TestUser {
@@ -22,6 +22,21 @@ export const generateTestUserAndToken = async (): Promise<TestUser> => {
   return { token, user };
 };
 
+export const generateTestVideo = async (): Promise<any> => {
+  const user: any = await User.findOne({ where: { username: "test" } });
+
+  const video = await Video.create({
+    id: uuidv4(),
+    title: "test video",
+    description: null,
+    fileExtension: "mp4",
+    thumbnail: ".jpg",
+    userId: user.id
+  });
+
+  return video;
+};
+
 export const removeTestUser = async () => {
   const user = await User.findOne({ where: { username: "test" } });
   if (!user) {
@@ -29,4 +44,13 @@ export const removeTestUser = async () => {
   }
 
   await user.destroy();
+};
+
+export const removeTestVIdeo = async () => {
+  const video = await Video.findOne({ where: { title: "test video" } });
+  if (!video) {
+    return;
+  }
+
+  await video.destroy();
 };
