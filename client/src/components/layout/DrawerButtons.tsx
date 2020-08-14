@@ -15,78 +15,69 @@ import WatchLaterIcon from "@material-ui/icons/WatchLater";
 import PlaylistDrawerWidget from "../other/PlaylistDrawerWidget";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 
+interface ListItemInterface {
+  link: string;
+  iconComponent: any;
+  text: string;
+}
+
+const items: ListItemInterface[] = [
+  {
+    link: "/",
+    iconComponent: <HomeIcon />,
+    text: "Home"
+  },
+
+  {
+    link: "/trending",
+    iconComponent: <WhatshotIcon />,
+    text: "Trending"
+  },
+  {
+    link: "/subscriptions",
+    iconComponent: <SubscriptionsIcon />,
+    text: "Subscriptions"
+  },
+  {
+    link: "/library",
+    iconComponent: <VideoLibraryIcon />,
+    text: "Library"
+  },
+  {
+    link: "/history",
+    iconComponent: <HistoryIcon />,
+    text: "History"
+  },
+  {
+    link: "/your-videos",
+    iconComponent: <OndemandVideoIcon />,
+    text: "Your videos"
+  },
+  {
+    link: "/liked",
+    iconComponent: <ThumbUpIcon />,
+    text: "Liked videos"
+  },
+  {
+    link: "/watch-later",
+    iconComponent: <WatchLaterIcon />,
+    text: "Watch later"
+  }
+];
+
 export const DrawerButtons: React.FC = () => {
   return (
     <div>
       <Divider />
       <List>
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <ListItem button>
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText style={{ color: "#fff" }} primary="Home" />
-          </ListItem>
-        </Link>
-        <Link to="/trending" style={{ textDecoration: "none" }}>
-          <ListItem button>
-            <ListItemIcon>
-              <WhatshotIcon />
-            </ListItemIcon>
-            <ListItemText style={{ color: "#fff" }} primary="Trending" />
-          </ListItem>
-        </Link>
-        <Link to="/subscriptions" style={{ textDecoration: "none" }}>
-          <ListItem button>
-            <ListItemIcon>
-              <SubscriptionsIcon />
-            </ListItemIcon>
-            <ListItemText style={{ color: "#fff" }} primary="Subscriptions" />
-          </ListItem>
-        </Link>
-      </List>
-      <Divider />
-      <List>
-        <Link to="/library" style={{ textDecoration: "none" }}>
-          <ListItem button>
-            <ListItemIcon>
-              <VideoLibraryIcon />
-            </ListItemIcon>
-            <ListItemText style={{ color: "#fff" }} primary="Library" />
-          </ListItem>
-        </Link>
-        <Link to="/history" style={{ textDecoration: "none" }}>
-          <ListItem button>
-            <ListItemIcon>
-              <HistoryIcon />
-            </ListItemIcon>
-            <ListItemText style={{ color: "#fff" }} primary="History" />
-          </ListItem>
-        </Link>
-        <Link to="/your-videos" style={{ textDecoration: "none" }}>
-          <ListItem button>
-            <ListItemIcon>
-              <OndemandVideoIcon />
-            </ListItemIcon>
-            <ListItemText style={{ color: "#fff" }} primary="Your videos" />
-          </ListItem>
-        </Link>
-        <Link to="/liked" style={{ textDecoration: "none" }}>
-          <ListItem button>
-            <ListItemIcon>
-              <ThumbUpIcon />
-            </ListItemIcon>
-            <ListItemText style={{ color: "#fff" }} primary="Liked" />
-          </ListItem>
-        </Link>
-        <Link to="/watch-later" style={{ textDecoration: "none" }}>
-          <ListItem button>
-            <ListItemIcon>
-              <WatchLaterIcon />
-            </ListItemIcon>
-            <ListItemText style={{ color: "#fff" }} primary="Watch Later" />
-          </ListItem>
-        </Link>
+        {items.map((item: ListItemInterface) => (
+          <Link to={item.link} style={{ textDecoration: "none" }}>
+            <ListItem button>
+              <ListItemIcon>{item.iconComponent}</ListItemIcon>
+              <ListItemText style={{ color: "#fff" }} primary={item.text} />
+            </ListItem>
+          </Link>
+        ))}
       </List>
       <Divider />
       <PlaylistDrawerWidget />
