@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Home from "./components/pages/Home";
+import { Home } from "./components/pages/Home";
 import Login from "./components/pages/Login";
 import CreateVideo from "./components/pages/CreateVideo";
 import { Search } from "./components/pages/Search";

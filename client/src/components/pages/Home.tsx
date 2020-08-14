@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import { connect } from "react-redux";
-import { AppState } from "../../store";
-import { getVideosAction } from "../../store/videoReducer";
 import { Video } from "../../interfaces/Video";
 import { VideoEntrySmall } from "../other/VideoEntrySmall";
+import { getVideos } from "../../services/video";
 
-type Props = {
-  getVideosAction: () => void;
-  videos: Video[];
-};
-
-const Home: React.FC<Props> = ({ getVideosAction, videos }) => {
+export const Home: React.FC = () => {
   const [loaded, setLoaded] = useState<boolean>(false);
+  const [videos, setVideos] = useState<Video[]>([]);
+
+  const loadVideos = useCallback(async () => {
+    const data = await getVideos();
+    setVideos(data);
+  }, []);
+
   useEffect(() => {
     if (!loaded) {
-      getVideosAction();
+      loadVideos();
       setLoaded(true);
     }
-  }, [loaded, getVideosAction, videos]);
+  }, [loaded, loadVideos]);
 
   return (
     <Container maxWidth="xl" style={{ marginTop: "1rem" }}>
@@ -32,9 +32,3 @@ const Home: React.FC<Props> = ({ getVideosAction, videos }) => {
     </Container>
   );
 };
-
-const mapStateToProps = (state: AppState) => ({
-  videos: state.videos
-});
-
-export default connect(mapStateToProps, { getVideosAction })(Home);

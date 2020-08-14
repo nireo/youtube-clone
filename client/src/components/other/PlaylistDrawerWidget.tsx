@@ -12,6 +12,7 @@ import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
 import { Link } from "react-router-dom";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import ListSubheader from "@material-ui/core/ListSubheader";
 
 type Props = {
   user: User | null;
@@ -41,6 +42,7 @@ const PlaylistDrawerWidget: React.FC<Props> = ({
       {loaded && (
         <div>
           <List dense>
+            <ListSubheader>{"Playlists"}</ListSubheader>
             {playlists.slice(0, amount).map((playlist: Playlist) => (
               <Link
                 to={`/playlist/${playlist.id}`}

@@ -264,7 +264,6 @@ const WatchVideo: React.FC<Props> = ({
 };
 
 const mapStateToProps = (state: AppState) => ({
-  videos: state.videos,
   user: state.user,
   subscriptions: state.subscriptions
 });

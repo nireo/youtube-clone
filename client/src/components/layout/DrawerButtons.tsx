@@ -12,6 +12,7 @@ import VideoLibraryIcon from "@material-ui/icons/VideoLibrary";
 import HistoryIcon from "@material-ui/icons/History";
 import OndemandVideoIcon from "@material-ui/icons/OndemandVideo";
 import WatchLaterIcon from "@material-ui/icons/WatchLater";
+import PlaylistDrawerWidget from "../other/PlaylistDrawerWidget";
 
 export const DrawerButtons: React.FC = () => {
   return (
@@ -78,6 +79,8 @@ export const DrawerButtons: React.FC = () => {
           </ListItem>
         </Link>
       </List>
+      <Divider />
+      <PlaylistDrawerWidget />
       <Divider />
     </div>
   );

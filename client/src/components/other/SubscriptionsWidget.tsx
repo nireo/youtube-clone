@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import ListSubheader from "@material-ui/core/ListSubheader";
 
 const useStyles = makeStyles((theme: Theme) => ({
   avatar: {
@@ -52,6 +53,7 @@ const SubscriptionsWidget: React.FC<Props> = ({
       {loaded && (
         <div>
           <List dense={true}>
+            <ListSubheader>{"Subscriptions"}</ListSubheader>
             {subscriptions.slice(0, amount).map((subscription: User) => (
               <Link
                 to={`/channel/${subscription.id}`}
