@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, Dispatch, SetStateAction } from "react";
 import { Comment, RateComment } from "../../../interfaces/Comment";
 import { connect } from "react-redux";
 import { AppState } from "../../../store";
@@ -21,7 +21,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 type Props = {
   comments: Comment[];
   user: User | null;
+  newComment: string;
 
+  setNewComment: Dispatch<SetStateAction<string>>;
   handleCommentRate: (action: RateComment, commentId: string) => Promise<void>;
   handleCommentCreation: (event: ChangeEvent<HTMLFormElement>) => Promise<void>;
 };
@@ -30,7 +32,9 @@ const CommentField: React.FC<Props> = ({
   comments,
   user,
   handleCommentCreation,
-  handleCommentRate
+  handleCommentRate,
+  newComment,
+  setNewComment
 }) => {
   const [comment, setComment] = useState<string>("");
   const [editing, setEditing] = useState<boolean>(false);

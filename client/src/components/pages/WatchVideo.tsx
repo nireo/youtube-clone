@@ -67,6 +67,7 @@ const WatchVideo: React.FC<Props> = ({
   const [comments, setComments] = useState<Comment[] | null>(null);
   const [subscribed, setSubscribed] = useState<boolean | null>(null);
   const [currentVideoId, setCurrentVideoId] = useState<string>("");
+  const [newComment, setNewComment] = useState<string>("");
 
   // 0=no like, 1=liked, 2=disliked
   const [likeStatus, setLikeStatus] = useState<number>(0);
@@ -133,7 +134,7 @@ const WatchVideo: React.FC<Props> = ({
       return;
     }
 
-    let content = await createComment(id, { content: comment });
+    let content = await createComment(id, { content: newComment });
     let copy = video;
     // typescript for some reason requires a check that copy is not null
     if (copy === null) {
@@ -251,6 +252,8 @@ const WatchVideo: React.FC<Props> = ({
                 comments={video.comments}
                 handleCommentRate={handleCommentRate}
                 handleCommentCreation={handleCommentCreation}
+                newComment={newComment}
+                setNewComment={setNewComment}
               />
             </Grid>
           </Grid>
