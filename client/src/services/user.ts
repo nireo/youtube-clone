@@ -118,3 +118,8 @@ export const getUserSubscriptions = async (userId: string) => {
   const response = await axios.get(`${baseUrl}/subscriptions/${userId}`);
   return response.data;
 };
+
+export const getLikedVideos = async () => {
+  const response = await axios.get(`${baseUrl}/liked`, getConfig());
+  return response.data;
+};

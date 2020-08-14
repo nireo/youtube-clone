@@ -13,6 +13,7 @@ import HistoryIcon from "@material-ui/icons/History";
 import OndemandVideoIcon from "@material-ui/icons/OndemandVideo";
 import WatchLaterIcon from "@material-ui/icons/WatchLater";
 import PlaylistDrawerWidget from "../other/PlaylistDrawerWidget";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 
 export const DrawerButtons: React.FC = () => {
   return (
@@ -68,6 +69,14 @@ export const DrawerButtons: React.FC = () => {
               <OndemandVideoIcon />
             </ListItemIcon>
             <ListItemText style={{ color: "#fff" }} primary="Your videos" />
+          </ListItem>
+        </Link>
+        <Link to="/liked" style={{ textDecoration: "none" }}>
+          <ListItem button>
+            <ListItemIcon>
+              <ThumbUpIcon />
+            </ListItemIcon>
+            <ListItemText style={{ color: "#fff" }} primary="Liked" />
           </ListItem>
         </Link>
         <Link to="/watch-later" style={{ textDecoration: "none" }}>
