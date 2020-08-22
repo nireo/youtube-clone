@@ -123,3 +123,8 @@ export const getLikedVideos = async () => {
   const response = await axios.get(`${baseUrl}/liked`, getConfig());
   return response.data;
 };
+
+export const getUserWithToken = async () => {
+  const response = await axios.get(`/auth/me`);
+  return response.data;
+};

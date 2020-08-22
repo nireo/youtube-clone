@@ -2,6 +2,7 @@ import { User, Credentials, UserWithToken } from "../interfaces/User";
 import { Dispatch } from "redux";
 import { login, register } from "../services/auth";
 import setTokens from "../utils/setTokens";
+import { getUserWithToken } from "../services/user";
 
 const reducer = (state: User | null = null, action: any) => {
   switch (action.type) {
@@ -62,6 +63,20 @@ export const loadLocalStorageUser = () => {
     dispatch({
       type: "LOGIN",
       data: userDataJSON.user
+    });
+  };
+};
+
+export const loadUserWithToken = () => {
+  return async (dispatch: Dispatch) => {
+    const user: User = await getUserWithToken();
+    if (!user) {
+      return;
+    }
+
+    dispatch({
+      type: "LOGIN",
+      data: user
     });
   };
 };

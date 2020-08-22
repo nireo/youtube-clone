@@ -10,7 +10,7 @@ import WatchVideo from "./components/pages/WatchVideo";
 import { connect } from "react-redux";
 import { AppState } from "./store";
 import { User } from "./interfaces/User";
-import { loadLocalStorageUser } from "./store/userReducer";
+import { loadUserWithToken } from "./store/userReducer";
 import Subscriptions from "./components/pages/Subscriptions";
 import UserChannel from "./components/pages/UserChannel";
 import YourVideos from "./components/pages/YourVideos";
@@ -29,10 +29,10 @@ import PlayPlaylist from "./components/pages/PlayPlaylist";
 
 type Props = {
   user: User | null;
-  loadLocalStorageUser: () => void;
+  loadUserWithToken: () => Promise<void>;
 };
 
-const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
+const App: React.FC<Props> = ({ user, loadUserWithToken }) => {
   // adding loaded since don't want the app constantly checking the local storage
   const [loaded, setLoaded] = useState<boolean>(false);
   const darkTheme = createMuiTheme({
@@ -44,10 +44,10 @@ const App: React.FC<Props> = ({ user, loadLocalStorageUser }) => {
 
   useEffect(() => {
     if (!loaded && user === null) {
-      loadLocalStorageUser();
+      loadUserWithToken();
       setLoaded(true);
     }
-  }, [loaded, user, loadLocalStorageUser]);
+  }, [loaded, user, loadUserWithToken]);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -118,4 +118,6 @@ const mapStateToProps = (state: AppState) => ({
   user: state.user
 });
 
-export default connect(mapStateToProps, { loadLocalStorageUser })(App);
+export default connect(mapStateToProps, {
+  loadUserWithToken
+})(App);
