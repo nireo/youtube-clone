@@ -5,12 +5,11 @@ import authenticateToken from "../../middlewares/tokenAuth";
 import fs from "fs";
 import getFileExtension from "../../utils/getFileExtension";
 import * as sequelize from "sequelize";
-import authenticateTokenNoStatus from "../../middlewares/tokenAuthNoStatus";
-import { optionalAuth } from "../../utils/withAuth";
+import withAuth, { optionalAuth } from "../../utils/withAuth";
 
 const router: express.Router = express.Router();
 
-router.post("/", authenticateToken, async (req: any, res: express.Response) => {
+router.post("/", withAuth, async (req: any, res: express.Response) => {
   try {
     if (!req.files.video || !req.files.thumbnail) {
       res.send({
@@ -55,7 +54,7 @@ router.post("/", authenticateToken, async (req: any, res: express.Response) => {
 
 router.delete(
   "/:videoId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const video: any = await Video.findOne({
@@ -85,7 +84,7 @@ router.delete(
 
 router.patch(
   "/rate/like/:videoId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const { videoId } = req.params;
@@ -126,7 +125,7 @@ router.patch(
 
 router.patch(
   "/rate/dislike/:videoId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const { videoId } = req.params;
@@ -164,7 +163,7 @@ router.patch(
 
 router.patch(
   "/video/:videoId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const video: any = await Video.findOne({
@@ -195,7 +194,7 @@ router.patch(
   }
 );
 
-router.get("/", async (req: express.Request, res: express.Response) => {
+router.get("/", async (_req: express.Request, res: express.Response) => {
   try {
     // find all public videos, this excludes private and only with link videos
     const videos = await Video.findAll({
@@ -302,23 +301,19 @@ router.get(
 );
 
 // get all the videos by the user who call this route
-router.get(
-  "/me",
-  authenticateToken,
-  async (req: any, res: express.Response) => {
-    try {
-      const videos = await Video.findAll({ where: { userId: req.user.id } });
-      res.status(200).json(videos);
-    } catch (error) {
-      return res.status(500).json({ message: error });
-    }
+router.get("/me", withAuth, async (req: any, res: express.Response) => {
+  try {
+    const videos = await Video.findAll({ where: { userId: req.user.id } });
+    res.status(200).json(videos);
+  } catch (error) {
+    return res.status(500).json({ message: error });
   }
-);
+});
 
 // this route is the used when the user wants to edit a video that is why it has token checking
 router.get(
   "/edit/:videoId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const { videoId } = req.params;
@@ -345,27 +340,30 @@ router.get(
 
 // can't really bother with implementing an algorithm which rates how "trendy" some videos are
 // since this is the case, we only get the videos with the most views
-router.get("/trending", async (req: express.Request, res: express.Response) => {
-  try {
-    const videos = await Video.findAll({
-      where: { privacyLevel: 0 },
-      include: User
-    });
+router.get(
+  "/trending",
+  async (_req: express.Request, res: express.Response) => {
+    try {
+      const videos = await Video.findAll({
+        where: { privacyLevel: 0 },
+        include: User
+      });
 
-    // sort by views
-    videos.sort((a: any, b: any) => {
-      return a.views - b.views;
-    });
+      // sort by views
+      videos.sort((a: any, b: any) => {
+        return a.views - b.views;
+      });
 
-    res.status(200).json(videos);
-  } catch (error) {
-    return res.status(500).json({ message: error });
+      res.status(200).json(videos);
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
   }
-});
+);
 
 router.patch(
   "/thumbnail/:videoId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       if (!req.files.thumbnail) return res.status(400);
@@ -397,7 +395,7 @@ router.patch(
 
 router.patch(
   "/privacy/:videoId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const { videoId } = req.params;

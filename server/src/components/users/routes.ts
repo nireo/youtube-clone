@@ -35,91 +35,79 @@ router.get(
   }
 );
 
-router.post(
-  "/avatar",
-  authenticateToken,
-  async (req: any, res: express.Response) => {
-    try {
-      if (!req.files) {
-        return res.send({
-          status: false,
-          message: "No avatar image was provided"
-        });
-      }
-
-      const avatar: any = req.files.avatar;
-      const avatarFilename = `${req.user.id}.${getFileExtension(avatar.name)}`;
-      avatar.mv("./avatars/" + avatarFilename);
-
-      req.user.avatar = avatarFilename;
-      await req.user.save();
-
-      res.send({
-        status: true,
-        message: "Avatar successfully uploaded"
+router.post("/avatar", withAuth, async (req: any, res: express.Response) => {
+  try {
+    if (!req.files) {
+      return res.send({
+        status: false,
+        message: "No avatar image was provided"
       });
-    } catch (error) {
-      res.status(500).json({ message: error });
     }
+
+    const avatar: any = req.files.avatar;
+    const avatarFilename = `${req.user.id}.${getFileExtension(avatar.name)}`;
+    avatar.mv("./avatars/" + avatarFilename);
+
+    req.user.avatar = avatarFilename;
+    await req.user.save();
+
+    res.send({
+      status: true,
+      message: "Avatar successfully uploaded"
+    });
+  } catch (error) {
+    res.status(500).json({ message: error });
   }
-);
+});
 
 // removes the users hole avatar thus setting it to the default avatar
-router.delete(
-  "/avatar",
-  authenticateToken,
-  async (req: any, res: express.Response) => {
-    try {
-      // check if the avatar already is null
-      if (req.user.avatar === null) {
-        return res.status(204);
-      }
-
-      //remove the file from the file-system
-      fs.unlink(`./avatars/${req.user.avatar}`, err => {
-        if (err) return res.status(500).json({ message: err });
-      });
-
-      req.user.avatar = null;
-      await req.user.save();
+router.delete("/avatar", withAuth, async (req: any, res: express.Response) => {
+  try {
+    // check if the avatar already is null
+    if (req.user.avatar === null) {
       return res.status(204);
-    } catch (error) {
-      return res.status(500).json({ message: error });
     }
+
+    //remove the file from the file-system
+    fs.unlink(`./avatars/${req.user.avatar}`, err => {
+      if (err) return res.status(500).json({ message: err });
+    });
+
+    req.user.avatar = null;
+    await req.user.save();
+    return res.status(204);
+  } catch (error) {
+    return res.status(500).json({ message: error });
   }
-);
+});
 
 // way to update username and channel description
-router.patch(
-  "/update",
-  authenticateToken,
-  async (req: any, res: express.Response) => {
-    try {
-      if (req.body.username) {
-        // check if a user with the same username already exists
-        const conflicts = await User.findOne({
-          where: { username: req.body.username }
-        });
-        if (conflicts) {
-          return res.status(409);
-        }
-
-        req.user.username = req.body.username;
+router.patch("/update", withAuth, async (req: any, res: express.Response) => {
+  try {
+    if (req.body.username) {
+      // check if a user with the same username already exists
+      const conflicts = await User.findOne({
+        where: { username: req.body.username }
+      });
+      if (conflicts) {
+        return res.status(409);
       }
 
-      if (req.body.description) {
-        req.user.description = req.body.description;
-      }
-
-      await req.user.save();
-      res.status(200).json(req.user);
-    } catch (error) {
-      return res.status(500).json({ message: error });
+      req.user.username = req.body.username;
     }
-  }
-);
 
-router.get("/users", async (req: express.Request, res: express.Response) => {
+    if (req.body.description) {
+      req.user.description = req.body.description;
+    }
+
+    await req.user.save();
+    res.status(200).json(req.user);
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+});
+
+router.get("/users", async (_req: express.Request, res: express.Response) => {
   try {
     const users = await User.findAll();
     res.status(200).json(users);
@@ -130,7 +118,7 @@ router.get("/users", async (req: express.Request, res: express.Response) => {
 
 router.delete(
   "/",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const user = await User.findOne({ where: { id: req.user.id } });
@@ -148,7 +136,7 @@ router.delete(
 
 router.post(
   "/subscribe/:userId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const user: any = await User.findOne({
@@ -186,7 +174,7 @@ router.post(
 
 router.delete(
   "/subscribe/:userId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const user: any = await User.findOne({
@@ -263,7 +251,7 @@ router.get(
 
 router.post(
   "/watch-later/:videoId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const { videoId } = req.params;
@@ -292,7 +280,7 @@ router.post(
 
 router.get(
   "/watch-later",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       let videos: any = [];
@@ -318,7 +306,7 @@ router.get(
 
 router.delete(
   "/watch-later/:videoId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       req.user.watchLater.filter((id: string) => id !== req.params.videoId);
@@ -333,7 +321,7 @@ router.delete(
 
 router.get(
   "/history",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       let videos: any = [];
@@ -358,7 +346,7 @@ router.get(
 
 // This combines many different routes into so that the library page is easier to create
 router.get(
-  "/library",
+  "/withAuth",
   authenticateToken,
   async (req: any, res: express.Response) => {
     try {
@@ -421,7 +409,7 @@ router.get(
 
 router.post(
   "/banner",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       if (!req.files.banner) {
@@ -447,7 +435,7 @@ router.post(
 
 router.delete(
   "/banner",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       if (req.user.banner === null) {
@@ -493,7 +481,7 @@ router.get(
 
 router.get(
   "/liked",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const videoLikes: any = await VideoLike.findAll({

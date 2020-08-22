@@ -1,11 +1,11 @@
 import express from "express";
 import { v4 as uuidv4 } from "uuid";
-import authenticateToken from "../../middlewares/tokenAuth";
 import { Playlist, User, Video } from "../../sequelize";
+import withAuth from "../../utils/withAuth";
 
 const router: express.Router = express.Router();
 
-router.post("/", authenticateToken, async (req: any, res: express.Response) => {
+router.post("/", withAuth, async (req: any, res: express.Response) => {
   try {
     const newPlaylistModel = await Playlist.create({
       id: uuidv4(),
@@ -21,7 +21,7 @@ router.post("/", authenticateToken, async (req: any, res: express.Response) => {
 
 router.delete(
   "/:playlistId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const playlist: any = await Playlist.findOne({
@@ -46,7 +46,7 @@ router.delete(
 
 router.patch(
   "/:playlistId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const { playlistId } = req.params;
@@ -127,7 +127,7 @@ router.get(
 
 router.post(
   "/video/:playlistId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const { playlistId } = req.params;
@@ -162,7 +162,7 @@ router.post(
 
 router.delete(
   "/video/:playlistId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const { playlistId } = req.params;

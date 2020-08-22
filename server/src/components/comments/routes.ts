@@ -1,45 +1,41 @@
 import express from "express";
 import { Video, Comment, CommentLike, Notification } from "../../sequelize";
 import { v4 as uuidv4 } from "uuid";
-import authenticateToken from "../../middlewares/tokenAuth";
+import withAuth from "../../utils/withAuth";
 
 const router: express.Router = express.Router();
 
-router.post(
-  "/:videoId",
-  authenticateToken,
-  async (req: any, res: express.Response) => {
-    try {
-      const video: any = await Video.findOne({
-        where: { id: req.params.videoId }
-      });
-      if (!video) {
-        return res.status(404).json({ message: "Video not found." });
-      }
-
-      const newComment = await Comment.create({
-        id: uuidv4(),
-        content: req.body.content,
-        videoId: req.params.videoId,
-        userId: req.user.id
-      });
-
-      //  send notification about the new comment to the creator of the video
-      await Notification.create({
-        id: uuidv4(),
-        content: "A new comment on your video",
-        videoId: req.params.videoId,
-        userId: req.user.id,
-        toUserId: video.userId
-      });
-
-      await newComment.save();
-      res.status(200).json(newComment);
-    } catch (error) {
-      res.status(500).json({ message: error });
+router.post("/:videoId", withAuth, async (req: any, res: express.Response) => {
+  try {
+    const video: any = await Video.findOne({
+      where: { id: req.params.videoId }
+    });
+    if (!video) {
+      return res.status(404).json({ message: "Video not found." });
     }
+
+    const newComment = await Comment.create({
+      id: uuidv4(),
+      content: req.body.content,
+      videoId: req.params.videoId,
+      userId: req.user.id
+    });
+
+    //  send notification about the new comment to the creator of the video
+    await Notification.create({
+      id: uuidv4(),
+      content: "A new comment on your video",
+      videoId: req.params.videoId,
+      userId: req.user.id,
+      toUserId: video.userId
+    });
+
+    await newComment.save();
+    res.status(200).json(newComment);
+  } catch (error) {
+    res.status(500).json({ message: error });
   }
-);
+});
 
 router.get("/:videoId", async (req: express.Request, res: express.Response) => {
   try {
@@ -54,7 +50,7 @@ router.get("/:videoId", async (req: express.Request, res: express.Response) => {
 
 router.patch(
   "/:action/:commentId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const comment: any = await Comment.findOne({
@@ -119,7 +115,7 @@ router.patch(
 
 router.patch(
   "/:commentId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const comment: any = await Comment.findOne({
@@ -165,7 +161,7 @@ router.delete(
 
 router.delete(
   "/:videoId/:commentId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const video: any = await Video.findOne({

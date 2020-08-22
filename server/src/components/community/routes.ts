@@ -5,8 +5,8 @@ import {
   CommunityLike,
   CommunityComment
 } from "../../sequelize";
-import authenticateToken from "../../middlewares/tokenAuth";
 import { v4 as uuidv4 } from "uuid";
+import withAuth from "../../utils/withAuth";
 
 const router: express.Router = express.Router();
 
@@ -56,7 +56,7 @@ router.get(
   }
 );
 
-router.post("/", authenticateToken, async (req: any, res: express.Response) => {
+router.post("/", withAuth, async (req: any, res: express.Response) => {
   try {
     const { content } = req.body;
     if (!content) {
@@ -75,34 +75,30 @@ router.post("/", authenticateToken, async (req: any, res: express.Response) => {
   }
 });
 
-router.delete(
-  "/:postId",
-  authenticateToken,
-  async (req: any, res: express.Response) => {
-    try {
-      const communityPost: any = await Community.findOne({
-        where: { id: req.params.postId }
-      });
+router.delete("/:postId", withAuth, async (req: any, res: express.Response) => {
+  try {
+    const communityPost: any = await Community.findOne({
+      where: { id: req.params.postId }
+    });
 
-      if (!communityPost) {
-        return res.status(404);
-      }
-
-      if (req.user.id !== communityPost.userId) {
-        return res.status(403);
-      }
-
-      await communityPost.destroy();
-      res.status(204);
-    } catch (error) {
-      return res.status(500).json({ message: error });
+    if (!communityPost) {
+      return res.status(404);
     }
+
+    if (req.user.id !== communityPost.userId) {
+      return res.status(403);
+    }
+
+    await communityPost.destroy();
+    res.status(204);
+  } catch (error) {
+    return res.status(500).json({ message: error });
   }
-);
+});
 
 router.patch(
   "/rate/:postId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const communityPost: any = await Community.findOne({
@@ -147,42 +143,38 @@ router.patch(
   }
 );
 
-router.patch(
-  "/:postId",
-  authenticateToken,
-  async (req: any, res: express.Response) => {
-    try {
-      const { content } = req.body;
-      if (!content) {
-        return res.status(401);
-      }
-
-      const communityPost: any = await Community.findOne({
-        where: { id: req.params.postId }
-      });
-      if (!communityPost) {
-        return res.status(404);
-      }
-
-      if (req.user.id !== communityPost.userId) {
-        return res.status(403);
-      }
-
-      communityPost.content = content;
-      communityPost.edited = true;
-      await communityPost.save();
-
-      res.status(200).json(communityPost);
-    } catch (error) {
-      return res.status(500).json({ message: error });
+router.patch("/:postId", withAuth, async (req: any, res: express.Response) => {
+  try {
+    const { content } = req.body;
+    if (!content) {
+      return res.status(401);
     }
+
+    const communityPost: any = await Community.findOne({
+      where: { id: req.params.postId }
+    });
+    if (!communityPost) {
+      return res.status(404);
+    }
+
+    if (req.user.id !== communityPost.userId) {
+      return res.status(403);
+    }
+
+    communityPost.content = content;
+    communityPost.edited = true;
+    await communityPost.save();
+
+    res.status(200).json(communityPost);
+  } catch (error) {
+    return res.status(500).json({ message: error });
   }
-);
+});
 
 // add comment route
 router.post(
   "/comment/:postId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const { postId } = req.params;
@@ -207,7 +199,7 @@ router.post(
 
 router.delete(
   "/comment/:commentId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const comment: any = CommunityComment.findOne({

@@ -1,12 +1,12 @@
 import express from "express";
-import authenticateToken from "../../middlewares/tokenAuth";
 import { Notification, User } from "../../sequelize";
+import withAuth from "../../utils/withAuth";
 
 const router: express.Router = express.Router();
 
 router.patch(
   "/:notificationId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const { notificationId } = req.params;
@@ -33,7 +33,7 @@ router.patch(
   }
 );
 
-router.get("/", authenticateToken, async (req: any, res: express.Response) => {
+router.get("/", withAuth, async (req: any, res: express.Response) => {
   try {
     const notifications = await Notification.findAll({
       where: { toUserId: req.user.id },
@@ -48,7 +48,7 @@ router.get("/", authenticateToken, async (req: any, res: express.Response) => {
 
 router.get(
   "/:notificationId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const notification = await Notification.findOne({
@@ -59,7 +59,7 @@ router.get(
         return res.status(404);
       }
 
-      res.status(200).json(notification)
+      res.status(200).json(notification);
     } catch (error) {
       return res.status(500).json({ message: error });
     }
@@ -68,7 +68,7 @@ router.get(
 
 router.delete(
   "/:notificationId",
-  authenticateToken,
+  withAuth,
   async (req: any, res: express.Response) => {
     try {
       const { notificationId } = req.params;
