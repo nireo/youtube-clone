@@ -28,13 +28,20 @@ router.post(
       bcrypt.hash(req.body.password, 10, async (error, hash) => {
         if (error) return res.status(500).send(error);
 
-        const user = await User.create({
+        const user: any = await User.create({
           username: req.body.username,
           password: hash,
           id: uuidv4()
         });
 
-        res.status(200).json(user);
+        const token = jwt.sign(
+          { username: user.username, id: user.id },
+          process.env.TOKEN_SECRET as string,
+          { expiresIn: "7d" }
+        );
+        res.cookie("token", token, { httpOnly: true });
+
+        res.status(200).json({ token, user });
       });
     } catch (error) {
       res.status(500).json({ message: error });

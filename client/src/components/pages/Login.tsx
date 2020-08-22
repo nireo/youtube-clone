@@ -10,7 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { connect } from "react-redux";
 import { AppState } from "../../store";
-import { loginAction } from "../../store/userReducer";
+import { loginAction, registerAction } from "../../store/userReducer";
 import { User, Credentials } from "../../interfaces/User";
 import { Redirect } from "react-router-dom";
 
@@ -37,9 +37,10 @@ const useStyles = makeStyles(theme => ({
 type Props = {
   user: User | null;
   loginAction: (credentials: Credentials) => void;
+  registerAction: (credentials: Credentials) => void;
 };
 
-const Login: React.FC<Props> = ({ loginAction, user }) => {
+const Login: React.FC<Props> = ({ loginAction, user, registerAction }) => {
   const [page, setPage] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -56,10 +57,14 @@ const Login: React.FC<Props> = ({ loginAction, user }) => {
     setPassword("");
   };
 
-  const handleLogin = (event: ChangeEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (username === "" || password === "") return;
-    loginAction({ username, password });
+    if (page === "login") {
+      loginAction({ username, password });
+    } else {
+      registerAction({ username, password });
+    }
   };
 
   return (
@@ -71,7 +76,7 @@ const Login: React.FC<Props> = ({ loginAction, user }) => {
         <Typography component="h1" variant="h5">
           {page === "register" ? "Register" : "Login"}
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleLogin}>
+        <form className={classes.form} noValidate onSubmit={handleFormSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -124,4 +129,4 @@ const mapStateToProps = (state: AppState) => ({
   user: state.user
 });
 
-export default connect(mapStateToProps, { loginAction })(Login);
+export default connect(mapStateToProps, { loginAction, registerAction })(Login);
