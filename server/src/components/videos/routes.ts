@@ -95,7 +95,8 @@ router.patch(
       const videoLike: any = await VideoLike.findOne({
         where: { userId: req.user.id, videoId }
       });
-      if (videoId) {
+
+      if (videoLike) {
         // remove dislike
         if (!videoLike.like) {
           videoLike.like = true;
@@ -135,7 +136,7 @@ router.patch(
       const videoLike: any = await VideoLike.findOne({
         where: { userId: req.user.id, videoId }
       });
-      if (videoId) {
+      if (videoLike) {
         if (videoLike.like) {
           videoLike.like = false;
           video.likes++;
